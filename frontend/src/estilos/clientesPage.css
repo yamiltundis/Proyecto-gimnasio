@@ -88,3 +88,42 @@
 .clientespage-columna-acciones {
     gap: 5em;
 }
+
+.clientespage-boton-ver-perfil {
+  margin-left: 0.5rem;
+  border: none;
+  padding: 0.3em 0.8em;
+  background-color: rgb(14, 14, 82);
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.clientespage-columna-acciones i {
+  margin-left: 0.5em;
+  cursor: pointer;
+}
+
+.estado-badge {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.estado-activo {
+  background-color: #d4edda; /* verde claro */
+  color: #155724;
+}
+
+.estado-vencido {
+  background-color: #fff3cd; /* amarillo claro */
+  color: #856404;
+}
+
+.estado-moroso {
+  background-color: #f8d7da; /* rojo claro */
+  color: #721c24;
+}
+

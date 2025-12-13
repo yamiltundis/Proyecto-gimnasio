@@ -1,0 +1,12 @@
+.boton-regresar {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background-color: rgb(14, 14, 82);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  max-width: fit-content;
+}

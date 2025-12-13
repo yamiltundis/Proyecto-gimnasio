@@ -47,12 +47,16 @@ export function ClientesPage () {
                            <td> {c.apellido} </td>
                            <td> {c.dni} </td>
                            <td> {c.email}</td>
-                           <td> {c.estado} </td>
-                           <td className='clientespage-columna-acciones'> 
-                              <i className='bi bi-trash-fill' onClick={() => eliminarCliente(c.id)}></i>
+                           <td>
+                             <span className={`estado-badge estado-${c.estado}`}>
+                               {c.estado}
+                             </span>
+                           </td>
+                           <td className='clientespage-columna-acciones'>
                               <Link to={`/admin/clientes/${c.id}`}>
-                                <button> Ver perfil </button> 
+                                <button className='clientespage-boton-ver-perfil'> Ver perfil </button> 
                               </Link>
+                              <i className='bi bi-trash-fill' onClick={() => eliminarCliente(c.id)}></i>
                            </td>                         
                         </tr>
                     ))}

@@ -1,4 +1,44 @@
+.clienteespecifico {
+    display: flex;
+    flex-direction: column;
+    min-height: 50vh;
+}
+
 .clienteespecifico img {
     height: 10em;
     width: 8em;
+    margin-top: 1rem;
+}
+
+.clienteespecifico-estado-badge {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  width: fit-content;
+  text-align: center;
+  margin-top: 1rem;
+
+  margin-top: 1rem;
+}
+
+.estado-activo {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.estado-vencido {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.estado-moroso {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.clienteespecifico .boton-regresar {
+  margin-top: auto;
 }

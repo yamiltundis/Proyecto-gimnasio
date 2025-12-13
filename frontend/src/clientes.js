@@ -29,7 +29,7 @@ export const clientes = [
             dni: 46102393,
             email: 'julian@gmail.com',
             foto: fotoJulian,
-            estado: 'suspendido'
+            estado: 'vencido'
         },
         {
             id: 4,
@@ -38,6 +38,6 @@ export const clientes = [
             dni: 55000000,
             email: 'colito@gmail.com',
             foto: fotoColo,
-            estado: 'suspendido'
+            estado: 'moroso'
         },
     ]
