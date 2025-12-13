@@ -1,0 +1,90 @@
+.clientespage-h1 {
+  margin-bottom: 0.5em;
+}
+
+.clientespage-contenedor-barra-busqueda-y-boton-nuevo-cliente {
+  display: flex; 
+  gap: 5rem;
+}
+
+.clientespage-barra-busqueda {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  max-width: 30em;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  height: 2em;
+}
+
+.clientespage-barra-busqueda i {
+  font-size: 1.2rem;
+  color: #888;
+  margin-right: 0.5rem;
+}
+
+.clientespage-input-busqueda {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 1rem;
+  color: #333;
+}
+
+.clientespage-boton-nuevo-cliente {
+  display: flex;
+  align-items: center;
+  background-color: #166f26;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  gap: 0.05em;
+  padding: 0.2rem 0.3rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  height: 2em;
+  margin-top: 0.2em;
+}
+
+.clientespage-boton-nuevo-cliente i {
+    color: white;
+    font-size: 1em;
+}
+
+.clientespage-texto-boton-nuevo-cliente {
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    background-color: #166f26;
+    color: white;
+    flex: 1;
+    cursor: pointer;
+}
+
+.clientespage-contenedor-tabla {
+    margin-top: 1.5em;
+}
+
+.clientespage-tabla {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.clientespage-tabla th, .clientespage-tabla td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+.clientespage-tabla th {
+  background-color: rgb(187, 184, 184);
+}
+
+.clientespage-tabla td {
+  background-color: white;
+}
+
+.clientespage-columna-acciones {
+    gap: 5em;
+}
