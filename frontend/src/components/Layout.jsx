@@ -19,6 +19,9 @@ export function Layout () {
                     <Link to="/admin/clases">
                       <li className='bi bi-stack'> Clases </li>
                     </Link>
+                    <Link to="/admin/membrecias">
+                      <li className='bi bi-card-checklist'> Membrecias </li>
+                    </Link>
                 </ul>
             </aside>
             <main className='layout-main'>

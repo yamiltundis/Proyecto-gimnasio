@@ -7,6 +7,7 @@ import { PagosPage } from "./pages/PagosPage.jsx"
 import { ClasesPage } from "./pages/ClasesPage.jsx"
 import { ClienteEspecificoPage } from "./pages/ClienteEspecificoPage.jsx"
 import { CrearClientePage } from "./pages/CrearClientePage"
+import { MembreciasPage } from "./pages/MembreciasPage.jsx"
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
           <Route path="clases" element={<ClasesPage />} />
           <Route path="clientes/:id" element={< ClienteEspecificoPage />}/>
           <Route path="clientes/crear" element={<CrearClientePage />}/>
+          <Route path="membrecias" element={<MembreciasPage />}/>
         </Route>
       </Routes>
     </BrowserRouter>
