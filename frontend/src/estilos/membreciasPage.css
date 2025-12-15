@@ -24,3 +24,7 @@
 .membreciaspage-columna-acciones {
     gap: 5em;
 }
+
+.membreciaspage-columna-acciones i {
+  color: blue;
+}

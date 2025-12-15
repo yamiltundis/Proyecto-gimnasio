@@ -2,6 +2,6 @@
 
 export function PagosPage () {
     return (
-        <h1> Aca vas a ver cada pago </h1>
+        <h1> Gestion de pagos </h1>
     )
 }

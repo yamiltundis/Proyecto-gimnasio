@@ -8,7 +8,11 @@ export function ClientesPage () {
     const [clientes, setClientes] = useState(clientesIniciales)
 
     const eliminarCliente = (id) => {
-        setClientes(clientes.filter(c => c.id !== id))
+      setClientes(clientes.filter(c => c.id !== id))
+    }
+
+    const agregarCliente = (data) => {
+      setClientes([...clientes, data])
     }
 
     return (

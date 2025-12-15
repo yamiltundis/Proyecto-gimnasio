@@ -9,9 +9,10 @@ export function MembreciasPage () {
            <table className='membreciaspage-tabla'>
             <thead>
               <tr>
-                <td> Membrecia </td>
-                <td> Cantidad de dias </td>
-                <td> Acciones </td>
+                <th> Membrecia </th>
+                <th> Cantidad de dias </th>
+                <th> Precio Actual </th>
+                <th> Acciones </th>
               </tr>
             </thead>
             <tbody>
@@ -20,7 +21,10 @@ export function MembreciasPage () {
                     <tr key={m.id}>
                        <td> {m.nombre} </td>
                        <td> {m.cantidadDias} </td>
-                       <td className='membreciaspage-columna-acciones'> </td>
+                       <td> ${m.precioActual}</td>
+                       <td className='membreciaspage-columna-acciones'> 
+                        <i className="bi bi-highlighter"></i>
+                       </td>
                     </tr>
                 ))
               }
