@@ -1,4 +1,5 @@
 import { Usuario, CreateUsuarioRequest, UpdateUsuarioRequest } from '../types/usuario.types'
+import prisma from '../config/prisma'
 
 let usuarios : Usuario[] = [
     { id: 1, nombre: 'Yamil', apellido: 'Tundis', dni: 45910179, fechaNacimiento: new Date(2004, 7, 10), 
@@ -8,6 +9,9 @@ let usuarios : Usuario[] = [
 ]
 
 export async function getAllUsuarios() : Promise<Usuario[]> {
+    const usuarioss = await prisma.cliente.findMany({
+        orderBy: { id: 'asc'}
+    })
     return usuarios;
 }
 
