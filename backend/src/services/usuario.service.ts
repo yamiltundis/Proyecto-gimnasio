@@ -9,14 +9,14 @@ let usuarios : Usuario[] = [
 ]
 
 export async function getAllUsuarios() : Promise<Usuario[]> {
-    const usuarioss = await prisma.cliente.findMany({
+    const usuario = await prisma.cliente.findMany({
         orderBy: { id: 'asc'}
     })
-    return usuarios;
+    return usuario;
 }
 
 export async function getUsuarioById(id: number): Promise<Usuario> {
-    const usuario = usuarios.find(u => u.id === id);
+    const usuario = await prisma.cliente.findUnique({ where: { id } })
     if (!usuario) {
       const error = new Error('Usuario not found');
       (error as any).statusCode = 404;
@@ -25,33 +25,43 @@ export async function getUsuarioById(id: number): Promise<Usuario> {
     return usuario;
 }
 
-export async function createUsuario(usuarioData: CreateUsuarioRequest): Promise<Usuario> {
-    const newUsuario: Usuario = {
-      id: usuarios.length + 1,
-      ...usuarioData
-    };
-    usuarios.push(newUsuario);
-    return newUsuario; 
+export async function createUsuario(data: CreateUsuarioRequest): Promise<Usuario> {
+    const created = await prisma.cliente.create({
+        data: {
+            nombre: data.nombre,
+            apellido: data.apellido,
+            dni: data.dni,
+            fechaNacimiento: data.fechaNacimiento,
+            email: data.email,
+            foto: data.foto,
+            rol: data.rol
+        }
+    })
+    return created; 
 }
 
-export async function updateUsuario(id: number, updatedData: UpdateUsuarioRequest): Promise<Usuario> {
-    const usuarioIndex = usuarios.findIndex(u => u.id === id);
-    if (usuarioIndex === -1) {
-      const error = new Error('Book not found');
-      (error as any).statusCode = 404;
-      throw error;
-    }
-    usuarios[usuarioIndex] = { ...usuarios[usuarioIndex], ...updatedData };
-    return usuarios[usuarioIndex];
+export async function updateUsuario(id: number, data: UpdateUsuarioRequest): Promise<Usuario> {
+    const updated = await prisma.cliente.update({
+      where: { id },
+      data: {
+       ...(data.nombre !== undefined ? { nombre: data.nombre } : {}),
+       ...(data.apellido !== undefined ? { apellido: data.apellido } : {}),
+       ...(data.dni !== undefined ? { dni: data.dni } : {}),
+       ...(data.fechaNacimiento !== undefined ? { fechaNacimiento: data.fechaNacimiento } : {}),
+       ...(data.email !== undefined ? { email: data.email } : {}),
+       ...(data.foto !== undefined ? { foto: data.foto } : {}),
+       ...(data.rol !== undefined ? { rol: data.rol } : {}),
+      },
+    });
+    return updated
 }
 
 export async function deleteUsuario(id: number): Promise<Usuario> {
-    const deletedUsuario = usuarios.find(u => u.id === id)
-    if (!deletedUsuario) {
+    const deleted = await prisma.cliente.delete({ where: { id } })
+    if (!deleted) {
         const error = new Error('Usuario no encontrado');
         (error as any).statusCode = 404;
         throw error;
     }
-    usuarios = usuarios.filter(u => u.id !== id);
-    return deletedUsuario;
+    return deleted;
 }
