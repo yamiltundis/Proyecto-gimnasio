@@ -1,18 +1,11 @@
 import { Usuario, CreateUsuarioRequest, UpdateUsuarioRequest } from '../types/usuario.types'
 import prisma from '../config/prisma'
 
-let usuarios : Usuario[] = [
-    { id: 1, nombre: 'Yamil', apellido: 'Tundis', dni: 45910179, fechaNacimiento: new Date(2004, 7, 10), 
-        email: 'yamiltundis6@gmail.com', foto: 'foto', rol: 'cliente'},
-    { id: 2, nombre: 'Pri', apellido: 'Paroni', dni: 47401190, fechaNacimiento: new Date(2006, 6, 3), 
-        email: 'prichu@gmail.com', foto: 'fotopri', rol: 'cliente'}
-]
-
 export async function getAllUsuarios() : Promise<Usuario[]> {
-    const usuario = await prisma.cliente.findMany({
+    const usuarios = await prisma.cliente.findMany({
         orderBy: { id: 'asc'}
     })
-    return usuario;
+    return usuarios;
 }
 
 export async function getUsuarioById(id: number): Promise<Usuario> {
