@@ -21,4 +21,13 @@ model Cliente {
 model TipoClase {
   id Int @id @default(autoincrement())
   nombre String
+  clasesEspecificas ClaseEspecifica[]
+}
+
+model ClaseEspecifica {
+  id Int @id @default(autoincrement())
+  diaHora DateTime
+  cantmax Int
+  tipoClaseId Int
+  tipoClase TipoClase @relation(fields: [tipoClaseId], references: [id])
 }
