@@ -17,6 +17,7 @@ model Cliente {
   foto String
   rol String
   pagos Pago[]
+  membreciasActivas MembreciaActiva[]
 }
 
 model TipoClase {
@@ -57,4 +58,15 @@ model Pago {
   cliente Cliente @relation(fields: [clienteId], references: [id])
   tipoMembreciaId Int
   tipoMembrecia TipoMembrecia @relation(fields: [tipoMembreciaId], references: [id])
+  membreciasActivas MembreciaActiva[]
+}
+
+model MembreciaActiva {
+  Id Int @id @default(autoincrement())
+  fechaInicio DateTime
+  fechaFin DateTime
+  clienteId Int
+  cliente Cliente @relation(fields: [clienteId], references: [id])
+  pagoId Int
+  pago Pago @relation(fields: [pagoId], references: [id])
 }

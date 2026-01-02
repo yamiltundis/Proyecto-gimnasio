@@ -20,6 +20,7 @@ export async function getPagoById(id: number): Promise<Pago> {
 
 export async function createPago(data: CreatePagoRequest): Promise<Pago> {
 
+    // Busco que el tipo de membrecia exista
     const membrecia = await prisma.tipoMembrecia.findUnique({
         where: { id: data.tipoMembreciaId}
     })
@@ -30,6 +31,7 @@ export async function createPago(data: CreatePagoRequest): Promise<Pago> {
       throw(error);
     }
 
+    // Busco que el tipo de membrecia tenga un precio en "ListaPrecio"
     const ultimoPrecio = await prisma.listaPrecio.findFirst({
       where: { tipoMembreciaId: data.tipoMembreciaId },
       orderBy: { diaInicial: 'desc' }
@@ -41,6 +43,7 @@ export async function createPago(data: CreatePagoRequest): Promise<Pago> {
       throw(error);
     }
 
+    // Registro el pago
     const newPago = await prisma.pago.create({
         data: {
             fecha: data.fecha,
@@ -48,6 +51,50 @@ export async function createPago(data: CreatePagoRequest): Promise<Pago> {
             clienteId: data.clienteId,
             tipoMembreciaId: data.tipoMembreciaId
         }
+    });
+
+
+    // Regla de negocio para el tema de qué hacer cuando se crea una membreciaActiva
+    const ultimaMembresia = await prisma.membreciaActiva.findFirst({
+      where: { clienteId: data.clienteId },
+      orderBy: { fechaFin: 'desc' }
+    });
+
+    let fechaInicio: Date;
+    let fechaFin: Date;
+    const fechaPago = data.fecha ? new Date(data.fecha) : new Date();
+
+    if (ultimaMembresia && ultimaMembresia.fechaFin > fechaPago) {
+      // Caso vigente: arranca la nueva membreciaActiva cuando termina la actual
+      fechaInicio = ultimaMembresia.fechaFin;
+      fechaFin = new Date(fechaInicio.getTime() + membrecia.dias * 24 * 60 * 60 * 1000);
+    } else {
+      // Caso vencida o en negativo
+      fechaInicio = fechaPago;
+    
+      if (ultimaMembresia) {
+        const diasNegativos = Math.floor(
+          (fechaInicio.getTime() - ultimaMembresia.fechaFin.getTime()) / (24 * 60 * 60 * 1000)
+        );
+    
+        // Si estuvo en negativo, se descuentan esos días
+        const diasRestantes = membrecia.dias - Math.max(diasNegativos, 0);
+        fechaFin = new Date(fechaInicio.getTime() + diasRestantes * 24 * 60 * 60 * 1000);
+      } else {
+        // Primera membresía del cliente
+        fechaFin = new Date(fechaInicio.getTime() + membrecia.dias * 24 * 60 * 60 * 1000);
+      }
+    }
+
+
+    // Se crea la membreciaActiva
+    await prisma.membreciaActiva.create({
+      data: {
+        clienteId: data.clienteId,
+        pagoId: newPago.id,
+        fechaInicio: fechaInicio,
+        fechaFin: fechaFin
+      }
     });
     return newPago;
 }
