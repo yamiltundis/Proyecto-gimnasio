@@ -7,6 +7,8 @@ import { claseEspecificaRoutes } from './routes/claseEspecifica.routes';
 import { tipoMembreciaRoutes } from  './routes/tipoMembrecia.routes'
 import { listaPrecioRoutes } from './routes/listaPrecio.routes';
 import { pagoRoutes } from './routes/pago.routes';
+import { reservaRoutes } from './routes/reserva.routes';
+import { asistenciaClaseRoutes } from './routes/asistenciaClase.routes';
 
 const app = express();
 const PORT = 3000;
@@ -23,7 +25,9 @@ app.use('/tiposClase', tipoClaseRoutes)
 app.use('/clasesEspecificas', claseEspecificaRoutes)
 app.use('/tiposMembrecia', tipoMembreciaRoutes)
 app.use('/listasPrecios', listaPrecioRoutes)
-app.use('/pagos', pagoRoutes)
+app.use('/pagos', pagoRoutes);
+app.use('/reservas', reservaRoutes);
+app.use('/asistenciasClases', asistenciaClaseRoutes);
 
 app.use(handleError)
 

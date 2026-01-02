@@ -18,6 +18,8 @@ model Cliente {
   rol String
   pagos Pago[]
   membreciasActivas MembreciaActiva[]
+  reservas Reserva[]
+  asistenciasClases AsistenciaClase[]
 }
 
 model TipoClase {
@@ -32,6 +34,8 @@ model ClaseEspecifica {
   cantmax Int
   tipoClaseId Int
   tipoClase TipoClase @relation(fields: [tipoClaseId], references: [id])
+  reservas Reserva[]
+  asistenciasClase AsistenciaClase[]
 }
 
 model TipoMembrecia {
@@ -69,4 +73,28 @@ model MembreciaActiva {
   cliente Cliente @relation(fields: [clienteId], references: [id])
   pagoId Int
   pago Pago @relation(fields: [pagoId], references: [id])
+}
+
+model Reserva {
+  id Int @id @default(autoincrement())
+  fechaReserva DateTime
+  estado String
+  clienteId Int
+  cliente Cliente @relation(fields: [clienteId], references: [id])
+  claseEspecificaId Int
+  claseEspecifica ClaseEspecifica @relation(fields: [claseEspecificaId], references: [id])
+  asistencia      AsistenciaClase? @relation("ReservaAsistencia")
+
+
+}
+
+model AsistenciaClase {
+  id Int @id @default(autoincrement())
+  horacheckin DateTime
+  clienteId Int
+  cliente Cliente @relation(fields: [clienteId], references: [id])
+  claseEspecificaId Int
+  claseEspecifica ClaseEspecifica @relation(fields: [claseEspecificaId], references: [id])
+  reserva     Reserva?  @relation("ReservaAsistencia",fields: [reservaId], references: [id])
+  reservaId   Int?      @unique
 }
