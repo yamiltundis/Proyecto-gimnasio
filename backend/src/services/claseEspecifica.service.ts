@@ -1,6 +1,5 @@
 import { ClaseEspecifica, CreateClaseEspecifica, UpdateClaseEspecifica } from "../types/claseEspecifica.types";
 import prisma from "../config/prisma";
-import { error } from "node:console";
 
 export async function getAllClasesEspecificas(): Promise<ClaseEspecifica[]> {
     const clases = await prisma.claseEspecifica.findMany({

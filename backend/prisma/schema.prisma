@@ -31,3 +31,18 @@ model ClaseEspecifica {
   tipoClaseId Int
   tipoClase TipoClase @relation(fields: [tipoClaseId], references: [id])
 }
+
+model TipoMembrecia {
+  id Int @id @default(autoincrement())
+  nombre String
+  dias Int
+  listasPrecios ListaPrecio[]
+}
+
+model ListaPrecio {
+  id Int @id @default(autoincrement())
+  monto Int
+  diaInicial DateTime
+  tipoMembreciaId Int
+  tipoMembrecia TipoMembrecia @relation(fields: [tipoMembreciaId], references: [id])
+}

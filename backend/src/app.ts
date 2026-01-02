@@ -4,6 +4,8 @@ import { handleError } from './middlewares/error.middleware';
 import { usuarioRoutes } from './routes/usuario.routes';
 import { tipoClaseRoutes } from './routes/tipoClase.routes';
 import { claseEspecificaRoutes } from './routes/claseEspecifica.routes';
+import { tipoMembreciaRoutes } from  './routes/tipoMembrecia.routes'
+import { listaPrecioRoutes } from './routes/listaPrecio.routes';
 
 const app = express();
 const PORT = 3000;
@@ -18,6 +20,8 @@ app.get('/', (req, res) => {
 app.use('/usuarios', usuarioRoutes)
 app.use('/tiposClase', tipoClaseRoutes)
 app.use('/clasesEspecificas', claseEspecificaRoutes)
+app.use('/tiposMembrecia', tipoMembreciaRoutes)
+app.use('/listasPrecios', listaPrecioRoutes)
 
 app.use(handleError)
 
