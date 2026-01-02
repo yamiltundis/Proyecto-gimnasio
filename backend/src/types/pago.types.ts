@@ -1,17 +1,21 @@
 export interface Pago {
     id: number,
     monto: number,
-    dia: Date
+    fecha: Date,
+    clienteId: number,
+    tipoMembreciaId: number
 }
 
 export interface CreatePagoRequest {
-    monto: number,
-    dia: Date
+    fecha: Date,
+    clienteId: number,
+    tipoMembreciaId: number
 }
 
 export interface UpdatePagoRequest {
-    monto?: number,
-    dia?: Date
+    fecha?: Date
+    clienteId?: number,
+    tipoMembreciaId?: number
 }
 
 export interface PagoResponse {
