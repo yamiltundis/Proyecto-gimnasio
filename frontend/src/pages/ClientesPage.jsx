@@ -1,11 +1,47 @@
 import '../estilos/clientesPage.css'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { clientes as clientesIniciales } from '../clientes'
 
 export function ClientesPage () {
 
-    const [clientes, setClientes] = useState(clientesIniciales)
+    const [clientes, setClientes] = useState([])
+   
+    useEffect(() => {
+      const fetchClientes = async () => {
+        try {
+          const response = await fetch('http://localhost:3000/usuarios')
+          if (!response.ok) {
+            throw new Error('Error al traer clientes')
+          }
+          const data = await response.json()
+
+          // Para cada cliente, pedimos su estado
+          const clientesConEstado = await Promise.all(
+            data.usuarios.map(async (c) => {
+              try {
+                const estadoResponse = await fetch(`http://localhost:3000/membreciasActivas/${c.id}`)
+                if (!estadoResponse.ok) {
+                  throw new Error('Error al traer estado')
+                }
+                const estadoData = await estadoResponse.json()
+                return { ...c, estado: estadoData.diasRestantes.estado } // combinamos cliente + estado
+              } catch (error) {
+                console.error(`Error al traer estado de cliente ${c.id}:`, error)
+                return { ...c, estado: 'Desconocido' } // fallback
+              }
+            })
+          )
+
+          setClientes(clientesConEstado)
+        } catch (error) {
+          console.error(error)
+        }
+      }
+
+      fetchClientes()
+    }, [])
+
+
 
     const eliminarCliente = (id) => {
       setClientes(clientes.filter(c => c.id !== id))
@@ -45,7 +81,7 @@ export function ClientesPage () {
                     </tr>
                 </thead>
                 <tbody>
-                    {clientes.map((c) => (
+                    {Array.isArray(clientes) && clientes.map((c) => (
                         <tr key={c.id}>
                            <td> {c.nombre} </td>
                            <td> {c.apellido} </td>

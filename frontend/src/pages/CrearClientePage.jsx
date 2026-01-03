@@ -1,5 +1,5 @@
 import '../estilos/crearclientepage.css';
-import { useState } from 'react';
+import { useState, useEffect, use } from 'react';
 import { BotonRegresar } from '../components/BotonRegresar';
 
 export function CrearClientePage() {
@@ -7,7 +7,9 @@ export function CrearClientePage() {
     nombre: '',
     apellido: '',
     email: '',
-    dni: ''
+    dni: '',
+    fechaNacimiento: '',
+    foto:''
   });
 
   const handleChange = (e) => {
@@ -18,17 +20,51 @@ export function CrearClientePage() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Datos del cliente:', formData);
-    // Acá podrías enviar los datos a una API o guardarlos en estado global
-    setFormData({
-      nombre: '',
-      apellido: '',
-      email: '',
-      dni: ''      
-    })
+      console.log('Datos del cliente:', formData);
+      const payload = {
+        ...formData,
+        dni: Number(formData.dni),
+        fechanacimiento: formData.fechaNacimiento 
+        ? new Date(formData.fechaNacimiento).toISOString() 
+        : null
+
+      };
+
+
+    try {
+      const response = await fetch('http://localhost:3000/usuarios', {
+        method: 'POST',
+        headers: {
+         'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al crear cliente');
+      }
+
+      const resultado = await response.json();
+      console.log('Cliente creado:', resultado);
+
+      // Limpiar el formulario
+      setFormData({
+        nombre: '',
+        apellido: '',
+        email: '',
+        dni: '',
+        fechaNacimiento: '',
+        foto: ''
+      });
+   
+      // Podés redirigir o mostrar un mensaje de éxito si querés
+    } catch (error) {
+      console.error('Error al enviar cliente:', error);
+    }
   };
+
 
   return (
     <>
@@ -78,6 +114,30 @@ export function CrearClientePage() {
               name="dni"
               placeholder="Ingrese el DNI"
               value={formData.dni}
+              onChange={handleChange}
+              required
+            />
+          </label>
+
+          <label>
+            Fecha de nacimiento:
+            <input
+              type="date"
+              name="fechaNacimiento"
+              placeholder="Ingrese su fecha de nacimiento"
+              value={formData.fechaNacimiento}
+              onChange={handleChange}
+              required
+            />
+          </label>
+
+          <label>
+            Foto:
+            <input
+              type="text"
+              name="foto"
+              placeholder="Ingrese una foto"
+              value={formData.foto}
               onChange={handleChange}
               required
             />

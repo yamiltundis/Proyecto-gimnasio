@@ -1,4 +1,6 @@
 import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
 import { logRequest } from './middlewares/logger.middleware';
 import { handleError } from './middlewares/error.middleware';
 import { usuarioRoutes } from './routes/usuario.routes';
@@ -10,10 +12,19 @@ import { pagoRoutes } from './routes/pago.routes';
 import { reservaRoutes } from './routes/reserva.routes';
 import { asistenciaClaseRoutes } from './routes/asistenciaClase.routes';
 import { asistenciaRoutes } from './routes/asistencia.routes';
+import { membreciaActivaRoutes } from './routes/membreciaActiva.routes';
+
+dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
+const corsOptions = {
+    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    credentials: true
+}
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(logRequest);
 
@@ -30,6 +41,7 @@ app.use('/pagos', pagoRoutes);
 app.use('/reservas', reservaRoutes);
 app.use('/asistenciasClases', asistenciaClaseRoutes);
 app.use('/asistencias', asistenciaRoutes);
+app.use('/membreciasActivas', membreciaActivaRoutes)
 
 app.use(handleError)
 

@@ -24,10 +24,10 @@ export async function createUsuario(data: CreateUsuarioRequest): Promise<Usuario
             nombre: data.nombre,
             apellido: data.apellido,
             dni: data.dni,
-            fechaNacimiento: data.fechaNacimiento,
+            fechaNacimiento: new Date(data.fechaNacimiento),
             email: data.email,
             foto: data.foto,
-            rol: data.rol
+            rol: 'cliente'
         }
     })
     return created; 
