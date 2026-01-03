@@ -3,7 +3,7 @@ import prisma from "../config/prisma";
 
 export async function getAllTiposMembrecias(): Promise<TipoMembrecia[]> {
     const tipos = await prisma.tipoMembrecia.findMany({
-        orderBy: { id: 'asc'}
+        orderBy: { dias: 'asc'}
     })
     return tipos;
 }

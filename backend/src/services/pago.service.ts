@@ -3,7 +3,20 @@ import prisma from "../config/prisma";
 
 export async function getAllPagos(): Promise<Pago[]> {
     const pagos = await prisma.pago.findMany({
-        orderBy: { id: 'asc'}
+        orderBy: { fecha: 'desc'},
+        include: {
+            cliente: {
+              select: {
+                nombre: true,
+                apellido: true
+              }
+            },
+            tipoMembrecia: {
+              select: {
+                nombre: true
+              }
+            }
+        }
     })
     return pagos;
 }

@@ -8,6 +8,19 @@ export async function getAllListasPrecios(): Promise<ListaPrecio[]> {
     return listas;
 }
 
+export async function getUltimoPrecioByMembrecia(membreciaId: number): Promise<Number> {
+    const precio = await prisma.listaPrecio.findFirst({
+        where: { tipoMembreciaId: membreciaId },
+        orderBy: { diaInicial: 'desc'}
+    })
+    if (!precio) {
+        const error = new Error('Sin precio');
+        (error as any).statusCode = 404;
+        throw(error);
+    }
+    return precio.monto
+}
+
 export async function getListaPrecioById(id: number): Promise<ListaPrecio> {
     const lista = await prisma.listaPrecio.findUnique({ where: { id }});
     if (!lista) {

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { ListaPrecio, CreateListaPrecio, UpdateListaPrecio, ListaPrecioListResponse, ListaPrecioResponse} from "../types/listaPrecio.types";
 import * as listaPrecioService from '../services/listaPrecio.service'
+import { nextTick } from "node:process";
 
 export async function getAllListasPrecios(req: Request, res: Response<ListaPrecioListResponse>, next: NextFunction) {
    try {
@@ -12,6 +13,18 @@ export async function getAllListasPrecios(req: Request, res: Response<ListaPreci
    } catch (error) {
         next(error)
    }
+}
+
+export async function getUltimoPrecioByMembrecia(req: Request, res: Response, next: NextFunction) {
+    try {
+        const { membreciaId } = req.params;
+        const precio = await listaPrecioService.getUltimoPrecioByMembrecia(parseInt(membreciaId))
+        res.json({
+            monto: precio
+        })
+    } catch (error) {
+        next(error)
+    }
 }
 
 export async function getListaPrecioById(req: Request, res: Response<ListaPrecioResponse>, next: NextFunction) {
