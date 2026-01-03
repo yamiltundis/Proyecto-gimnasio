@@ -20,6 +20,7 @@ model Cliente {
   membreciasActivas MembreciaActiva[]
   reservas Reserva[]
   asistenciasClases AsistenciaClase[]
+  asistencias Asistencia[]
 }
 
 model TipoClase {
@@ -84,8 +85,6 @@ model Reserva {
   claseEspecificaId Int
   claseEspecifica ClaseEspecifica @relation(fields: [claseEspecificaId], references: [id])
   asistencia      AsistenciaClase? @relation("ReservaAsistencia")
-
-
 }
 
 model AsistenciaClase {
@@ -97,4 +96,11 @@ model AsistenciaClase {
   claseEspecifica ClaseEspecifica @relation(fields: [claseEspecificaId], references: [id])
   reserva     Reserva?  @relation("ReservaAsistencia",fields: [reservaId], references: [id])
   reservaId   Int?      @unique
+}
+
+model Asistencia {
+  id Int @id @default(autoincrement())
+  fechaHora DateTime
+  clienteId Int
+  cliente Cliente @relation(fields: [clienteId], references: [id])
 }

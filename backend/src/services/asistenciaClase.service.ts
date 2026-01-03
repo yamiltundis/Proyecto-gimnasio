@@ -1,5 +1,6 @@
 import { AsistenciaClase, CreateAsistenciaClaseRequest, UpdateAsistenciaClaseRequest } from "../types/asistenciaClase.types";
 import prisma from "../config/prisma";
+import { validarMembreciaActiva } from "./validarMembreciaActiva";
 
 export async function getAllAsistenciasClases(): Promise<AsistenciaClase[]> {
     const asistencias = await prisma.asistenciaClase.findMany({
@@ -20,23 +21,8 @@ export async function getAsistenciaClaseById(id: number): Promise<AsistenciaClas
 
 export async function createAsistenciaClase(data: CreateAsistenciaClaseRequest): Promise<AsistenciaClase> {
 
-  const membreciaActiva = await prisma.membreciaActiva.findFirst({
-    where: { clienteId: data.clienteId },
-    orderBy: { fechaFin: 'desc' }
-  });
-
-  if (!membreciaActiva) {
-    const error = new Error('No puede registrarse asistencia: el cliente no tiene ninguna membrecía activa');
-    (error as any).statusCode = 400;
-    throw error;
-  }
-
-  const horacheckin = data.horacheckin ? new Date(data.horacheckin) : new Date();
-  if (membreciaActiva.fechaFin < horacheckin) {
-    const error = new Error('No puede registrarse asistencia: la membrecía activa ya finalizó');
-    (error as any).statusCode = 403;
-    throw error;
-  }
+  // Verifica que el cliente esté con una membrecia en activo
+  await validarMembreciaActiva(data.clienteId, data.horacheckin);
 
   const clase = await prisma.claseEspecifica.findUnique({
     where: { id: data.claseEspecificaId },
@@ -80,7 +66,7 @@ export async function createAsistenciaClase(data: CreateAsistenciaClaseRequest):
 
   const newAsistencia = await prisma.asistenciaClase.create({
     data: {
-      horacheckin,
+      horacheckin: data.horacheckin,
       clienteId: data.clienteId,
       claseEspecificaId: data.claseEspecificaId,
       reservaId: data.reservaId

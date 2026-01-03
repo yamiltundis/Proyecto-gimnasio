@@ -9,6 +9,7 @@ import { listaPrecioRoutes } from './routes/listaPrecio.routes';
 import { pagoRoutes } from './routes/pago.routes';
 import { reservaRoutes } from './routes/reserva.routes';
 import { asistenciaClaseRoutes } from './routes/asistenciaClase.routes';
+import { asistenciaRoutes } from './routes/asistencia.routes';
 
 const app = express();
 const PORT = 3000;
@@ -28,6 +29,7 @@ app.use('/listasPrecios', listaPrecioRoutes)
 app.use('/pagos', pagoRoutes);
 app.use('/reservas', reservaRoutes);
 app.use('/asistenciasClases', asistenciaClaseRoutes);
+app.use('/asistencias', asistenciaRoutes);
 
 app.use(handleError)
 

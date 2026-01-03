@@ -1,5 +1,6 @@
 import { Reserva, CreateReservaRequest, UpdateReservaRequest } from "../types/reserva.types";
 import prisma from "../config/prisma";
+import { validarMembreciaActiva } from "./validarMembreciaActiva";
 
 export async function getAllReservas(): Promise<Reserva[]> {
     const reservas = await prisma.reserva.findMany({
@@ -20,25 +21,8 @@ export async function getReservaById(id: number): Promise<Reserva> {
 
 export async function createReserva(data: CreateReservaRequest): Promise<Reserva> {
 
-    const membreciaActiva = await prisma.membreciaActiva.findFirst({
-        where: { clienteId: data.clienteId},
-        orderBy: { fechaFin: 'desc'}
-    })
-
-    // Verifico que exista alguna membrecia activa para el cliente de la reserva
-    const fechaReserva = data.fechaReserva ? new Date(data.fechaReserva) : new Date();
-    if (!membreciaActiva) {
-        const error = new Error('No puede realizar una reserva ya que el cliente no ha tenido ninguna membrecia activa');
-        (error as any).statusCode = 404;
-        throw(error);        
-    }
-    
-    // Verifico que el cliente tenga una MembreciaActiva no terminada
-    if (membreciaActiva.fechaFin < fechaReserva) {
-        const error = new Error('No puede realizar una reserva ya que su ultima membrecia activa finalizó');
-        (error as any).statusCode = 404;
-        throw(error);
-    }
+    // Verifica que el cliente esté con una membrecia en activo
+    await validarMembreciaActiva(data.clienteId, data.fechaReserva);
 
     // Verifico que exista la clase específica y que el cupo máximo no haya sido alcanzado
     if (!data.claseEspecificaId) { throw new Error("Debe indicar una clase específica"); }
