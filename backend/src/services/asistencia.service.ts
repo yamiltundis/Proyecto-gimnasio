@@ -4,7 +4,15 @@ import { validarMembreciaActiva } from "./validarMembreciaActiva";
 
 export async function getAllAsistencias(): Promise<Asistencia[]> {
     const asistencias = await prisma.asistencia.findMany({
-        orderBy: { id: 'asc'}
+        orderBy: { fechaHora: 'desc'},
+        include: {
+            cliente: {
+                select: {
+                    nombre: true,
+                    apellido: true
+                }
+            }
+        }
     })
     return asistencias;
 }

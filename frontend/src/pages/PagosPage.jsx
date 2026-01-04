@@ -44,7 +44,7 @@ export function PagosPage () {
                <i className="bi bi-search"></i>
                <input type="text" placeholder='Buscar por cliente' className='pagospage-input-busqueda'></input>
             </div>
-            <Link to="/admin/clientes/crear">
+            <Link to="/admin/pagos/crear">
             <div className='pagospage-boton-nuevo-pago'>
                <i className='bi bi-plus'></i>
                <button className='pagospage-texto-boton-nuevo-pago'> Nuevo Pago</button>            

@@ -13,12 +13,19 @@ export function Layout () {
                     <Link to="/admin/clientes">
                       <li className='bi bi-person-lines-fill'> Clientes </li>
                     </Link>
+
+                    <Link to="/admin/asistencias">
+                      <li className='bi bi-file-arrow-down'> Asistencias </li>
+                    </Link>
+
                     <Link to="/admin/pagos">
                       <li className='bi bi-cash'> Pagos </li>
                     </Link>
+
                     <Link to="/admin/clases">
                       <li className='bi bi-stack'> Clases </li>
                     </Link>
+
                     <Link to="/admin/membrecias">
                       <li className='bi bi-card-checklist'> Membrecias </li>
                     </Link>
