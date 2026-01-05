@@ -26,7 +26,6 @@ export function ClientesPage () {
                 const estadoData = await estadoResponse.json()
                 return { ...c, estado: estadoData.diasRestantes.estado } // combinamos cliente + estado
               } catch (error) {
-                console.error(`Error al traer estado de cliente ${c.id}:`, error)
                 return { ...c, estado: 'Desconocido' } // fallback
               }
             })

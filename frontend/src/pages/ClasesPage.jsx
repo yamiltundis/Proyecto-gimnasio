@@ -1,30 +1,78 @@
-import { ClasesCards } from "../components/clasesCards"
+import '../estilos/clasesPage.css'
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+
 export function ClasesPage () {
+
+    const [clases, setClases] = useState([])
+   
+    useEffect(() => {
+      const fetchClases = async () => {
+        try {
+          const response = await fetch('http://localhost:3000/tiposclase')
+          if (!response.ok) {
+            throw new Error('Error al traer tipos de clases')
+          }
+          const data = await response.json()
+
+          setClases(data.tiposClase)
+        } catch (error) {
+          console.error(error)
+        }
+      }
+
+      fetchClases()
+    }, [])
+
+
+
+    const eliminarClase = (id) => {
+      setClases(clases.filter(c => c.id !== id))
+    }
+
+    const agregarClase = (data) => {
+      setClases([...clases, data])
+    }
+
     return (
         <>
-          <h1> Las clases </h1>
+          <h1 className='clasespage-h1'> Gestión de clases </h1>
 
-          <ClasesCards
-            clases={[
-              {
-                id: 1,
-                nombre: "Boxeo",
-                fechaHora: "2026-01-08T19:00",
-                cupo: 30,
-                reservas: 18,
-                asistenciasFinales: 25
-              },
-              {
-                id: 2,
-                nombre: "Zumba",
-                fechaHora: "2026-01-10T20:00",
-                cupo: 25,
-                reservas: 20,
-                asistenciasFinales: 22
-              }
-            ]}
-          />
+          <div className='clasespage-contenedor-barra-busqueda-y-boton-nuevo-clase'>
+            <div className="clasespage-barra-busqueda">
+               <i className="bi bi-search"></i>
+               <input type="text" placeholder='Buscar por nombre' className='clasespage-input-busqueda'></input>
+            </div>
+            <Link to="/admin/clases/crear">
+            <div className='clasespage-boton-nuevo-clase'>
+               <i className='bi bi-plus'></i>
+               <button className='clasespage-texto-boton-nuevo-clase'> Nuevo tipo de clase </button>            
+            </div>
+            </Link>
+          </div>
 
+           <div className='clasespage-contenedor-tabla'>
+             <table className='clasespage-tabla'>
+                <thead>
+                    <tr>
+                        <th> Nombre </th>
+                        <th> Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {Array.isArray(clases) && clases.map((c) => (
+                        <tr key={c.id}>
+                           <td> {c.nombre} </td>
+                           <td className='clasespage-columna-acciones'>
+                              <Link to={`/admin/clases/clasesespecificas`}>
+                                <p className='clasespage-link-ver-clases'> Ver clases </p> 
+                              </Link>
+                           </td>                         
+                        </tr>
+                    ))}
+                </tbody>
+             </table>
+           </div>
         </>
     )
 }
