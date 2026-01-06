@@ -14,7 +14,6 @@ npm-debug.log*
 Thumbs.db
 *.swp
 
-# Configuración de entorno (no se comparte)
 .env
 
 # Archivos de desarrollo opcionales
