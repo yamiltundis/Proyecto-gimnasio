@@ -11,3 +11,5 @@ Tecnologias:
 - Frontend: React
 - Backend: Node.js, TypeScript, Express, Prisma (próximamente Zod y JWT)
 - Persistencia: MySql corriendo en un contenedor Docker (con volumen para no perder los datos)
+
+Próximamente lo van a poder correr cuando finalice el docker compose
