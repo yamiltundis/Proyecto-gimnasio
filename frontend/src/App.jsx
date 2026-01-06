@@ -14,6 +14,7 @@ import { CrearAsistenciaPage } from "./pages/CrearAsistenciaPage.jsx"
 import { ClasesEspecificasPage } from "./pages/ClasesEspecificasPage.jsx"
 import { CrearClasePage } from "./pages/CrearClasePage.jsx"
 import { ReservasPage } from "./pages/ReservasPage.jsx"
+import { CrearClaseEspecificaPage } from "./pages/CrearClaseEspecificaPage.jsx"
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
           <Route path="pagos/crear" element={<CrearPagoPage />} />
           <Route path="clases" element={<ClasesPage />} />
           <Route path="clases/:id" element={ <ClasesEspecificasPage/>}/>
+          <Route path="clases/:id/crear" element={ <CrearClaseEspecificaPage/>}/>
           <Route path="clases/:id/reservas" element={<ReservasPage />}/>
           <Route path="clases/crear" element={ <CrearClasePage/>}/>
           <Route path="membrecias" element={<MembreciasPage />}/>

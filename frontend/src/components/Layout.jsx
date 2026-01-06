@@ -6,7 +6,7 @@ export function Layout () {
     return (
         <div className='layout'>
             <header className='layout-header'>
-                <h1> TuGym </h1>
+                <h1> GymLab </h1>
             </header>
             <aside className='layout-aside'>
                 <ul className='layout-aside-lista'>

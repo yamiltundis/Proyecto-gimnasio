@@ -67,7 +67,7 @@ export function ClasesEspecificasPage () {
                <i className="bi bi-search"></i>
                <input type="text" placeholder='Buscar por nombre o DNI' className='clasesespecificaspage-input-busqueda'></input>
             </div>
-            <Link to="/admin/clientes/crear">
+            <Link to={`/admin/clases/${id}/crear`}>
             <div className='clasesespecificaspage-boton-nuevo-claseespecifica'>
                <i className='bi bi-plus'></i>
                <button className='clasesespecificaspage-texto-boton-nuevo-claseespecifica'> Nueva Clase </button>            

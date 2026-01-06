@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom'
 export function ClientesPage () {
 
   const [clientes, setClientes] = useState([])
+  const [busqueda, setBusqueda] = useState("")
+  const [estadoFiltro, setEstadoFiltro] = useState("")
   const [mostrarModal, setMostrarModal] = useState(false);
 
     useEffect(() => {
@@ -45,6 +47,16 @@ export function ClientesPage () {
 
     }
 
+    const clientesFiltrados = clientes.filter(c => {
+      const coincideBusqueda =
+        c.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+        c.apellido.toLowerCase().includes(busqueda.toLowerCase());
+    
+      const coincideEstado = estadoFiltro === "" || c.estado === estadoFiltro;
+
+      return coincideBusqueda && coincideEstado;
+    })
+
     const eliminarCliente = (id) => {
       setClientes(clientes.filter(c => c.id !== id))
     }
@@ -60,8 +72,26 @@ export function ClientesPage () {
           <div className='clientespage-contenedor-barra-busqueda-y-boton-nuevo-cliente'>
             <div className="clientespage-barra-busqueda">
                <i className="bi bi-search"></i>
-               <input type="text" placeholder='Buscar por nombre o DNI' className='clientespage-input-busqueda'></input>
+               <input 
+                  type="text" 
+                  placeholder='Buscar por nombre o apellido' 
+                  className='clientespage-input-busqueda'
+                  value={busqueda}
+                  onChange={(e) => setBusqueda(e.target.value)}
+                  ></input>
             </div>
+                  <select
+                    className="clientespage-select-estado"
+                    value={estadoFiltro}
+                    onChange={(e) => setEstadoFiltro(e.target.value)}
+                  >
+                    <option value="">Todos los estados</option>
+                    <option value="Activo"> Activo </option>
+                    <option value="Aplazado"> Aplazado </option>
+                    <option value="Suspendido"> Suspendido </option>
+                    <option value="Desconocido"> Desconocido </option>
+                  </select>
+
             <Link to="/admin/clientes/crear">
             <div className='clientespage-boton-nuevo-cliente'>
                <i className='bi bi-plus'></i>
@@ -83,7 +113,7 @@ export function ClientesPage () {
                     </tr>
                 </thead>
                 <tbody>
-                    {Array.isArray(clientes) && clientes.map((c) => (
+                    {Array.isArray(clientes) && clientesFiltrados.map((c) => (
                         <tr key={c.id}>
                            <td> {c.nombre} </td>
                            <td> {c.apellido} </td>
