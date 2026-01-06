@@ -6,6 +6,12 @@ export interface ClaseEspecifica {
     tipoClaseId: number
 }
 
+export interface ClaseEspecificaListadoFront extends ClaseEspecifica {
+  estado: "Pendiente" | "Finalizada",
+  cantidadReservas: number
+}
+
+
 export interface CreateClaseEspecifica {
     diaHora: Date,
     cantmax: number,
@@ -19,7 +25,7 @@ export interface UpdateClaseEspecifica {
 }
 
 export interface ClaseEspecificaResponse {
-    claseEspecifica: ClaseEspecifica
+    claseEspecifica: ClaseEspecifica,
     message: string
 }
 

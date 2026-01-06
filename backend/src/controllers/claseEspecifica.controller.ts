@@ -4,7 +4,11 @@ import * as claseEspecificaService from '../services/claseEspecifica.service'
 
 export async function getAllClasesEspecificas(req: Request, res: Response<ClaseEspecificaListResponse>, next: NextFunction) {
    try {
-    const clases = await claseEspecificaService.getAllClasesEspecificas();
+    const tipoClase = req.query.tipoClase
+        ? Number(req.query.tipoClase)
+        : undefined;
+
+    const clases = await claseEspecificaService.getAllClasesEspecificas(tipoClase);
     res.json({
         clasesEspecificas: clases,
         total: clases.length

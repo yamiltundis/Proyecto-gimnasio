@@ -2,9 +2,18 @@ import { Reserva, CreateReservaRequest, UpdateReservaRequest } from "../types/re
 import prisma from "../config/prisma";
 import { validarMembreciaActiva } from "./validarMembreciaActiva";
 
-export async function getAllReservas(): Promise<Reserva[]> {
+export async function getAllReservas(claseEspecificaId?: number): Promise<Reserva[]> {
     const reservas = await prisma.reserva.findMany({
-        orderBy: { id: 'asc'}
+        where: claseEspecificaId ? { claseEspecificaId: claseEspecificaId } : {},
+        orderBy: { id: 'asc'},
+        include: { 
+            cliente: {
+                select: {
+                    nombre: true,
+                    apellido: true
+                }
+            }
+        }
     })
     return reservas;
 }

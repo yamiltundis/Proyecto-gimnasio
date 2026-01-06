@@ -1,13 +1,13 @@
-.clientespage-h1 {
+.reservaspage-h1 {
   margin-bottom: 0.5em;
 }
 
-.clientespage-contenedor-barra-busqueda-y-boton-nuevo-cliente {
+.reservaspage-contenedor-barra-busqueda-y-boton-nuevo-reserva {
   display: flex; 
   gap: 5rem;
 }
 
-.clientespage-barra-busqueda {
+.reservaspage-barra-busqueda {
   display: flex;
   align-items: center;
   background-color: #fff;
@@ -20,13 +20,13 @@
   height: 2em;
 }
 
-.clientespage-barra-busqueda i {
+.reservaspage-barra-busqueda i {
   font-size: 1.2rem;
   color: #888;
   margin-right: 0.5rem;
 }
 
-.clientespage-input-busqueda {
+.reservaspage-input-busqueda {
   border: none;
   outline: none;
   flex: 1;
@@ -34,7 +34,7 @@
   color: #333;
 }
 
-.clientespage-boton-nuevo-cliente {
+.reservaspage-boton-nuevo-reserva {
   display: flex;
   align-items: center;
   background-color: #166f26;
@@ -47,12 +47,12 @@
   margin-top: 0.2em;
 }
 
-.clientespage-boton-nuevo-cliente i {
+.reservaspage-boton-nuevo-reserva i {
     color: white;
     font-size: 1em;
 }
 
-.clientespage-texto-boton-nuevo-cliente {
+.reservaspage-texto-boton-nuevo-reserva {
     border: none;
     outline: none;
     font-size: 1rem;
@@ -62,34 +62,34 @@
     cursor: pointer;
 }
 
-.clientespage-contenedor-tabla {
+.reservaspage-contenedor-tabla {
     margin-top: 1.5em;
 }
 
-.clientespage-tabla {
+.reservaspage-tabla {
     border: 1px solid black;
     border-collapse: collapse;
 }
 
-.clientespage-tabla th, .clientespage-tabla td {
+.reservaspage-tabla th, .reservaspage-tabla td {
   border: 1px solid #ccc;
   padding: 8px;
   text-align: center;
 }
 
-.clientespage-tabla th {
+.reservaspage-tabla th {
   background-color: rgb(187, 184, 184);
 }
 
-.clientespage-tabla td {
+.reservaspage-tabla td {
   background-color: white;
 }
 
-.clientespage-columna-acciones {
+.reservaspage-columna-acciones {
     gap: 5em;
 }
 
-.clientespage-boton-ver-perfil {
+.reservaspage-boton-ver-perfil {
   margin-left: 0.5rem;
   border: none;
   padding: 0.3em 0.8em;
@@ -99,52 +99,7 @@
   cursor: pointer;
 }
 
-.clientespage-columna-acciones i {
+.reservaspage-columna-acciones i {
   margin-left: 0.5em;
   cursor: pointer;
-}
-
-.clientespage-estado-badge {
-  display: inline-block;
-  padding: 0.3rem 0.6rem;
-  border-radius: 12px;
-  font-weight: bold;
-  font-size: 0.9rem;
-}
-
-.estado-Activo {
-  background-color: #d4edda;
-  color: #155724;
-}
-
-.estado-Atrasado {
-  background-color: #fff3cd;
-  color: #856404;
-}
-
-.estado-Suspendido {
-  background-color: #f8d7da;
-  color: #721c24;
-}
-
-.estado-Desconocido {
-  background-color: #c2bdbe;
-  color: #000000;
-}
-
-.clientespage-modal-overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5); /* fondo oscuro */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.clientespage-modal {
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  min-width: 300px;
 }

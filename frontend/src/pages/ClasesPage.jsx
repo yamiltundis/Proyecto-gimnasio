@@ -64,7 +64,7 @@ export function ClasesPage () {
                         <tr key={c.id}>
                            <td> {c.nombre} </td>
                            <td className='clasespage-columna-acciones'>
-                              <Link to={`/admin/clases/clasesespecificas`}>
+                              <Link to={`/admin/clases/${c.id}`}>
                                 <p className='clasespage-link-ver-clases'> Ver clases </p> 
                               </Link>
                            </td>                         

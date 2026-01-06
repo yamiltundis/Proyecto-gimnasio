@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom'
 
 export function ClientesPage () {
 
-    const [clientes, setClientes] = useState([])
-   
+  const [clientes, setClientes] = useState([])
+  const [mostrarModal, setMostrarModal] = useState(false);
+
     useEffect(() => {
       const fetchClientes = async () => {
         try {
@@ -40,7 +41,9 @@ export function ClientesPage () {
       fetchClientes()
     }, [])
 
+    function confirmarEliminacion ()  {
 
+    }
 
     const eliminarCliente = (id) => {
       setClientes(clientes.filter(c => c.id !== id))
@@ -87,7 +90,7 @@ export function ClientesPage () {
                            <td> {c.dni} </td>
                            <td> {c.email}</td>
                            <td>
-                             <span className={`estado-badge estado-${c.estado}`}>
+                             <span className={`clientespage-estado-badge estado-${c.estado}`}>
                                {c.estado}
                              </span>
                            </td>
@@ -95,13 +98,22 @@ export function ClientesPage () {
                               <Link to={`/admin/clientes/${c.id}`}>
                                 <button className='clientespage-boton-ver-perfil'> Ver perfil </button> 
                               </Link>
-                              <i className='bi bi-trash-fill' onClick={() => eliminarCliente(c.id)}></i>
+                              <i className='bi bi-trash-fill' onClick={() => setMostrarModal(true)}></i>
                            </td>                         
                         </tr>
                     ))}
                 </tbody>
              </table>
            </div>
+          {mostrarModal && (
+            <div className="clientespage-modal-overlay">
+              <div className="clientespage-modal">
+                <h2>¿Seguro que querés eliminar esta clase?</h2>
+                 <button onClick={confirmarEliminacion}>Sí</button>
+                <button onClick={() => setMostrarModal(false)}>Cancelar</button>
+               </div>
+            </div>
+          )}
         </>
     )
 }

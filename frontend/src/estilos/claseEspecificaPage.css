@@ -1,0 +1,133 @@
+.clasesespecificaspage-h1 {
+  margin-bottom: 0.5em;
+}
+
+.clasesespecificaspage-contenedor-barra-busqueda-y-boton-nuevo-claseespecifica {
+  display: flex; 
+  gap: 5rem;
+}
+
+.clasesespecificaspage-barra-busqueda {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  max-width: 30em;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  height: 2em;
+}
+
+.clasesespecificaspage-barra-busqueda i {
+  font-size: 1.2rem;
+  color: #888;
+  margin-right: 0.5rem;
+}
+
+.clasesespecificaspage-input-busqueda {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 1rem;
+  color: #333;
+}
+
+.clasesespecificaspage-boton-nuevo-claseespecifica {
+  display: flex;
+  align-items: center;
+  background-color: #166f26;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  gap: 0.05em;
+  padding: 0.2rem 0.3rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  height: 2em;
+  margin-top: 0.2em;
+}
+
+.clasesespecificaspage-boton-nuevo-claseespecifica i {
+    color: white;
+    font-size: 1em;
+}
+
+.clasesespecificaspage-texto-boton-nuevo-claseespecifica {
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    background-color: #166f26;
+    color: white;
+    flex: 1;
+    cursor: pointer;
+}
+
+.clasesespecificaspage-contenedor-tabla {
+    margin-top: 1.5em;
+}
+
+.clasesespecificaspage-tabla {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+}
+
+.clasesespecificaspage-tabla th, .clasesespecificaspage-tabla td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+.clasesespecificaspage-tabla th {
+  background-color: rgb(187, 184, 184);
+}
+
+.clasesespecificaspage-tabla td {
+  background-color: white;
+}
+
+.clasesespecificaspage-columna-acciones {
+  justify-content: center;
+  align-items: center;
+}
+
+.clasesespecificaspage-columna-acciones span {
+  display: inline-block;
+  padding: 2px 4px;
+  cursor: pointer;
+}
+
+.clasesespecificaspage-columna-acciones a {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.clasesespecificaspage-link-ver-reservas {
+  color: rgb(14, 14, 94);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.clasesespecificaspage-link-ver-asistencias {
+  color: rgb(14, 14, 94);
+  cursor: pointer;
+  text-decoration: underline;  
+}
+
+.clasesespecificaspage-estado-badge {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.estado-Pendiente {
+  background-color: #ccd669df;
+  color: #000201;
+}
+
+.estado-Finalizada {
+  background-color: #67d483;
+  color: #155724;
+}

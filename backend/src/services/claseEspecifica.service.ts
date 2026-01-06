@@ -1,11 +1,20 @@
-import { ClaseEspecifica, CreateClaseEspecifica, UpdateClaseEspecifica } from "../types/claseEspecifica.types";
+import { ClaseEspecifica, ClaseEspecificaListadoFront ,CreateClaseEspecifica, UpdateClaseEspecifica } from "../types/claseEspecifica.types";
 import prisma from "../config/prisma";
 
-export async function getAllClasesEspecificas(): Promise<ClaseEspecifica[]> {
+export async function getAllClasesEspecificas(tipoClase?: number): Promise<ClaseEspecificaListadoFront[]> {
     const clases = await prisma.claseEspecifica.findMany({
-        orderBy: { id: 'asc'}
+        where: tipoClase ? { tipoClaseId: tipoClase } : {},
+        include: { reservas: true },
+        orderBy: { diaHora: 'desc'}
     })
-    return clases;
+
+    const clasesConEstado: ClaseEspecificaListadoFront[]= clases.map(clase => ({
+      ...clase,
+      estado: new Date(clase.diaHora) > new Date() ? "Pendiente" : "Finalizada",
+      cantidadReservas: clase.reservas.length
+    }));
+
+    return clasesConEstado;
 }
 
 export async function getClaseEspecificaById(id: number): Promise<ClaseEspecifica> {
