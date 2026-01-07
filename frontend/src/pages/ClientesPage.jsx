@@ -80,17 +80,17 @@ export function ClientesPage () {
                   onChange={(e) => setBusqueda(e.target.value)}
                   ></input>
             </div>
-                  <select
-                    className="clientespage-select-estado"
-                    value={estadoFiltro}
-                    onChange={(e) => setEstadoFiltro(e.target.value)}
-                  >
-                    <option value="">Todos los estados</option>
-                    <option value="Activo"> Activo </option>
-                    <option value="Aplazado"> Aplazado </option>
-                    <option value="Suspendido"> Suspendido </option>
-                    <option value="Desconocido"> Desconocido </option>
-                  </select>
+            <select
+              className="clientespage-select-estado"
+              value={estadoFiltro}
+              onChange={(e) => setEstadoFiltro(e.target.value)}
+            >
+              <option value="">Todos los estados</option>
+              <option value="Activo"> Activo </option>
+              <option value="Aplazado"> Aplazado </option>
+              <option value="Suspendido"> Suspendido </option>
+              <option value="Desconocido"> Desconocido </option>
+            </select>
 
             <Link to="/admin/clientes/crear">
             <div className='clientespage-boton-nuevo-cliente'>

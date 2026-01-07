@@ -4,10 +4,10 @@
 
 .pagospage-contenedor-barra-busqueda-y-boton-nuevo-pago {
   display: flex; 
-  gap: 5rem;
+  gap: 2rem;
 }
 
-.pagospage-barra-busqueda {
+.pagospage-barra-busqueda-cliente {
   display: flex;
   align-items: center;
   background-color: #fff;
@@ -15,15 +15,51 @@
   border-radius: 8px;
   padding: 0.5rem 1rem;
   width: 100%;
-  max-width: 30em;
+  max-width: 20em;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   height: 2em;
+}
+
+.pagospage-barra-busqueda-fecha {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  max-width: 10em;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  height: 2em;
+  margin-left: 0.1em;
 }
 
 .pagospage-barra-busqueda i {
   font-size: 1.2rem;
   color: #888;
   margin-right: 0.5rem;
+}
+
+.pagospage-select-estado {
+  padding: 8px 12px;
+  border: 2px solid #4CAF50;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pagospage-select-estado:hover {
+  border-color: #45a049;
+  background-color: #fff;
+}
+
+.pagospage-select-estado:focus {
+  outline: none;
+  border-color: #2e7d32;
+  box-shadow: 0 0 5px rgba(46, 125, 50, 0.5);
 }
 
 .pagospage-input-busqueda {

@@ -7,7 +7,7 @@
   gap: 5rem;
 }
 
-.asistenciaspage-barra-busqueda {
+.asistenciaspage-barra-busqueda-cliente {
   display: flex;
   align-items: center;
   background-color: #fff;
@@ -15,9 +15,23 @@
   border-radius: 8px;
   padding: 0.5rem 1rem;
   width: 100%;
-  max-width: 30em;
+  max-width: 20em;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   height: 2em;
+}
+
+.asistenciaspage-barra-busqueda-dia {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  max-width: 10em;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  height: 2em;
+  margin-left: 0.1em;
 }
 
 .asistenciaspage-barra-busqueda i {
