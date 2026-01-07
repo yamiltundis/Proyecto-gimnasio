@@ -126,7 +126,7 @@ export function ClientesPage () {
                            </td>
                            <td className='clientespage-columna-acciones'>
                               <Link to={`/admin/clientes/${c.id}`}>
-                                <button className='clientespage-boton-ver-perfil'> Ver perfil </button> 
+                                <span className='clientespage-link-ver-perfil'> Ver perfil </span> 
                               </Link>
                               <i className='bi bi-trash-fill' onClick={() => setMostrarModal(true)}></i>
                            </td>                         
@@ -138,9 +138,9 @@ export function ClientesPage () {
           {mostrarModal && (
             <div className="clientespage-modal-overlay">
               <div className="clientespage-modal">
-                <h2>¿Seguro que querés eliminar esta clase?</h2>
+                <h2>¿Seguro que querés eliminar este cliente?</h2>
                  <button onClick={confirmarEliminacion}>Sí</button>
-                <button onClick={() => setMostrarModal(false)}>Cancelar</button>
+                 <button onClick={() => setMostrarModal(false)}>Cancelar</button>
                </div>
             </div>
           )}

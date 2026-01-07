@@ -1,7 +1,8 @@
 import '../estilos/claseEspecificaPage.css'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import { BotonRegresar } from '../components/BotonRegresar'
 
 export function ClasesEspecificasPage () {
     const { id } = useParams(); 
@@ -112,6 +113,7 @@ export function ClasesEspecificasPage () {
                 </tbody>
              </table>
            </div>
+           <BotonRegresar />
         </>
     )
 }

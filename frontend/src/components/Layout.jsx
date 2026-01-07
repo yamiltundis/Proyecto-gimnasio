@@ -35,7 +35,7 @@ export function Layout () {
                 <Outlet />
             </main>
             <footer className='layout-footer'>
-                <p> TuGym 2025</p>
+                <p> GymLab 2026 </p>
             </footer> 
         </div>
     )

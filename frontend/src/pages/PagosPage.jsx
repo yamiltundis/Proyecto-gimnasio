@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom'
 
 export function PagosPage () {
 
-    const [pagos, setPagos] = useState([])
-    const [nombresMembresias, setNombresMembresias] = useState([])
-    const [busqueda, setBusqueda] = useState("")
-    const [busquedaFecha, setBusquedaFecha] = useState("")
-    const [busquedaMembresia, setBusquedaMembresia] = useState("")
+    const [pagos, setPagos] = useState([]) // estado para guardar los pagos que vienen del back
+    const [nombresMembresias, setNombresMembresias] = useState([]) // estado para mostrar los nombres de las membresias en el filtro
+    const [busqueda, setBusqueda] = useState("") // estado para filtrar por cliente
+    const [busquedaFecha, setBusquedaFecha] = useState("") // estado para filtrar por fecha
+    const [busquedaMembresia, setBusquedaMembresia] = useState("") // estado para filtrar por mrembresia
    
     useEffect(() => {
       const fetchPagos = async () => {
@@ -128,7 +128,6 @@ export function PagosPage () {
                         <th> Monto </th>
                         <th> Cliente </th>
                         <th> Membrecia </th>
-                        <th> Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -137,12 +136,7 @@ export function PagosPage () {
                            <td> {formatearFecha(p.fecha)} </td>
                            <td> ${p.monto} </td>
                            <td> {p.cliente.nombre} {p.cliente.apellido} </td>
-                           <td> {p.tipoMembrecia.nombre}</td>
-                           <td className='pagospage-columna-acciones'>
-                              <Link to={`/admin/clientes/${p.id}`}>
-                                <button className='pagospage-boton-ver-info'> Ver info </button> 
-                              </Link>
-                           </td>                         
+                           <td> {p.tipoMembrecia.nombre}</td>                     
                         </tr>
                     ))}
                 </tbody>

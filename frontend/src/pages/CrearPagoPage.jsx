@@ -1,13 +1,18 @@
 import '../estilos/crearpagopage.css';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { BotonRegresar } from '../components/BotonRegresar';
 
 export function CrearPagoPage() {
+
+  const [mostrarModal, setMostrarModal] = useState(false) // estado para mostrar modal de creacion de pago
   const [formData, setFormData] = useState({
     fecha: '',
     clienteId: '',
     tipoMembreciaId: ''
   });
+  
+  const [pagoCreado, setPagoCreado] = useState(null)
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -44,6 +49,7 @@ export function CrearPagoPage() {
       }
 
       const resultado = await response.json();
+      setPagoCreado(resultado)
       console.log('Pago creado:', resultado);
 
       setFormData({
@@ -55,6 +61,7 @@ export function CrearPagoPage() {
     } catch (error) {
       console.error('Error al enviar pago:', error);
     }
+    setMostrarModal(true)
   };
 
 
@@ -105,6 +112,19 @@ export function CrearPagoPage() {
         </button>
       </form>
       <BotonRegresar />
+      {mostrarModal && pagoCreado && (
+         <div className="pagospage-modal-overlay">
+              <div className="pagospage-modal">
+                <h2>
+                  El pago del cliente fue creado correctamente!
+                </h2>
+                <i className="bi bi-check-circle-fill icono-verde"></i>
+                <Link to="/admin/pagos">
+                  <span onClick={() => setMostrarModal(false)} className="pagospage-link-cerrar-modal"> Volver al listado de pagos </span>
+                </Link>
+              </div>
+         </div>
+      )}
     </>
   );
 }

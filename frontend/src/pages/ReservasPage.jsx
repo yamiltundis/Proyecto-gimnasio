@@ -1,7 +1,8 @@
 import '../estilos/reservasPage.css'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import { BotonRegresar } from '../components/BotonRegresar';
 
 export function ReservasPage () {
     const { id } = useParams(); 
@@ -79,6 +80,7 @@ export function ReservasPage () {
                 </tbody>
              </table>
            </div>
+           <BotonRegresar />
         </>
     )
 }

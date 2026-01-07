@@ -54,3 +54,45 @@
 .crearpagopage-boton-submit:hover {
   background-color: #0056b3;
 }
+
+.pagospage-modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5); /* fondo oscuro */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagospage-modal {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1000;
+}
+
+.pagospage-modal h2 {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.icono-verde {
+  color: green;
+  font-size: 3rem;
+  margin-bottom: 2rem; 
+}
+
+.pagospage-link-cerrar-modal {
+  color: rgb(14, 14, 94);
+  bottom: 1rem;
+  right: 1rem;
+  cursor: pointer;
+  text-decoration: underline;
+  position: absolute;
+}

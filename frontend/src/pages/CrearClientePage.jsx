@@ -1,5 +1,6 @@
 import '../estilos/crearclientepage.css';
-import { useState, useEffect, use } from 'react';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { BotonRegresar } from '../components/BotonRegresar';
 
 export function CrearClientePage() {
@@ -12,6 +13,8 @@ export function CrearClientePage() {
     foto:''
   });
 
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
     setFormData({
@@ -22,47 +25,16 @@ export function CrearClientePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-      console.log('Datos del cliente:', formData);
-      const payload = {
-        ...formData,
-        dni: Number(formData.dni),
-        fechanacimiento: formData.fechaNacimiento 
-        ? new Date(formData.fechaNacimiento).toISOString() 
-        : null
+    console.log('Datos del cliente:', formData);
+    const payload = {
+      ...formData,
+       dni: Number(formData.dni),
+       fechanacimiento: formData.fechaNacimiento 
+       ? new Date(formData.fechaNacimiento).toISOString() 
+      : null
+    };
+    navigate("/admin/pagos/crearprimerpago", { state: { clienteData: payload }});
 
-      };
-
-
-    try {
-      const response = await fetch('http://localhost:3000/usuarios', {
-        method: 'POST',
-        headers: {
-         'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) {
-        throw new Error('Error al crear cliente');
-      }
-
-      const resultado = await response.json();
-      console.log('Cliente creado:', resultado);
-
-      // Limpiar el formulario
-      setFormData({
-        nombre: '',
-        apellido: '',
-        email: '',
-        dni: '',
-        fechaNacimiento: '',
-        foto: ''
-      });
-   
-      // Podés redirigir o mostrar un mensaje de éxito si querés
-    } catch (error) {
-      console.error('Error al enviar cliente:', error);
-    }
   };
 
 
@@ -143,7 +115,6 @@ export function CrearClientePage() {
             />
           </label>
         </div>
-
         <button type="submit" className="crearclientepage-boton-submit">
           Crear Cliente
         </button>

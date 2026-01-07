@@ -15,6 +15,7 @@ import { ClasesEspecificasPage } from "./pages/ClasesEspecificasPage.jsx"
 import { CrearClasePage } from "./pages/CrearClasePage.jsx"
 import { ReservasPage } from "./pages/ReservasPage.jsx"
 import { CrearClaseEspecificaPage } from "./pages/CrearClaseEspecificaPage.jsx"
+import { CrearPrimerPagoPage } from "./pages/CrearPrimerPagoPage.jsx"
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
           <Route path="clientes/crear" element={<CrearClientePage />}/>
           <Route path="pagos" element={<PagosPage />} />
           <Route path="pagos/crear" element={<CrearPagoPage />} />
+          <Route path="pagos/crearprimerpago" element={<CrearPrimerPagoPage />} />
           <Route path="clases" element={<ClasesPage />} />
           <Route path="clases/:id" element={ <ClasesEspecificasPage/>}/>
           <Route path="clases/:id/crear" element={ <CrearClaseEspecificaPage/>}/>
