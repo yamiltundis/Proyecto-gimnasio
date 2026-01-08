@@ -16,6 +16,7 @@ import { CrearClasePage } from "./pages/CrearClasePage.jsx"
 import { ReservasPage } from "./pages/ReservasPage.jsx"
 import { CrearClaseEspecificaPage } from "./pages/CrearClaseEspecificaPage.jsx"
 import { CrearPrimerPagoPage } from "./pages/CrearPrimerPagoPage.jsx"
+import { LoginLayout } from "./components/LoginLayout.jsx"
 
 function App() {
 
@@ -23,7 +24,10 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/inicio" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
+
+        <Route path ="/login"element={<LoginLayout />}>
+          <Route path="" element={<LoginPage />} />
+        </Route>
 
         <Route path="/admin" element={<Layout />}>
           <Route path="clientes" element={<ClientesPage />} />
