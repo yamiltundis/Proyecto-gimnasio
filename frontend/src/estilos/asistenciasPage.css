@@ -15,7 +15,7 @@
   border-radius: 8px;
   padding: 0.5rem 1rem;
   width: 100%;
-  max-width: 20em;
+  max-width: 30em;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   height: 2em;
 }
@@ -34,7 +34,7 @@
   margin-left: 0.1em;
 }
 
-.asistenciaspage-barra-busqueda i {
+.asistenciaspage-barra-busqueda-cliente i {
   font-size: 1.2rem;
   color: #888;
   margin-right: 0.5rem;
