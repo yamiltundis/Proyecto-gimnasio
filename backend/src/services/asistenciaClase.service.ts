@@ -2,9 +2,18 @@ import { AsistenciaClase, CreateAsistenciaClaseRequest, UpdateAsistenciaClaseReq
 import prisma from "../config/prisma";
 import { validarMembreciaActiva } from "./validarMembreciaActiva";
 
-export async function getAllAsistenciasClases(): Promise<AsistenciaClase[]> {
+export async function getAllAsistenciasClases(claseEspecificaId?: number): Promise<AsistenciaClase[]> {
     const asistencias = await prisma.asistenciaClase.findMany({
-        orderBy: { id: 'asc'}
+        where: claseEspecificaId ? { claseEspecificaId: claseEspecificaId } : {},
+        orderBy: { id: 'asc'},
+        include: {
+          cliente: {
+            select: {
+              nombre: true,
+              apellido: true
+            }
+          }
+        }
     })
     return asistencias;
 }

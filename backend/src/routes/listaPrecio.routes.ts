@@ -1,5 +1,7 @@
 import { Router } from "express";
 import * as listaPrecioController from '../controllers/listaPrecio.controller'
+import { validate } from "../middlewares/validation.middleware";
+import { createListaPrecioSchema, updateListaPrecioSchema } from "../validations/listaPrecio.validations";
 
 const router = Router();
 
@@ -9,9 +11,9 @@ router.get('/ultimo/:membreciaId', listaPrecioController.getUltimoPrecioByMembre
 
 router.get('/:id', listaPrecioController.getListaPrecioById);
 
-router.post('/', listaPrecioController.createListaPrecio);
+router.post('/', validate(createListaPrecioSchema), listaPrecioController.createListaPrecio);
 
-router.put('/:id', listaPrecioController.updateListaPrecio);
+router.put('/:id', validate(updateListaPrecioSchema), listaPrecioController.updateListaPrecio);
 
 router.delete('/:id', listaPrecioController.deleteListaPrecio);
 

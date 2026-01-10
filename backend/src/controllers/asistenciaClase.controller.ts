@@ -4,7 +4,11 @@ import * as asistenciaClaseService from '../services/asistenciaClase.service'
 
 export async function getAllAsistenciasClases(req: Request, res: Response<AsistenciaClaseListResponse>, next: NextFunction) {
    try {
-    const asistencias = await asistenciaClaseService.getAllAsistenciasClases();
+    const claseEspecificaId = req.query.claseEspecificaId
+    ? Number(req.query.claseEspecificaId)
+    : undefined;
+
+    const asistencias = await asistenciaClaseService.getAllAsistenciasClases(claseEspecificaId);
     res.json({
         asistencias: asistencias,
         total: asistencias.length

@@ -1,5 +1,7 @@
 import { Router } from "express";
-import * as claseEspecificaController from '../controllers/claseEspecifica.controller'
+import * as claseEspecificaController from '../controllers/claseEspecifica.controller';
+import { validate } from "../middlewares/validation.middleware";
+import { createClaseEspecificaSchema, updateClaseEspecificaSchema } from "../validations/claseEspecifica.validations";
 
 const router = Router();
 
@@ -7,9 +9,9 @@ router.get('/', claseEspecificaController.getAllClasesEspecificas);
 
 router.get('/:id', claseEspecificaController.getClaseEspecificaById);
 
-router.post('/', claseEspecificaController.createClaseEspecifica);
+router.post('/', validate(createClaseEspecificaSchema), claseEspecificaController.createClaseEspecifica);
 
-router.put('/:id', claseEspecificaController.updateClaseEspecifica);
+router.put('/:id', validate(updateClaseEspecificaSchema),claseEspecificaController.updateClaseEspecifica);
 
 router.delete('/:id', claseEspecificaController.deleteClaseEspecifica);
 

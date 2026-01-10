@@ -1,0 +1,95 @@
+.asistenciasclasepage-h1 {
+  margin-bottom: 0.5em;
+}
+
+.asistenciasclasepage-contenedor-barra-busqueda-y-boton-nuevo-asistenciaclase {
+  display: flex; 
+  gap: 5rem;
+}
+
+.asistenciasclasepage-barra-busqueda {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  max-width: 30em;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  height: 2em;
+}
+
+.asistenciasclasepage-barra-busqueda i {
+  font-size: 1.2rem;
+  color: #888;
+  margin-right: 0.5rem;
+}
+
+.asistenciasclasepage-input-busqueda {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 1rem;
+  color: #333;
+}
+
+.asistenciasclasepage-boton-nuevo-asistenciaclase {
+  display: flex;
+  align-items: center;
+  background-color: #166f26;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  gap: 0.05em;
+  padding: 0.2rem 0.3rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  height: 2em;
+  margin-top: 0.2em;
+}
+
+.asistenciasclasepage-boton-nuevo-asistenciaclase i {
+    color: white;
+    font-size: 1em;
+}
+
+.asistenciasclasepage-texto-boton-nuevo-asistenciaclase {
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    background-color: #166f26;
+    color: white;
+    flex: 1;
+    cursor: pointer;
+}
+
+.asistenciasclasepage-contenedor-tabla {
+    margin-top: 1.5em;
+}
+
+.asistenciasclasepage-tabla {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.asistenciasclasepage-tabla th, .asistenciasclasepage-tabla td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+.asistenciasclasepage-tabla th {
+  background-color: rgb(187, 184, 184);
+}
+
+.asistenciasclasepage-tabla td {
+  background-color: white;
+}
+
+.asistenciasclasepage-columna-acciones {
+    gap: 5em;
+}
+
+.asistenciasclasepage-columna-acciones i {
+  margin-left: 0.5em;
+  cursor: pointer;
+}

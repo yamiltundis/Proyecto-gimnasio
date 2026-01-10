@@ -4,6 +4,7 @@ import * as reservaService from '../services/reserva.service'
 
 export async function getAllReservas(req: Request, res: Response<ReservaListResponse>, next: NextFunction) {
    try {
+    
     const claseEspecificaId = req.query.claseEspecificaId
     ? Number(req.query.claseEspecificaId)
     : undefined;

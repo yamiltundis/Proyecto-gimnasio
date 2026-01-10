@@ -108,12 +108,12 @@ export function ClasesEspecificasPage () {
                            </td>
                            <td> {c.cantmax} </td>
                            <td> {c.cantidadReservas} </td>
-                           <td> </td> 
+                           <td> {c.cantidadAsistencias}</td> 
                            <td className='clasesespecificaspage-columna-acciones'>
                               <Link to={`/admin/clases/${c.id}/reservas`}>
                                 <span className='clasesespecificaspage-link-ver-reservas'> Ver reservas </span> 
                               </Link>
-                              <Link to={`/admin/clientes/${c.id}`}>
+                              <Link to={`/admin/clases/${c.id}/asistencias`}>
                                 <span className='clasesespecificaspage-link-ver-asistencias'> Ver asistencias </span> 
                               </Link>
                            </td>                         
