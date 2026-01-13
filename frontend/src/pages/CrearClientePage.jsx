@@ -30,7 +30,7 @@ export function CrearClientePage() {
     const payload = {
       ...formData,
        dni: Number(formData.dni),
-       fechanacimiento: formData.fechaNacimiento 
+       fechaNacimiento: formData.fechaNacimiento 
        ? new Date(formData.fechaNacimiento).toISOString() 
       : null
     };

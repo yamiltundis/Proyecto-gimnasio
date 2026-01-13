@@ -10,18 +10,18 @@ export const validate = (schema: ZodType) => {
      req.body = validatedData;
      next();
    } catch (error) {
-     if (error instanceof ZodError) {
-       // Formatear errores para el frontend
-       return res.status(400).json({
-         success: false,
-         message: 'Datos inválidos',
-         errors: error.issues.map(err => ({
-           field: err.path.join('.'),
-           message: err.message
-         }))
-       });
-     }
-     return next(error);
+      if (error instanceof ZodError) {
+        // Creamos un error con statusCode y mensaje
+        const err: any = new Error("Datos inválidos");
+        err.statusCode = 400;
+        err.details = error.issues.map((issue) => ({
+          field: issue.path.join("."),
+          message: issue.message,
+        }));
+        return next(err);
+      }
+      return next(error);
+
    }
  };
 };

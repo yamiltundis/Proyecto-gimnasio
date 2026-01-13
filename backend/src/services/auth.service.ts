@@ -5,16 +5,16 @@ import { LoginRequest, LoginResponse } from '../types/auth.types';
 
 export async function login(data: LoginRequest): Promise<LoginResponse['data']> {
    // 1. Buscar usuario
-   const user = await prisma.usuario.findUnique({
+   const usuario = await prisma.usuario.findUnique({
        where: { email: data.email }
    });
-   if (!user) {
+   if (!usuario) {
        const error = new Error('Credenciales inválidas') as any;
        error.statusCode = 401;
        throw error;
    }
    // 2. Verificar password
-   const validPassword = await bcrypt.compare(data.password, user.password);
+   const validPassword = await bcrypt.compare(data.password, usuario.password);
    if (!validPassword) {
        const error = new Error('Credenciales inválidas') as any;
        error.statusCode = 401;
@@ -25,15 +25,15 @@ export async function login(data: LoginRequest): Promise<LoginResponse['data']> 
 
    const token = jwt.sign(
        {
-           id: user.id,
-           email: user.email,
-           rol: user.rol
+           id: usuario.id,
+           email: usuario.email,
+           rol: usuario.rol
        },
        secret,
        { expiresIn: "1h"}
    );
 
-   const { password: _, ...userWithoutPassword } = user;
+   const { password: _, ...userWithoutPassword } = usuario;
    return {
        user: userWithoutPassword,
        token

@@ -1,8 +1,11 @@
 import { useState } from "react";
-import '../estilos/loginPage.css'
+import '../estilos/loginPage.css';
+import { setToken } from "../helpers/auth";
+import { useNavigate } from "react-router-dom";
 
 export function LoginPage () {
 
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
       email: '',
       password: ''
@@ -18,6 +21,23 @@ export function LoginPage () {
 
     const handleSubmit = async (e) => {
       e.preventDefault();
+      try {
+          const res = await fetch("http://localhost:3000/auth/login" , {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(formData)
+          });
+          if (!res.ok) throw new Error("Error en login");
+          const json = await res.json();
+          console.log("Respuesta del backend:", json);
+
+          const { token } = json.data;
+
+          setToken(token);
+          navigate("/admin");
+      } catch (err) {
+           alert("Login fallido");
+      }
       console.log('Datos del inicio de sesión:', formData);
     };
 
@@ -30,7 +50,7 @@ export function LoginPage () {
                   Email:
                   <input
                     type="email"
-                    name="fecha"
+                    name="email"
                     placeholder="Ingrese su email"
                     value={formData.email}
                     onChange={handleChange}
@@ -41,7 +61,7 @@ export function LoginPage () {
                 <label>
                   Contraseña
                   <input
-                    type="text"
+                    type="password"
                     name="password"
                     placeholder="Ingrese su contraseña"
                     value={formData.password}

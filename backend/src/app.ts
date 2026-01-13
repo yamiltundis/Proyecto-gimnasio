@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { authRoutes } from './routes/auth.routes';
 import { logRequest } from './middlewares/logger.middleware';
 import { handleError } from './middlewares/error.middleware';
 import { usuarioRoutes } from './routes/usuario.routes';
@@ -13,6 +14,7 @@ import { reservaRoutes } from './routes/reserva.routes';
 import { asistenciaClaseRoutes } from './routes/asistenciaClase.routes';
 import { asistenciaRoutes } from './routes/asistencia.routes';
 import { membreciaActivaRoutes } from './routes/membreciaActiva.routes';
+import { meta } from 'zod/v4/core';
 
 dotenv.config();
 
@@ -21,17 +23,16 @@ const PORT = process.env.PORT || 3000;
 
 const corsOptions = {
     origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-    credentials: true
-}
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+};
 
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(logRequest);
 
-app.get('/', (req, res) => {
-    res.send('Hola mundo desde express!')
-});
-
+app.use('/auth', authRoutes)
 app.use('/usuarios', usuarioRoutes)
 app.use('/tiposClase', tipoClaseRoutes)
 app.use('/clasesEspecificas', claseEspecificaRoutes)

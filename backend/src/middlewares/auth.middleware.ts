@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 declare global {
     namespace Express {
         interface Request {
-            user?: {
+            usuario?: {
                 id: number;
                 email: string;
                 rol: 'cliente' | 'admin' | 'superadmin'
@@ -22,7 +22,7 @@ export function authenticate(req: Request, res: Response, next: NextFunction) {
         const token = authHeader.split(' ')[1];
         const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any;
 
-        req.user = {
+        req.usuario = {
             id: decoded.id,
             email: decoded.email,
             rol: decoded.rol
@@ -39,13 +39,13 @@ export function authenticate(req: Request, res: Response, next: NextFunction) {
 
 export function authorize(...roles: string[]) {
     return (req: Request, res: Response, next: NextFunction) => {
-        if (!req.user) {
+        if (!req.usuario) {
             return res.json(401).json({
                 success: false,
                 error: 'No autenticado'
             })
         }
-        if (!roles.includes(req.user.rol)) {
+        if (!roles.includes(req.usuario.rol)) {
             return res.status(403).json({
                 success: false,
                 error: 'No tienes permisos para esta acción'
