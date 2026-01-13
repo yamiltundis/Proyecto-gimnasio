@@ -10,7 +10,8 @@ export function CrearClientePage() {
     email: '',
     dni: '',
     fechaNacimiento: '',
-    foto:''
+    foto:'',
+    password:''
   });
 
   const navigate = useNavigate();
@@ -110,6 +111,17 @@ export function CrearClientePage() {
               name="foto"
               placeholder="Ingrese una foto"
               value={formData.foto}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <label>
+            Contraseña:
+            <input
+              type="password"
+              name="password"
+              placeholder="Ingrese la contraseña"
+              value={formData.password}
               onChange={handleChange}
               required
             />
