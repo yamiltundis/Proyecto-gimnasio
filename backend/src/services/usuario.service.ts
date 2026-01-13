@@ -1,16 +1,18 @@
-import { Usuario, CreateUsuarioRequest, UpdateUsuarioRequest } from '../types/usuario.types'
-import prisma from '../config/prisma'
+import { Usuario, CreateUsuarioRequest, UpdateUsuarioRequest } from '../types/usuario.types';
+import prisma from '../config/prisma';
+import bcrypt from 'bcrypt'; 
 
 export async function getAllUsuarios() : Promise<Usuario[]> {
     const usuarios = await prisma.usuario.findMany({
         orderBy: { id: 'asc' },
-        where: { rol: 'cliente' }
+        where: { rol: 'cliente' },
+        omit: { password: true }
     })
     return usuarios;
 }
 
 export async function getUsuarioById(id: number): Promise<Usuario> {
-    const usuario = await prisma.usuario.findUnique({ where: { id } })
+    const usuario = await prisma.usuario.findUnique({ where: { id }, omit: { password: true } })
     if (!usuario) {
       const error = new Error('Usuario not found');
       (error as any).statusCode = 404;
@@ -20,34 +22,47 @@ export async function getUsuarioById(id: number): Promise<Usuario> {
 }
 
 export async function createUsuario(data: CreateUsuarioRequest): Promise<Usuario> {
+
+    const exists = await prisma.usuario.findUnique({ where: { email: data.email }})
+    if (exists) {
+        const error = new Error('Email ya registrado') as any;
+        error.statusCode(409);
+        throw error
+    }
+
+    const hashedPassword = await bcrypt.hash(data.password, 10);
     const created = await prisma.usuario.create({
         data: {
-            nombre: data.nombre,
-            apellido: data.apellido,
-            dni: data.dni,
-            fechaNacimiento: new Date(data.fechaNacimiento),
-            email: data.email,
-            foto: data.foto,
-            rol: 'cliente'
+            ...data,
+            password: hashedPassword
         }
     })
     return created; 
 }
 
+
 export async function updateUsuario(id: number, data: UpdateUsuarioRequest): Promise<Usuario> {
-    const updated = await prisma.usuario.update({
-      where: { id },
-      data: {
-       ...(data.nombre !== undefined ? { nombre: data.nombre } : {}),
-       ...(data.apellido !== undefined ? { apellido: data.apellido } : {}),
-       ...(data.dni !== undefined ? { dni: data.dni } : {}),
-       ...(data.fechaNacimiento !== undefined ? { fechaNacimiento: data.fechaNacimiento } : {}),
-       ...(data.email !== undefined ? { email: data.email } : {}),
-       ...(data.foto !== undefined ? { foto: data.foto } : {}),
-       ...(data.rol !== undefined ? { rol: data.rol } : {}),
-      },
-    });
-    return updated
+    try {
+        const updateData: Partial<UpdateUsuarioRequest> = { ...data };
+        if (data.password) {
+            updateData.password = await bcrypt.hash(data.password, 10);
+        } else {
+            delete (updateData as any).password;
+        }
+        return await prisma.usuario.update({
+            where: { id },
+            data: updateData,
+            omit: { password: true }
+        });
+
+    } catch (error: any) {
+        if (error.code === 'P2025') {
+            const error = new Error('Usuario no encontrado') as any;
+            error.statusCode = 404;
+            throw error;
+        }
+        throw error;
+    }
 }
 
 export async function deleteUsuario(id: number): Promise<Usuario> {

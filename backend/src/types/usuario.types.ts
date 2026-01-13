@@ -6,8 +6,7 @@ export interface Usuario {
     fechaNacimiento: Date,
     email: string,
     foto: string,
-    rol: string,
-    password: string
+    rol: string
 }
 
 export interface CreateUsuarioRequest {

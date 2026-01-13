@@ -10,4 +10,5 @@ export interface LoginResponse {
     user: Omit<Usuario, 'password'>;
     token: string;
   };
+  success: boolean
 }

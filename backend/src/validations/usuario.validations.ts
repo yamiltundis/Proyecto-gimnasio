@@ -21,6 +21,9 @@ export const createUserSchema = z.object({
 
     rol: z.string()
     .min(1,'Se requiere el rol del usuario'),
+
+    password: z.string()
+    .min(1,'Se requiere una contraseña'),
 });
 
 export const updateUserSchema = createUserSchema.partial();

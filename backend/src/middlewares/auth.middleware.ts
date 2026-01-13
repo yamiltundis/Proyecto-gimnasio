@@ -1,7 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from 'jsonwebtoken'
-import { error } from "node:console";
-import { success } from "zod";
+import jwt from 'jsonwebtoken';
 
 declare global {
     namespace Express {

@@ -21,14 +21,16 @@ export async function login(data: LoginRequest): Promise<LoginResponse['data']> 
        throw error;
    }
    // 3. Generar JWT
+    const secret: string = process.env.JWT_SECRET as string;
+
    const token = jwt.sign(
        {
            id: user.id,
            email: user.email,
            rol: user.rol
        },
-       process.env.JWT_SECRET!,
-       { expiresIn: process.env.JWT_EXPIRES_IN }
+       secret,
+       { expiresIn: "1h"}
    );
 
    const { password: _, ...userWithoutPassword } = user;
