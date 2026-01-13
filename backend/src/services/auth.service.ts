@@ -5,7 +5,7 @@ import { LoginRequest, LoginResponse } from '../types/auth.types';
 
 export async function login(data: LoginRequest): Promise<LoginResponse['data']> {
    // 1. Buscar usuario
-   const user = await prisma.cliente.findUnique({
+   const user = await prisma.usuario.findUnique({
        where: { email: data.email }
    });
    if (!user) {

@@ -7,7 +7,7 @@ datasource db {
   provider = "mysql"
 }
 
-model Cliente {
+model Usuario {
   id     Int    @id @default(autoincrement())
   nombre String
   apellido String
@@ -16,6 +16,7 @@ model Cliente {
   email  String @unique
   foto String
   rol String
+  password String @default("")
   pagos Pago[]
   membreciasActivas MembreciaActiva[]
   reservas Reserva[]
@@ -60,7 +61,7 @@ model Pago {
   monto Int
   fecha DateTime
   clienteId Int
-  cliente Cliente @relation(fields: [clienteId], references: [id])
+  cliente Usuario @relation(fields: [clienteId], references: [id])
   tipoMembreciaId Int
   tipoMembrecia TipoMembrecia @relation(fields: [tipoMembreciaId], references: [id])
   membreciasActivas MembreciaActiva[]
@@ -71,7 +72,7 @@ model MembreciaActiva {
   fechaInicio DateTime
   fechaFin DateTime
   clienteId Int
-  cliente Cliente @relation(fields: [clienteId], references: [id])
+  cliente Usuario @relation(fields: [clienteId], references: [id])
   pagoId Int
   pago Pago @relation(fields: [pagoId], references: [id])
 }
@@ -81,7 +82,7 @@ model Reserva {
   fechaReserva DateTime
   estado String
   clienteId Int
-  cliente Cliente @relation(fields: [clienteId], references: [id])
+  cliente Usuario @relation(fields: [clienteId], references: [id])
   claseEspecificaId Int
   claseEspecifica ClaseEspecifica @relation(fields: [claseEspecificaId], references: [id])
   asistencia      AsistenciaClase? @relation("ReservaAsistencia")
@@ -91,7 +92,7 @@ model AsistenciaClase {
   id Int @id @default(autoincrement())
   horacheckin DateTime
   clienteId Int
-  cliente Cliente @relation(fields: [clienteId], references: [id])
+  cliente Usuario @relation(fields: [clienteId], references: [id])
   claseEspecificaId Int
   claseEspecifica ClaseEspecifica @relation(fields: [claseEspecificaId], references: [id])
   reserva     Reserva?  @relation("ReservaAsistencia",fields: [reservaId], references: [id])
@@ -102,5 +103,5 @@ model Asistencia {
   id Int @id @default(autoincrement())
   fechaHora DateTime
   clienteId Int
-  cliente Cliente @relation(fields: [clienteId], references: [id])
+  cliente Usuario @relation(fields: [clienteId], references: [id])
 }

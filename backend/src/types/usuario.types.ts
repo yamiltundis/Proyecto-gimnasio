@@ -6,7 +6,8 @@ export interface Usuario {
     fechaNacimiento: Date,
     email: string,
     foto: string,
-    rol: string
+    rol: string,
+    password: string
 }
 
 export interface CreateUsuarioRequest {
@@ -16,7 +17,8 @@ export interface CreateUsuarioRequest {
     fechaNacimiento: Date,
     email: string,
     foto: string,
-    rol: string
+    rol: string,
+    password: string
 }
 
 export interface UpdateUsuarioRequest {
@@ -26,7 +28,8 @@ export interface UpdateUsuarioRequest {
     fechaNacimiento?: Date,
     email?: string,
     foto?: string,
-    rol?: string
+    rol?: string,
+    password?: string
 }
 
 export interface UsuarioResponse {

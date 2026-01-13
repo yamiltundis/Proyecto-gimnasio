@@ -2,14 +2,15 @@ import { Usuario, CreateUsuarioRequest, UpdateUsuarioRequest } from '../types/us
 import prisma from '../config/prisma'
 
 export async function getAllUsuarios() : Promise<Usuario[]> {
-    const usuarios = await prisma.cliente.findMany({
-        orderBy: { id: 'asc'}
+    const usuarios = await prisma.usuario.findMany({
+        orderBy: { id: 'asc' },
+        where: { rol: 'cliente' }
     })
     return usuarios;
 }
 
 export async function getUsuarioById(id: number): Promise<Usuario> {
-    const usuario = await prisma.cliente.findUnique({ where: { id } })
+    const usuario = await prisma.usuario.findUnique({ where: { id } })
     if (!usuario) {
       const error = new Error('Usuario not found');
       (error as any).statusCode = 404;
@@ -19,7 +20,7 @@ export async function getUsuarioById(id: number): Promise<Usuario> {
 }
 
 export async function createUsuario(data: CreateUsuarioRequest): Promise<Usuario> {
-    const created = await prisma.cliente.create({
+    const created = await prisma.usuario.create({
         data: {
             nombre: data.nombre,
             apellido: data.apellido,
@@ -34,7 +35,7 @@ export async function createUsuario(data: CreateUsuarioRequest): Promise<Usuario
 }
 
 export async function updateUsuario(id: number, data: UpdateUsuarioRequest): Promise<Usuario> {
-    const updated = await prisma.cliente.update({
+    const updated = await prisma.usuario.update({
       where: { id },
       data: {
        ...(data.nombre !== undefined ? { nombre: data.nombre } : {}),
@@ -50,7 +51,7 @@ export async function updateUsuario(id: number, data: UpdateUsuarioRequest): Pro
 }
 
 export async function deleteUsuario(id: number): Promise<Usuario> {
-    const deleted = await prisma.cliente.delete({ where: { id } })
+    const deleted = await prisma.usuario.delete({ where: { id } })
     if (!deleted) {
         const error = new Error('Usuario no encontrado');
         (error as any).statusCode = 404;
