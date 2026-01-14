@@ -3,55 +3,16 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { BotonRegresar } from '../components/BotonRegresar'
+import { useFetch } from '../hooks/useFetch';
 
 export function ClasesEspecificasPage () {
-    const { id } = useParams(); 
-    const [clases, setClases] = useState([])
-   
-    useEffect(() => {
-      const fetchClases = async () => {
-        try {
-          const response = await fetch(`http://localhost:3000/clasesespecificas?tipoClase=${id}`)
-          if (!response.ok) {
-            throw new Error('Error al traer clases')
-          }
-          const data = await response.json()
+    const { id } = useParams();
 
-          {/*
-          const clientesConEstado = await Promise.all(
-            data.usuarios.map(async (c) => {
-              try {
-                const estadoResponse = await fetch(`http://localhost:3000/membreciasActivas/${c.id}`)
-                if (!estadoResponse.ok) {
-                  throw new Error('Error al traer estado')
-                }
-                const estadoData = await estadoResponse.json()
-                return { ...c, estado: estadoData.diasRestantes.estado } // combinamos cliente + estado
-              } catch (error) {
-                return { ...c, estado: 'Desconocido' } // fallback
-              }
-            })
-          ) */}
+    const url = `http://localhost:3000/clasesespecificas?tipoClase=${id}`;
+    const { data, loading, error } = useFetch(url, {}, { requireAuth: true });
 
-          setClases(data.clasesEspecificas)
-        } catch (error) {
-          console.error(error)
-        }
-      }
-
-      fetchClases()
-    }, [])
-
-
-
-    const eliminarClase = (id) => {
-      setClases(clases.filter(c => c.id !== id))
-    }
-
-    const agregarClase = (data) => {
-      setClases([...clases, data])
-    }
-
+    const clases = data?.clasesEspecificas || [];
+    
     function formatearFecha(fechaISO) {
       if (!fechaISO) return '';
   

@@ -1,30 +1,14 @@
 import '../estilos/clasesPage.css'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useFetch } from '../hooks/useFetch';
 
 export function ClasesPage () {
 
-    const [clases, setClases] = useState([])
-   
-    useEffect(() => {
-      const fetchClases = async () => {
-        try {
-          const response = await fetch('http://localhost:3000/tiposclase')
-          if (!response.ok) {
-            throw new Error('Error al traer tipos de clases')
-          }
-          const data = await response.json()
+    const url = 'http://localhost:3000/tiposclase';
+    const { data, loading, error } = useFetch(url, {}, { requireAuth: true });
 
-          setClases(data.tiposClase)
-        } catch (error) {
-          console.error(error)
-        }
-      }
-
-      fetchClases()
-    }, [])
-
-
+    const clases = data?.tiposClase || [];
 
     const eliminarClase = (id) => {
       setClases(clases.filter(c => c.id !== id))

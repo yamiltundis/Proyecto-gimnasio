@@ -1,34 +1,17 @@
 import '../estilos/asistenciasPage.css'
 import { useState, useEffect, use } from 'react'
 import { Link } from 'react-router-dom'
+import { useFetch } from '../hooks/useFetch'
 
 export function AsistenciasPage () {
 
-    const [asistencias, setAsistencias] = useState([])
     const [busquedaFecha, setBusquedaFecha] = useState("")
     const [busqueda, setBusqueda] = useState("")
-   
-    useEffect(() => {
-      const fetchAsistencias= async () => {
-        try {
-          const response = await fetch('http://localhost:3000/asistencias')
-          if (!response.ok) {
-            throw new Error('Error al traer asistencias')
-          }
-          const data = await response.json()
 
-          setAsistencias(data.asistencias)
-        } catch (error) {
-          console.error(error)
-        }
-      }
+    const url = 'http://localhost:3000/asistencias';
+    const { data, loading, error } = useFetch(url, {}, { requireAuth: true });
 
-      fetchAsistencias()
-    }, [])
-
-    const agregarAsistencias = (data) => {
-      setAsistencias([...asistencias, data])
-    }
+    const asistencias = data?.asistencias || [];
 
     function formatearFecha(fechaISO) {
         if (!fechaISO) return '';

@@ -1,49 +1,22 @@
 import '../estilos/pagosPage.css'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useFetch } from '../hooks/useFetch'
 
 export function PagosPage () {
 
-    const [pagos, setPagos] = useState([]) // estado para guardar los pagos que vienen del back
-    const [nombresMembresias, setNombresMembresias] = useState([]) // estado para mostrar los nombres de las membresias en el filtro
     const [busqueda, setBusqueda] = useState("") // estado para filtrar por cliente
     const [busquedaFecha, setBusquedaFecha] = useState("") // estado para filtrar por fecha
     const [busquedaMembresia, setBusquedaMembresia] = useState("") // estado para filtrar por mrembresia
    
-    useEffect(() => {
-      const fetchPagos = async () => {
-        try {
-          const response = await fetch('http://localhost:3000/pagos')
-          if (!response.ok) {
-            throw new Error('Error al traer pagos')
-          }
-          const data = await response.json()
+    const urlPagos = 'http://localhost:3000/pagos';
+    const { data: pagosData, loading: pagosLoading, error: pagosError } = useFetch(urlPagos, {}, { requireAuth: true });
+    const pagos = pagosData?.pagos || [];
 
-          setPagos(data.pagos)
-        } catch (error) {
-          console.error(error)
-        }
-      }
+    const urlMembrecias = 'http://localhost:3000/tiposmembrecia';
+    const { data: membresiasData, loading: membresiasLoading, error: membresiasError } = useFetch(urlMembrecias, {}, { requireAuth: true });
+    const nombresMembresias = membresiasData?.tiposmembrecias || [];
 
-      fetchPagos()
-    }, [])
-
-    useEffect(() => {
-      const fetchNombresMembresias = async () => {
-        try {
-          const response = await fetch('http://localhost:3000/tiposmembrecia')
-          if (!response.ok) {
-            throw new Error('Error al traer los nombres de las membresias')
-          }
-          const data = await response.json();
-          setNombresMembresias(data.tiposmembrecias);
-        } catch (error) {
-          console.error(error)
-        }
-      }
-
-      fetchNombresMembresias()
-    }, [])
 
     const agregarPago = (data) => {
       setPagos([...pagos, data])

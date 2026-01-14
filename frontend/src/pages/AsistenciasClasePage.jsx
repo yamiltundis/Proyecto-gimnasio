@@ -3,32 +3,15 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { BotonRegresar } from '../components/BotonRegresar';
+import { useFetch } from '../hooks/useFetch';
 
 export function AsistenciasClasePage () {
     const { id } = useParams(); 
-    const [asistencias, setAsistencias] = useState([])
-   
-    useEffect(() => {
-      const fetchAsistencias = async () => {
-        try {
-          const response = await fetch(`http://localhost:3000/asistenciasclases?claseEspecificaId=${id}`)
-          if (!response.ok) {
-            throw new Error('Error al traer asistencias de la clse')
-          }
-          const data = await response.json()
 
-          setAsistencias(data.asistencias)
-        } catch (error) {
-          console.error(error)
-        }
-      }
+    const url = `http://localhost:3000/asistenciasclases?claseEspecificaId=${id}`;
+    const { data, loading, error} = useFetch(url, {}, { requireAuth: true });
 
-      fetchAsistencias()
-    }, [])
-
-    const agregarAsistencia = (data) => {
-      setAsistencias([...asistencias, data])
-    }
+    const asistencias = data?.asistencias || [];
 
     function formatearFecha(fechaISO) {
       if (!fechaISO) return ''

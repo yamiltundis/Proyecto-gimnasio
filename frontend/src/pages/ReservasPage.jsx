@@ -1,37 +1,18 @@
 import '../estilos/reservasPage.css'
 import { useState, useEffect } from 'react'
+import { useFetch } from '../hooks/useFetch';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { BotonRegresar } from '../components/BotonRegresar';
 
 export function ReservasPage () {
-    const { id } = useParams(); 
-    const [reservas, setReservas] = useState([])
-   
-    useEffect(() => {
-      const fetchReservas = async () => {
-        try {
-          const response = await fetch(`http://localhost:3000/reservas?claseEspecificaId=${id}`)
-          if (!response.ok) {
-            throw new Error('Error al traer reservas')
-          }
-          const data = await response.json()
+    const { id } = useParams();
 
-          setReservas(data.reservas)
-        } catch (error) {
-          console.error(error)
-        }
-      }
+    const url = `http://localhost:3000/reservas?claseEspecificaId=${id}`;
+    const { data, loading, error } = useFetch(url, {}, { requireAuth: true });
 
-      fetchReservas()
-    }, [])
-
-
-
-    const eliminarReserva = (id) => {
-      setReservas(reservas.filter(r => r.id !== id))
-    }
-
+    const reservas = data?.reservas || [];
+    
     const agregarReserva = (data) => {
       setReservas([...reservas, data])
     }
