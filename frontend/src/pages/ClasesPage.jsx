@@ -9,15 +9,7 @@ export function ClasesPage () {
     const { data, loading, error } = useFetch(url, {}, { requireAuth: true });
 
     const clases = data?.tiposClase || [];
-
-    const eliminarClase = (id) => {
-      setClases(clases.filter(c => c.id !== id))
-    }
-
-    const agregarClase = (data) => {
-      setClases([...clases, data])
-    }
-
+    
     return (
         <>
           <h1 className='clasespage-h1'> Gestión de clases </h1>

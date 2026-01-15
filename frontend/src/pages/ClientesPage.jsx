@@ -1,7 +1,7 @@
-import '../estilos/clientesPage.css'
-import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { useFetch } from '../hooks/useFetch'
+import '../estilos/clientesPage.css';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useFetch } from '../hooks/useFetch';
 
 export function ClientesPage () {
   const [busqueda, setBusqueda] = useState("")

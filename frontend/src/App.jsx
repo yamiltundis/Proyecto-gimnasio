@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { UsuarioProvider, useUsuario } from "./context/usuarioContext.jsx"
 import { Layout } from "./components/Layout.jsx"
 import { HomePage } from "./pages/HomePage.jsx"
 import { LoginPage } from "./pages/LoginPage.jsx"
@@ -22,8 +23,9 @@ import { AsistenciasClasePage } from "./pages/AsistenciasClasePage.jsx"
 function App() {
 
   return (
-    <BrowserRouter>
-      <Routes>
+    <UsuarioProvider>
+     <BrowserRouter>
+       <Routes>
         <Route path="/inicio" element={<HomePage />} />
 
         <Route path ="/login"element={<LoginLayout />}>
@@ -47,8 +49,9 @@ function App() {
           <Route path="asistencias" element={<AsistenciasPage />}/>
           <Route path="asistencias/crear" element={<CrearAsistenciaPage />}/>
         </Route>
-      </Routes>
-    </BrowserRouter>
+       </Routes>
+     </BrowserRouter>
+    </UsuarioProvider>
   )
 }
 

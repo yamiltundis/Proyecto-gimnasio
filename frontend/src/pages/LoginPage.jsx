@@ -2,8 +2,11 @@ import { useState } from "react";
 import '../estilos/loginPage.css';
 import { setToken } from "../helpers/auth";
 import { useNavigate } from "react-router-dom";
+import { useUsuario } from "../context/usuarioContext";
 
 export function LoginPage () {
+
+    const { setUsuario } = useUsuario();
 
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -31,9 +34,10 @@ export function LoginPage () {
           const json = await res.json();
           console.log("Respuesta del backend:", json);
 
-          const { token } = json.data;
+          const { user, token } = json.data;
 
           setToken(token);
+          setUsuario(user);
           navigate("/admin");
       } catch (err) {
            alert("Login fallido");

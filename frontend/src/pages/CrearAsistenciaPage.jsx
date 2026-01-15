@@ -26,8 +26,8 @@ export function CrearAsistenciaPage() {
         fechaHora: formData.fechaHora 
         ? new Date(formData.fechaHora).toISOString() 
         : null
-    }
-    ;
+    };
+    
     try {
       const response = await fetch('http://localhost:3000/asistencias', {
         method: 'POST',
