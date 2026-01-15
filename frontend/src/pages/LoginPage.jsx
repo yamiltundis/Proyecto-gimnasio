@@ -38,7 +38,14 @@ export function LoginPage () {
 
           setToken(token);
           setUsuario(user);
-          navigate("/admin");
+            
+          if (user.rol === "admin" || user.rol === "superadmin") {
+            navigate("/admin");
+          } else if (user.rol === "cliente") {
+            navigate("/cliente");
+          } else {
+            navigate("/login"); // fallback
+          }
       } catch (err) {
            alert("Login fallido");
       }

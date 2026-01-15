@@ -5,7 +5,9 @@ import { createAsistenciaSchema, updateAsistenciaSchema } from "../validations/a
 
 const router = Router();
 
-router.get('/', asistenciaController.getAllAsistencias);
+router.get('/admin', asistenciaController.getAllAsistencias);
+
+router.get('/cliente', asistenciaController.getAllAsistenciasByCliente);
 
 router.get('/:id', asistenciaController.getAsistenciaById);
 

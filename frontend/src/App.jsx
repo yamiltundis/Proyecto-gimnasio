@@ -1,8 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { UsuarioProvider, useUsuario } from "./context/usuarioContext.jsx"
-import { Layout } from "./components/Layout.jsx"
+
+// Páginas generales
 import { HomePage } from "./pages/HomePage.jsx"
 import { LoginPage } from "./pages/LoginPage.jsx"
+
+// Paginas para el admin
+import { Layout } from "./components/Layout.jsx"
 import { ClientesPage } from "./pages/ClientesPage.jsx"
 import { PagosPage } from "./pages/PagosPage.jsx"
 import { ClasesPage } from "./pages/ClasesPage.jsx"
@@ -19,6 +23,11 @@ import { CrearClaseEspecificaPage } from "./pages/CrearClaseEspecificaPage.jsx"
 import { CrearPrimerPagoPage } from "./pages/CrearPrimerPagoPage.jsx"
 import { LoginLayout } from "./components/LoginLayout.jsx"
 import { AsistenciasClasePage } from "./pages/AsistenciasClasePage.jsx"
+
+// Páginas para el cliente
+import { LayoutCliente } from "./components/LayoutCliente.jsx";
+import { MiPerfil } from "./pages/MiPerfilPage.jsx";
+import { MisAsistenciasPage } from "./pages/MisAsistenciasPage.jsx"
 
 function App() {
 
@@ -49,7 +58,13 @@ function App() {
           <Route path="asistencias" element={<AsistenciasPage />}/>
           <Route path="asistencias/crear" element={<CrearAsistenciaPage />}/>
         </Route>
+
+        <Route path="/cliente" element={<LayoutCliente />}>
+          <Route path="miperfil" element={<MiPerfil />}></Route>
+          <Route path="misasistencias" element={<MisAsistenciasPage />}></Route>
+        </Route>
        </Routes>
+
      </BrowserRouter>
     </UsuarioProvider>
   )
