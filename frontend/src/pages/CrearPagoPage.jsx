@@ -2,6 +2,8 @@ import '../estilos/crearpagopage.css';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BotonRegresar } from '../components/BotonRegresar';
+import { useFetch } from '../hooks/useFetch';
+import Select from 'react-select';
 
 export function CrearPagoPage() {
 
@@ -11,6 +13,14 @@ export function CrearPagoPage() {
     clienteId: '',
     tipoMembreciaId: ''
   });
+
+  const url = 'http://localhost:3000/usuarios';
+  const { data: clienteData, loading: clienteLoading, error: clienteError } = useFetch(url, {}, { requireAuth: true });
+  const clientes = clienteData?.usuarios || [];
+
+  const urlMembrecia = 'http://localhost:3000/tiposmembrecia';
+  const { data, loading, error } = useFetch(urlMembrecia, {}, { requireAuth: true });
+  const membrecias = data?.tiposmembrecias || [];
   
   const [pagoCreado, setPagoCreado] = useState(null)
 
@@ -20,7 +30,18 @@ export function CrearPagoPage() {
       ...formData,
       [name]: value
     });
+    console.log(formData)
   };
+
+  const options = clientes.map(c => ({
+    value: c.id,
+    label: `${c.nombre} ${c.apellido} - ${c.dni}`
+  }));
+
+    const optionsMembrecias = membrecias.map(m => ({
+    value: m.id,
+    label: m.nombre
+  }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,8 +54,8 @@ export function CrearPagoPage() {
         fecha: formData.fecha 
         ? new Date(formData.fecha).toISOString() 
         : null
-    }
-    ;
+    };
+
     try {
       const response = await fetch('http://localhost:3000/pagos', {
         method: 'POST',
@@ -64,7 +85,6 @@ export function CrearPagoPage() {
     setMostrarModal(true)
   };
 
-
   return (
     <>
       <h1 className="crearpagopage-h1">Crear Pago</h1>
@@ -83,26 +103,33 @@ export function CrearPagoPage() {
           </label>
 
           <label>
-            ClienteId
-            <input
-              type="number"
-              name="clienteId"
-              placeholder="Ingrese el id del cliente"
-              value={formData.clienteId}
-              onChange={handleChange}
-              required
-            />
+            Cliente
+              <Select
+                options={options}
+                onChange={option => handleChange({ target: {
+                                      name: "clienteId",
+                                      value: option.value
+                                    }
+                                  })
+                        }
+                placeholder="Buscar cliente..."
+                isSearchable
+              />
           </label>
 
           <label>
-            TipoMembreciaId
-            <input
-              type="number"
-              name="tipoMembreciaId"
-              placeholder="Ingrese el id del tipo de membrecia"
-              value={formData.tipoMembreciaId}
-              onChange={handleChange}
-              required
+            TipoMembresia
+            <Select
+              options={optionsMembrecias}
+              onChange={option => handleChange({
+                                    target: {
+                                      name: "tipoMembreciaId",
+                                      value: option.value
+                                    }
+                                  })
+                        }
+              placeholder="Buscar membresia..."
+              isSearchable
             />
           </label>
         </div>

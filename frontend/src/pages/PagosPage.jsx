@@ -9,7 +9,7 @@ export function PagosPage () {
     const [busquedaFecha, setBusquedaFecha] = useState("") // estado para filtrar por fecha
     const [busquedaMembresia, setBusquedaMembresia] = useState("") // estado para filtrar por mrembresia
    
-    const urlPagos = 'http://localhost:3000/pagos';
+    const urlPagos = 'http://localhost:3000/pagos/admin';
     const { data: pagosData, loading: pagosLoading, error: pagosError } = useFetch(urlPagos, {}, { requireAuth: true });
     const pagos = pagosData?.pagos || [];
 
