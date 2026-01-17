@@ -14,6 +14,20 @@ export async function getAllPagos(req: Request, res: Response<PagoListResponse>,
    }
 }
 
+export async function getAllPagosByCliente(req: Request, res: Response<PagoListResponse>, next: NextFunction) {
+   try {
+    const id = req.usuario!.id;
+    const pagos = await pagoService.getAllPagosByCliente(id);
+    res.json({
+        pagos: pagos,
+        total: pagos.length
+    })
+   } catch (error) {
+        next(error)
+   }
+}
+
+
 export async function getPagoById(req: Request, res: Response<PagoResponse>, next: NextFunction) {
     try {
         const { id } = req.params;

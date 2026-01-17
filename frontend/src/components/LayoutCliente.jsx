@@ -18,7 +18,7 @@ export function LayoutCliente () {
                       <li className='bi bi-file-arrow-down'> Asistencias </li>
                     </Link>
 
-                    <Link to="/admin/pagos">
+                    <Link to="/cliente/mispagos">
                       <li className='bi bi-cash'> Pagos </li>
                     </Link>
 

@@ -14,7 +14,6 @@ import { reservaRoutes } from './routes/reserva.routes';
 import { asistenciaClaseRoutes } from './routes/asistenciaClase.routes';
 import { asistenciaRoutes } from './routes/asistencia.routes';
 import { membreciaActivaRoutes } from './routes/membreciaActiva.routes';
-import { meta } from 'zod/v4/core';
 
 dotenv.config();
 

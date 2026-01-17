@@ -15,8 +15,6 @@ export async function getAllAsistencias(req: Request, res: Response<AsistenciaLi
 }
 
 export async function getAllAsistenciasByCliente(req: Request, res: Response<AsistenciaListResponse>, next: NextFunction) {
-    console.log("Usuario en request:", req.usuario);
-
    try {
     const id = req.usuario!.id;
     const asistencias = await asistenciaService.getAllAsistenciasByCliente(id);

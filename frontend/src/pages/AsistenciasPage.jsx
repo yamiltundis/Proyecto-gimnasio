@@ -8,7 +8,7 @@ export function AsistenciasPage () {
     const [busquedaFecha, setBusquedaFecha] = useState("")
     const [busqueda, setBusqueda] = useState("")
 
-    const url = 'http://localhost:3000/asistencias';
+    const url = 'http://localhost:3000/asistencias/admin';
     const { data, loading, error } = useFetch(url, {}, { requireAuth: true });
 
     const asistencias = data?.asistencias || [];

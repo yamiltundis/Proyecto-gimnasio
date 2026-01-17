@@ -17,13 +17,7 @@ export async function getAllAsistencias(): Promise<Asistencia[]> {
     return asistencias;
 }
 
-export async function getAllAsistenciasByCliente(id: number | undefined): Promise<Asistencia[]> {
-    if (id == undefined) {
-        const error = new Error('ID de cliente no proporcionado');
-        (error as any).statusCode = 404;
-        throw(error);
-    }
-
+export async function getAllAsistenciasByCliente(id: number): Promise<Asistencia[]> {
     const asistencias = await prisma.asistencia.findMany({
         where: { clienteId: id },
         orderBy: { fechaHora: 'desc'}

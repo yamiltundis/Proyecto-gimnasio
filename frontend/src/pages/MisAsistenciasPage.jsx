@@ -29,11 +29,7 @@ export function MisAsistenciasPage () {
     }
 
       const asistenciasFiltradas = asistencias.filter(a => {
-        const coincideBusqueda =
-          a.cliente.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-          a.cliente.apellido.toLowerCase().includes(busqueda.toLowerCase());
 
-  
         let fechaAsistencia = null;
         if (a.fechaHora) {
           const d = new Date(a.fechaHora);
@@ -45,7 +41,7 @@ export function MisAsistenciasPage () {
         const coincideFecha =
           busquedaFecha === "" || fechaAsistencia === busquedaFecha;
     
-        return coincideBusqueda && coincideFecha;
+        return coincideFecha;
       });
 
 
@@ -71,20 +67,12 @@ export function MisAsistenciasPage () {
                 <thead>
                     <tr>
                         <th> Fecha y Hora </th>
-                        <th> Cliente </th>
-                        {/* <th> Acciones</th> */}
                     </tr>
                 </thead>
                 <tbody>
                     {Array.isArray(asistencias) && asistenciasFiltradas.map((a) => (
                         <tr key={a.id}>
-                           <td> {formatearFecha(a.fechaHora)} </td>
-                           <td> {a.cliente.nombre} {a.cliente.apellido} </td>
-                           {/*<td className='asistenciaspage-columna-acciones'>
-                              {/*<Link to={`/admin/clientes/${a.id}`}>
-                                <button className='asistenciaspage-boton-ver-info'> Ver info </button> 
-                              </Link>
-                           </td> */}                        
+                           <td> {formatearFecha(a.fechaHora)} </td>                       
                         </tr>
                     ))}
                 </tbody>

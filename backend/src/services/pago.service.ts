@@ -21,6 +21,21 @@ export async function getAllPagos(): Promise<Pago[]> {
     return pagos;
 }
 
+export async function getAllPagosByCliente(id: number): Promise<Pago[]> {
+    const pagos = await prisma.pago.findMany({
+        where: { clienteId: id },
+        orderBy: { fecha: 'desc'},
+        include: {
+            tipoMembrecia: {
+              select: {
+                nombre: true
+              }
+            }
+        }
+    })
+    return pagos;
+}
+
 export async function getPagoById(id: number): Promise<Pago> {
     const pago = await prisma.pago.findUnique({ where: { id }});
     if (!pago) {

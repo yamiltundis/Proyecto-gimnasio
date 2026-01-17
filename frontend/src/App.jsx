@@ -28,6 +28,7 @@ import { AsistenciasClasePage } from "./pages/AsistenciasClasePage.jsx"
 import { LayoutCliente } from "./components/LayoutCliente.jsx";
 import { MiPerfil } from "./pages/MiPerfilPage.jsx";
 import { MisAsistenciasPage } from "./pages/MisAsistenciasPage.jsx"
+import { MisPagosPage } from "./pages/MisPagosPage.jsx";
 
 function App() {
 
@@ -62,6 +63,7 @@ function App() {
         <Route path="/cliente" element={<LayoutCliente />}>
           <Route path="miperfil" element={<MiPerfil />}></Route>
           <Route path="misasistencias" element={<MisAsistenciasPage />}></Route>
+          <Route path="mispagos" element={<MisPagosPage />}></Route>
         </Route>
        </Routes>
 
