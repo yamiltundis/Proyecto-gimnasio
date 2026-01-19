@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { BotonRegresar } from '../components/BotonRegresar';
 import { useFetch } from '../hooks/useFetch';
 import Select from 'react-select';
+import { ModalRespuesta } from '../components/ModalRespuesta';
 
 export function CrearPagoPage() {
 
@@ -23,6 +24,7 @@ export function CrearPagoPage() {
   const membrecias = data?.tiposmembrecias || [];
   
   const [pagoCreado, setPagoCreado] = useState(null)
+  const [creacionExitosa, setCreacionExitosa] = useState(null)
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -81,8 +83,10 @@ export function CrearPagoPage() {
 
     } catch (error) {
       console.error('Error al enviar pago:', error);
+      setCreacionExitosa(false)
+    } finally {
+      setMostrarModal(true)
     }
-    setMostrarModal(true)
   };
 
   return (
@@ -105,6 +109,7 @@ export function CrearPagoPage() {
           <label>
             Cliente
               <Select
+                className='crearpagopage-select'
                 options={options}
                 onChange={option => handleChange({ target: {
                                       name: "clienteId",
@@ -120,6 +125,7 @@ export function CrearPagoPage() {
           <label>
             TipoMembresia
             <Select
+              className='crearpagopage-select'
               options={optionsMembrecias}
               onChange={option => handleChange({
                                     target: {
@@ -139,18 +145,19 @@ export function CrearPagoPage() {
         </button>
       </form>
       <BotonRegresar />
-      {mostrarModal && pagoCreado && (
-         <div className="pagospage-modal-overlay">
-              <div className="pagospage-modal">
-                <h2>
-                  El pago del cliente fue creado correctamente!
-                </h2>
-                <i className="bi bi-check-circle-fill icono-verde"></i>
-                <Link to="/admin/pagos">
-                  <span onClick={() => setMostrarModal(false)} className="pagospage-link-cerrar-modal"> Volver al listado de pagos </span>
-                </Link>
-              </div>
-         </div>
+      
+      {mostrarModal && (
+        <ModalRespuesta
+         frase={
+            creacionExitosa
+              ? "El pago del cliente fue creado correctamente!"
+              : "El pago del cliente no se pudo realizar"
+         }
+         exito={creacionExitosa}
+          link="/admin/pagos"
+          textoLink="Volver al listado de pagos"
+          onClose={() => setMostrarModal(false)}
+       />
       )}
     </>
   );

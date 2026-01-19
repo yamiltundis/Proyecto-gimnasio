@@ -1,8 +1,24 @@
 import '../estilos/crearAsistenciaPage.css';
 import { useState, useEffect } from 'react';
 import { BotonRegresar } from '../components/BotonRegresar';
+import Select from 'react-select';
+import { useFetch } from '../hooks/useFetch';
+import { ModalRespuesta } from '../components/ModalRespuesta';
 
 export function CrearAsistenciaPage() {
+  
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [creacionExitosa, setCreacionExitosa] = useState(null);
+
+  const url = 'http://localhost:3000/usuarios';
+  const { data: clienteData, loading: clienteLoading, error: clienteError } = useFetch(url, {}, { requireAuth: true });
+  const clientes = clienteData?.usuarios || [];
+
+  const options = clientes.map(c => ({
+    value: c.id,
+    label: `${c.nombre} ${c.apellido} - ${c.dni}`
+  }));
+
   const [formData, setFormData] = useState({
     fechaHora: '',
     clienteId: ''
@@ -42,6 +58,7 @@ export function CrearAsistenciaPage() {
       }
 
       const resultado = await response.json();
+      setCreacionExitosa(true)
       console.log('Asistencia creada:', resultado);
 
       setFormData({
@@ -51,6 +68,9 @@ export function CrearAsistenciaPage() {
 
     } catch (error) {
       console.error('Error al crear asistencia:', error);
+      setCreacionExitosa(false)
+    } finally {
+      setMostrarModal(true)
     }
   };
 
@@ -73,16 +93,20 @@ export function CrearAsistenciaPage() {
           </label>
 
           <label>
-            ClienteId
-            <input
-              type="number"
-              name="clienteId"
-              placeholder="Ingrese el id del cliente"
-              value={formData.clienteId}
-              onChange={handleChange}
-              required
+            Cliente
+            <Select
+              className='crearpagopage-select'
+              options={options}
+              onChange={option => handleChange({ target: {
+                                  name: "clienteId",
+                                  value: option.value
+                                }
+                              })
+                       }
+              placeholder="Buscar cliente..."
+              isSearchable
             />
-          </label>
+          </label>          
         </div>
 
         <button type="submit" className="crearasistenciapage-boton-submit">
@@ -90,6 +114,15 @@ export function CrearAsistenciaPage() {
         </button>
       </form>
       <BotonRegresar />
+      {mostrarModal && (
+        <ModalRespuesta
+          frase={ creacionExitosa ? "La asistencia fue creada correctamente!" : "La asistencia no se pudo cargar" }
+          exito={creacionExitosa}
+          link="/admin/asistencias"
+          textoLink="Volver al listado de asistencias"
+          onClose={() => setMostrarModal(false)}
+        />
+      )}
     </>
   );
 }
