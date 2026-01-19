@@ -7,40 +7,17 @@ export function ClientesPage () {
   const [busqueda, setBusqueda] = useState("")
   const [estadoFiltro, setEstadoFiltro] = useState("")
   const [mostrarModal, setMostrarModal] = useState(false)
-  const [clientesConEstado, setClientesConEstado] = useState([])
 
   const url = 'http://localhost:3000/usuarios'
   const { data, loading, error } = useFetch(url, {}, true) // requireAuth = true
 
-  const clientes = data?.usuarios || []
-
-  useEffect(() => {
-    if (!data?.usuarios) return
-
-    const fetchMembrecias = async () => {
-      const clientesConEstado = await Promise.all(
-        data.usuarios.map(async (c) => {
-          try {
-            const estadoResponse = await fetch(`http://localhost:3000/membreciasActivas/${c.id}`)
-            if (!estadoResponse.ok) throw new Error('Error al traer estado')
-            const estadoData = await estadoResponse.json()
-            return { ...c, estado: estadoData.diasRestantes.estado }
-          } catch (error) {
-            return { ...c, estado: 'Desconocido' }
-          }
-        })
-      )
-      setClientesConEstado(clientesConEstado)
-    }
-
-    fetchMembrecias()
-  }, [data])
+  const clientes = data?.usuarios || [];
 
   function confirmarEliminacion () {
     // lógica de eliminación
   }
 
-  const clientesFiltrados = clientesConEstado.filter(c => {
+  const clientesFiltrados = clientes.filter(c => {
     const coincideBusqueda =
       c.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
       c.apellido.toLowerCase().includes(busqueda.toLowerCase())
@@ -98,6 +75,7 @@ export function ClientesPage () {
                   <th>DNI</th>
                   <th>Email</th>
                   <th>Estado</th>
+                  <th>Dias Restantes</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -109,10 +87,11 @@ export function ClientesPage () {
                     <td>{c.dni}</td>
                     <td>{c.email}</td>
                     <td>
-                      <span className={`clientespage-estado-badge estado-${c.estado}`}>
-                        {c.estado}
+                      <span className={`clientespage-estado-badge estado-${c.membresia.estado}`}>
+                        {c.membresia.estado}
                       </span>
                     </td>
+                    <td> {c.membresia.diasRestantes}</td>
                     <td className='clientespage-columna-acciones'>
                       <Link to={`/admin/clientes/${c.id}`}>
                         <span className='clientespage-link-ver-perfil'>Ver perfil</span> 

@@ -1,28 +1,15 @@
-import { useParams, Link } from "react-router-dom"
-import { useEffect, useState } from "react"
-import '../estilos/clienteEspecifico.css'
-import { BotonRegresar } from "../components/BotonRegresar"
+import { useParams, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import '../estilos/clienteEspecifico.css';
+import { BotonRegresar } from "../components/BotonRegresar";
+import { useFetch } from "../hooks/useFetch";
 
 export function ClienteEspecificoPage () {
     const { id } = useParams()
-    const [cliente, setCliente] = useState([])
 
-    useEffect(() => {
-       const fetchCliente = async () => {
-        try {
-            const response = await fetch(`http://localhost:3000/usuarios/${id}`)
-            if (!response) {
-                throw new Error('Error al traer la info del cliente')
-            }
-            const data = await response.json()
-            setCliente(data.usuario)
-        } catch (error) {
-            console.error(error)
-        }
-       }
-
-       fetchCliente()
-    }, [])
+    const url = `http://localhost:3000/usuarios/${id}`;
+    const { data, error, loading } = useFetch(url, {}, { requireAuth: true });
+    const cliente = data?.usuario || []
 
     return (
         <div className='clienteespecifico'>

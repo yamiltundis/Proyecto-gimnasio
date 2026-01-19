@@ -22,7 +22,6 @@ export async function getUltimaMembreciaActiva(clienteId: number) {
     }
 
     const respuesta = ({
-      clienteId,
       fechaFin: ultimaMembresia.fechaFin,
       diasRestantes,
       estado

@@ -12,7 +12,7 @@ router.get('/:id', authenticate, authorize('superadmin', 'admin', 'cliente'), us
 
 router.post('/', authenticate, authorize('superadmin', 'admin'), validate(createUserSchema), usuarioController.createUsuario)
 
-router.put('/:id', authenticate, authorize('superadmin', 'admin', 'cliente'), validate(updateUserSchema), usuarioController.updateUsuario)
+router.put('/:id', validate(updateUserSchema), usuarioController.updateUsuario)
 
 router.delete('/:id', authenticate, authorize('superadmin'), usuarioController.deleteUsuario)
 

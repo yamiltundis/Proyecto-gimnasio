@@ -1,6 +1,7 @@
 import { Usuario, CreateUsuarioRequest, UpdateUsuarioRequest } from '../types/usuario.types';
 import prisma from '../config/prisma';
-import bcrypt from 'bcrypt'; 
+import bcrypt from 'bcrypt';
+import { getUltimaMembreciaActiva } from './membreciaActiva.service';
 
 export async function getAllUsuarios() : Promise<Usuario[]> {
     const usuarios = await prisma.usuario.findMany({
@@ -8,7 +9,19 @@ export async function getAllUsuarios() : Promise<Usuario[]> {
         where: { rol: 'cliente' },
         omit: { password: true }
     })
-    return usuarios;
+
+    const usuariosConMembresia = await Promise.all( 
+        usuarios.map(async (u) => {
+        try {
+          const membresia = await getUltimaMembreciaActiva(u.id);
+          return { ...u, membresia };
+        } catch {
+          return { ...u, membresia: null };
+        }
+     })
+    );
+
+   return usuariosConMembresia;
 }
 
 export async function getUsuarioById(id: number): Promise<Usuario> {
@@ -18,7 +31,12 @@ export async function getUsuarioById(id: number): Promise<Usuario> {
       (error as any).statusCode = 404;
       throw error;
     }
-    return usuario;
+
+    const membresia = await getUltimaMembreciaActiva(id)
+    
+    const usuarioConMembresia = { ...usuario, membresia}
+    
+    return usuarioConMembresia;
 }
 
 export async function createUsuario(data: CreateUsuarioRequest): Promise<Usuario> {

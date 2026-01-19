@@ -19,9 +19,9 @@ export function CrearClientePage() {
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
     setFormData({
-      ...formData,
-      [name]: value
-    });
+    ...formData,
+    [name]: type === "file" ? files[0] : value
+  });
   };
 
   const handleSubmit = async (e) => {
@@ -107,10 +107,9 @@ export function CrearClientePage() {
           <label>
             Foto:
             <input
-              type="text"
+              type="file"
               name="foto"
               placeholder="Ingrese una foto"
-              value={formData.foto}
               onChange={handleChange}
               required
             />

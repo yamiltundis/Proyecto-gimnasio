@@ -25,10 +25,21 @@ export function CrearPrimerPagoPage() {
 
     try {
         // 1. Crear cliente
+        const dataCliente = new FormData();
+        dataCliente.append("nombre", clienteData.nombre);
+        dataCliente.append("apellido", clienteData.apellido);
+        dataCliente.append("email", clienteData.email);
+        dataCliente.append("dni", clienteData.dni);
+        dataCliente.append("fechaNacimiento", clienteData.fechaNacimiento);
+
+        if (clienteData.foto) {
+          dataCliente.append("foto", clienteData.foto);
+        }
+
         const resCliente = await fetch("http://localhost:3000/usuarios", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(clienteData)
+            body: dataCliente
         })
         if (!resCliente.ok) {
             throw new Error('Error al crear al cliente')
