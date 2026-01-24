@@ -2,6 +2,7 @@ import '../estilos/asistenciasPage.css'
 import { useState, useEffect, use } from 'react'
 import { Link } from 'react-router-dom'
 import { useFetch } from '../hooks/useFetch'
+import { Calendario } from "../components/Calendario"
 
 export function MisAsistenciasPage () {
 
@@ -12,6 +13,18 @@ export function MisAsistenciasPage () {
     const { data, loading, error } = useFetch(url, {}, { requireAuth: true });
 
     const asistencias = data?.asistencias || [];
+
+    const events = asistencias.map(a => {
+      const fecha = new Date(a.fechaHora);
+      const hora = fecha.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit", hour12: false });
+
+      return {
+        title: `📍 ${hora}`,   // 👈 ahora se ve la hora
+        start: fecha,
+        end: new Date(fecha.getTime() + 60 * 60 * 1000)
+      };
+    });
+
 
     function formatearFecha(fechaISO) {
         if (!fechaISO) return '';
@@ -49,19 +62,6 @@ export function MisAsistenciasPage () {
     return (
         <>
           <h1 className='asistenciaspage-h1'> Tus Asistencias </h1>
-
-          <div className='asistenciaspage-contenedor-barra-busqueda-y-boton-nuevo-asistencia'>
-            <div className="asistenciaspage-barra-busqueda-dia">
-               <input 
-                  type="date"
-                  placeholder='Busque asistencia por dia'
-                  className='asistenciaspage-input-busqueda'
-                  value={busquedaFecha}
-                  onChange={(e) => { setBusquedaFecha(e.target.value)}}
-               />
-            </div>
-          </div>
-
            <div className='asistenciaspage-contenedor-tabla'>
              <table className='asistenciaspage-tabla'>
                 <thead>
@@ -78,6 +78,8 @@ export function MisAsistenciasPage () {
                 </tbody>
              </table>
            </div>
+           <Calendario events={events}/>
+
         </>
     )
 }
