@@ -1,0 +1,32 @@
+.tarjetapago {
+  background-color: rgb(14, 14, 82);
+  padding: 1.5rem;
+  border-radius: 1em;
+  color: white;
+  display: inline-block;
+  min-width: 220px;
+  max-width: 300px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease;
+}
+
+.tarjetapago:hover {
+  transform: scale(1.02); /* 👈 efecto visual al pasar el mouse */
+}
+
+.tarjetapago-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tarjetapago-primeracolumna h2 {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.tarjetapago-segundacolumna {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-align: center;
+}

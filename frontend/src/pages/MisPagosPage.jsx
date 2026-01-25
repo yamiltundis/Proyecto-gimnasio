@@ -2,6 +2,7 @@ import '../estilos/pagosPage.css'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useFetch } from '../hooks/useFetch'
+import { TarjetaPago } from '../components/TarjetaPago'
 
 export function MisPagosPage () {
 
@@ -15,11 +16,6 @@ export function MisPagosPage () {
     const urlMembrecias = 'http://localhost:3000/tiposmembrecia';
     const { data: membresiasData, loading: membresiasLoading, error: membresiasError } = useFetch(urlMembrecias, {}, { requireAuth: true });
     const nombresMembresias = membresiasData?.tiposmembrecias || [];
-
-
-    const agregarPago = (data) => {
-      setPagos([...pagos, data])
-    }
 
     function formatearFecha(fechaISO) {
       if (!fechaISO) return '';
@@ -78,33 +74,18 @@ export function MisPagosPage () {
               })}
             </select>
 
-            {/* <Link to="/admin/pagos/crear">
-            <div className='pagospage-boton-nuevo-pago'>
-               <i className='bi bi-plus'></i>
-               <button className='pagospage-texto-boton-nuevo-pago'> Nuevo Pago</button>            
-            </div>
-            </Link> */}
           </div>
 
-           <div className='pagospage-contenedor-tabla'>
-             <table className='pagospage-tabla'>
-                <thead>
-                    <tr>
-                        <th> Fecha </th>
-                        <th> Monto </th>
-                        <th> Membrecia </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {Array.isArray(pagos) && pagosFiltrados.map((p) => (
-                        <tr key={p.id}>
-                           <td> {formatearFecha(p.fecha)} </td>
-                           <td> ${p.monto} </td>
-                           <td> {p.tipoMembrecia.nombre}</td>                     
-                        </tr>
-                    ))}
-                </tbody>
-             </table>
+           <div className="tarjetapago-contenedor">
+            {pagosFiltrados.map(p => (
+              <TarjetaPago
+                key={p.id}
+                id={p.id}
+                fecha={formatearFecha(p.fecha)}
+                membresia={p.tipoMembrecia.nombre}
+                monto={p.monto.toLocaleString("es-AR")}
+               />
+            ))}
            </div>
         </>
     )

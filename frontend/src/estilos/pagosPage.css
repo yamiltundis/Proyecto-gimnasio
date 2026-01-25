@@ -173,3 +173,11 @@
   background-color: #c2bdbe;
   color: #000000;
 }
+
+.tarjetapago-contenedor {
+  display: flex;
+  flex-wrap: wrap;         /* 👈 permite que pasen a la siguiente línea si no entran */
+  gap: 1.5rem;
+  justify-content: center; /* 👈 centra las tarjetas horizontalmente */
+  margin-top: 2rem;
+}
