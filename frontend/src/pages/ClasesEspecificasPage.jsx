@@ -44,6 +44,12 @@ export function ClasesEspecificasPage () {
                <button className='clasesespecificaspage-texto-boton-nuevo-claseespecifica'> Nueva Clase </button>            
             </div>
             </Link>
+            <Link to={`/admin/clases/${id}/crearconpatron`}>
+            <div className='clasesespecificaspage-boton-nuevo-claseespecifica'>
+               <i className='bi bi-plus'></i>
+               <button className='clasesespecificaspage-texto-boton-nuevo-claseespecifica'> Nuevas clases por patrón </button>            
+            </div>
+            </Link>
           </div>
 
            <div className='clasesespecificaspage-contenedor-tabla'>

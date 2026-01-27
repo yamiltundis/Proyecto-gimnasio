@@ -20,6 +20,7 @@ import { ClasesEspecificasPage } from "./pages/ClasesEspecificasPage.jsx"
 import { CrearClasePage } from "./pages/CrearClasePage.jsx"
 import { ReservasPage } from "./pages/ReservasPage.jsx"
 import { CrearClaseEspecificaPage } from "./pages/CrearClaseEspecificaPage.jsx"
+import { CrearClaseEspecificaPatronPage } from "./pages/CrearClaseEspecificaPatronPage.jsx"
 import { CrearPrimerPagoPage } from "./pages/CrearPrimerPagoPage.jsx"
 import { LoginLayout } from "./components/LoginLayout.jsx"
 import { AsistenciasClasePage } from "./pages/AsistenciasClasePage.jsx"
@@ -52,6 +53,7 @@ function App() {
           <Route path="clases" element={<ClasesPage />} />
           <Route path="clases/:id" element={ <ClasesEspecificasPage/>}/>
           <Route path="clases/:id/crear" element={ <CrearClaseEspecificaPage/>}/>
+          <Route path="clases/:id/crearconpatron" element={ <CrearClaseEspecificaPatronPage/>}/>
           <Route path="clases/:id/reservas" element={<ReservasPage />}/>
           <Route path="clases/:id/asistencias" element={<AsistenciasClasePage />}/>
           <Route path="clases/crear" element={ <CrearClasePage/>}/>
