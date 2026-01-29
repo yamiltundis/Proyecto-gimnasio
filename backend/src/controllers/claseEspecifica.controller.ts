@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { ClaseEspecifica, CreateClaseEspecifica, UpdateClaseEspecifica, ClaseEspecificaListResponse, ClaseEspecificaResponse } from "../types/claseEspecifica.types";
+import { ClaseEspecifica, CreateClaseEspecifica, CreateClaseEspecificaConPatron, UpdateClaseEspecifica, ClaseEspecificaListResponse, ClaseEspecificaResponse, ClaseEspecificaConPatronResponse } from "../types/claseEspecifica.types";
 import * as claseEspecificaService from '../services/claseEspecifica.service'
 
 export async function getAllClasesEspecificas(req: Request, res: Response<ClaseEspecificaListResponse>, next: NextFunction) {
@@ -37,6 +37,18 @@ export async function createClaseEspecifica(req: Request<{}, ClaseEspecificaResp
     res.json({
        claseEspecifica: newClase,
        message: 'Clase Especifica creada correctamente'
+    })
+   } catch (error) {
+        next(error)
+   }
+}
+
+export async function createClaseEspecificaConPatron(req: Request<{}, ClaseEspecificaConPatronResponse, CreateClaseEspecificaConPatron>, res: Response<ClaseEspecificaConPatronResponse>, next: NextFunction) {
+   try {
+    const clasesCreadas = await claseEspecificaService.createClaseEspecificaConPatron(req.body);
+    res.json({
+       message: 'Fueron creadas las clases correctamente con el patrón seleccionado!',
+       total: clasesCreadas.length
     })
    } catch (error) {
         next(error)

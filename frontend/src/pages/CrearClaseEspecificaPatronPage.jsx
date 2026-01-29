@@ -43,13 +43,14 @@ export function CrearClaseEspecificaPatronPage() {
            ? [...prev.diasSemana, value]
            : prev.diasSemana.filter((dia) => dia !== value)
        }));
+       console.log("formData actualizado:", formData);
      } else {
        setFormData((prev) => ({
          ...prev,
          [name]: value
        }));
+       console.log("formData actualizado:", formData);
      }
-     console.log("formData actualizado:", formData);
    };
 
 
@@ -61,14 +62,12 @@ export function CrearClaseEspecificaPatronPage() {
         ...formData,
         cantmax: Number(formData.cantmax),
         tipoClaseId: Number(formData.tipoClaseId),
-        diaHora: formData.diaHora 
-        ? new Date(formData.diaHora).toISOString() 
-        : null
+        hora: formData.hora
     };
 
     console.log('Datos de la clase creada:', payload);
     try {
-      const response = await fetch('http://localhost:3000/clasesespecificas', {
+      const response = await fetch('http://localhost:3000/clasesespecificas/conpatron', {
         method: 'POST',
         headers: {
          'Content-Type': 'application/json'

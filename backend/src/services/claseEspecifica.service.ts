@@ -1,5 +1,6 @@
-import { ClaseEspecifica, ClaseEspecificaListadoFront ,CreateClaseEspecifica, UpdateClaseEspecifica } from "../types/claseEspecifica.types";
+import { ClaseEspecifica, ClaseEspecificaListadoFront ,CreateClaseEspecifica, CreateClaseEspecificaConPatron, UpdateClaseEspecifica } from "../types/claseEspecifica.types";
 import prisma from "../config/prisma";
+import { addDays, isBefore } from "date-fns";
 
 export async function getAllClasesEspecificas(tipoClase?: number): Promise<ClaseEspecificaListadoFront[]> {
     const clases = await prisma.claseEspecifica.findMany({
@@ -37,6 +38,45 @@ export async function createClaseEspecifica(data: CreateClaseEspecifica): Promis
         }
     });
     return newClase;
+}
+
+export async function createClaseEspecificaConPatron(data: CreateClaseEspecificaConPatron): Promise<ClaseEspecifica[]> {
+  const fechaInicio = new Date(data.fechaInicio);
+  const fechaFin = new Date(data.fechaFin);
+
+  const clasesCreadas: ClaseEspecifica[] = [];
+
+  for (let d = new Date(fechaInicio); d <= fechaFin; d = addDays(d, 1)) {
+    const nombreDia = d
+      .toLocaleDateString("es-ES", { weekday: "long" })
+      .toLowerCase();
+
+    if (data.diasSemana.includes(nombreDia)) {
+      const [horaStr, minutoStr] = data.hora.split(":");
+      const fechaClase = new Date(
+        d.getFullYear(),
+        d.getMonth(),
+        d.getDate(),
+        parseInt(horaStr, 10),
+        parseInt(minutoStr, 10),
+        0,
+        0
+      );
+
+      console.log("FechaClase construida:", fechaClase.toISOString());
+
+      const nuevaClase = await createClaseEspecifica({
+        diaHora: fechaClase,
+        cantmax: data.cantmax,
+        tipoClaseId: data.tipoClaseId,
+      });
+
+      clasesCreadas.push(nuevaClase);
+    }
+  }
+
+  return clasesCreadas;
+  
 }
 
 export async function updateClaseEspecifica(id: number, data: UpdateClaseEspecifica): Promise<ClaseEspecifica> {

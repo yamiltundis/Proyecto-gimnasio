@@ -11,9 +11,17 @@ export interface ClaseEspecificaListadoFront extends ClaseEspecifica {
   cantidadReservas: number
 }
 
-
 export interface CreateClaseEspecifica {
     diaHora: Date,
+    cantmax: number,
+    tipoClaseId: number
+}
+
+export interface CreateClaseEspecificaConPatron {
+    fechaInicio: string,
+    fechaFin: string,
+    diasSemana: string[],
+    hora: string,
     cantmax: number,
     tipoClaseId: number
 }
@@ -27,6 +35,11 @@ export interface UpdateClaseEspecifica {
 export interface ClaseEspecificaResponse {
     claseEspecifica: ClaseEspecifica,
     message: string
+}
+
+export interface ClaseEspecificaConPatronResponse {
+    message: string,
+    total: number
 }
 
 export interface ClaseEspecificaListResponse {
