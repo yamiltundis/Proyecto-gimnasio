@@ -64,6 +64,8 @@
 
 .clasesespecificaspage-contenedor-tabla {
     margin-top: 1.5em;
+    max-height: 400px;   /* límite de altura */
+    overflow-y: auto;
 }
 
 .clasesespecificaspage-tabla {

@@ -7,6 +7,8 @@ const router = Router();
 
 router.get('/', claseEspecificaController.getAllClasesEspecificas);
 
+router.get('/anotarse', claseEspecificaController.getClasesEspecificasParaAnotarse);
+
 router.get('/:id', claseEspecificaController.getClaseEspecificaById);
 
 router.post('/', validate(createClaseEspecificaSchema), claseEspecificaController.createClaseEspecifica);

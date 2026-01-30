@@ -22,7 +22,7 @@ export function LayoutCliente () {
                       <li className='bi bi-cash'> Pagos </li>
                     </Link>
 
-                    <Link to="/admin/clases">
+                    <Link to="/cliente/clases">
                       <li className='bi bi-stack'> Clases </li>
                     </Link>
                 </ul>

@@ -9,9 +9,9 @@ router.get('/', reservaController.getAllReservas);
 
 router.get('/:id', reservaController.getReservaById);
 
-router.post('/', validate(createAsistenciaClaseSchema), reservaController.createReserva);
+router.post('/', reservaController.createReserva);
 
-router.put('/:id', validate(updateAsistenciaClaseSchema),reservaController.updateReserva);
+router.put('/:id', reservaController.updateReserva);
 
 router.delete('/:id', reservaController.deleteReserva);
 

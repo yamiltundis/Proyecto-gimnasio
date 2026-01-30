@@ -1,35 +1,36 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { UsuarioProvider, useUsuario } from "./context/usuarioContext.jsx"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { UsuarioProvider, useUsuario } from "./context/usuarioContext.jsx";
 
 // Páginas generales
-import { HomePage } from "./pages/HomePage.jsx"
-import { LoginPage } from "./pages/LoginPage.jsx"
+import { HomePage } from "./pages/HomePage.jsx";
+import { LoginPage } from "./pages/LoginPage.jsx";
 
 // Paginas para el admin
-import { Layout } from "./components/Layout.jsx"
-import { ClientesPage } from "./pages/ClientesPage.jsx"
-import { PagosPage } from "./pages/PagosPage.jsx"
-import { ClasesPage } from "./pages/ClasesPage.jsx"
-import { ClienteEspecificoPage } from "./pages/ClienteEspecificoPage.jsx"
-import { CrearClientePage } from "./pages/CrearClientePage"
-import { MembreciasPage } from "./pages/MembreciasPage.jsx"
-import { AsistenciasPage } from "./pages/AsistenciasPage.jsx"
-import { CrearPagoPage } from "./pages/CrearPagoPage.jsx"
-import { CrearAsistenciaPage } from "./pages/CrearAsistenciaPage.jsx"
-import { ClasesEspecificasPage } from "./pages/ClasesEspecificasPage.jsx"
-import { CrearClasePage } from "./pages/CrearClasePage.jsx"
-import { ReservasPage } from "./pages/ReservasPage.jsx"
-import { CrearClaseEspecificaPage } from "./pages/CrearClaseEspecificaPage.jsx"
-import { CrearClaseEspecificaPatronPage } from "./pages/CrearClaseEspecificaPatronPage.jsx"
-import { CrearPrimerPagoPage } from "./pages/CrearPrimerPagoPage.jsx"
-import { LoginLayout } from "./components/LoginLayout.jsx"
-import { AsistenciasClasePage } from "./pages/AsistenciasClasePage.jsx"
+import { Layout } from "./components/Layout.jsx";
+import { ClientesPage } from "./pages/ClientesPage.jsx";
+import { PagosPage } from "./pages/PagosPage.jsx";
+import { ClasesPage } from "./pages/ClasesPage.jsx";
+import { ClienteEspecificoPage } from "./pages/ClienteEspecificoPage.jsx";
+import { CrearClientePage } from "./pages/CrearClientePage";
+import { MembreciasPage } from "./pages/MembreciasPage.jsx";
+import { AsistenciasPage } from "./pages/AsistenciasPage.jsx";
+import { CrearPagoPage } from "./pages/CrearPagoPage.jsx";
+import { CrearAsistenciaPage } from "./pages/CrearAsistenciaPage.jsx";
+import { ClasesEspecificasPage } from "./pages/ClasesEspecificasPage.jsx";
+import { CrearClasePage } from "./pages/CrearClasePage.jsx";
+import { ReservasPage } from "./pages/ReservasPage.jsx";
+import { CrearClaseEspecificaPage } from "./pages/CrearClaseEspecificaPage.jsx";
+import { CrearClaseEspecificaPatronPage } from "./pages/CrearClaseEspecificaPatronPage.jsx";
+import { CrearPrimerPagoPage } from "./pages/CrearPrimerPagoPage.jsx";
+import { LoginLayout } from "./components/LoginLayout.jsx";
+import { AsistenciasClasePage } from "./pages/AsistenciasClasePage.jsx";
 
 // Páginas para el cliente
 import { LayoutCliente } from "./components/LayoutCliente.jsx";
 import { MiPerfil } from "./pages/MiPerfilPage.jsx";
-import { MisAsistenciasPage } from "./pages/MisAsistenciasPage.jsx"
+import { MisAsistenciasPage } from "./pages/MisAsistenciasPage.jsx";
 import { MisPagosPage } from "./pages/MisPagosPage.jsx";
+import { ClienteClases } from "./pages/ClienteClases.jsx";
 
 function App() {
 
@@ -66,6 +67,7 @@ function App() {
           <Route path="miperfil" element={<MiPerfil />}></Route>
           <Route path="misasistencias" element={<MisAsistenciasPage />}></Route>
           <Route path="mispagos" element={<MisPagosPage />}></Route>
+          <Route path="clases" element={<ClienteClases />}></Route>
         </Route>
        </Routes>
 

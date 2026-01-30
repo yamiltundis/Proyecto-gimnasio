@@ -2,11 +2,15 @@ import '../estilos/crearClaseEspecificaPatronPage.css';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { BotonRegresar } from '../components/BotonRegresar';
+import { ModalRespuesta } from '../components/ModalRespuesta';
 
 export function CrearClaseEspecificaPatronPage() {
   const { id } = useParams();
   const [tipoClase, setTipoClase] = useState("");
   const [mostrarModalDias, setMostrarModalDias] = useState(false);
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [respuesta, setRespuesta] = useState(null)
+  const [creacionExitosa, setCreacionExitosa] = useState(null);
   const [formData, setFormData] = useState({
     hora: '',
     cantmax: '',
@@ -80,7 +84,9 @@ export function CrearClaseEspecificaPatronPage() {
       }
 
       const resultado = await response.json();
-      console.log('Clase específica creada:', resultado);
+      setCreacionExitosa(true)
+      console.log('Clases específicas creadas:', resultado);
+      setRespuesta(resultado)
 
       setFormData({
         hora: '',
@@ -92,7 +98,10 @@ export function CrearClaseEspecificaPatronPage() {
       });
 
     } catch (error) {
-      console.error('Error al enviar clase especifica:', error);
+      console.error('Error al crear clases:', error);
+      setCreacionExitosa(false)
+    } finally {
+      setMostrarModal(true)
     }
   };
 
@@ -178,6 +187,15 @@ export function CrearClaseEspecificaPatronPage() {
         </button>
       </form>
       <BotonRegresar />
+      {mostrarModal && (
+        <ModalRespuesta
+          frase={ creacionExitosa ? `Fueron correctamente creadas las ${respuesta.total} clases!` : "No se han podido crear las clases" }
+          exito={creacionExitosa}
+          link={`/admin/clases/${id}`}
+          textoLink="Volver al listado de clases"
+          onClose={() => setMostrarModal(false)}
+        />
+      )}
     </>
   );
 }

@@ -31,6 +31,18 @@ export async function getClaseEspecificaById(req: Request, res: Response<ClaseEs
     }
 }
 
+export async function getClasesEspecificasParaAnotarse(req: Request, res: Response<ClaseEspecificaListResponse>, next: NextFunction) {
+    try {
+        const clases = await claseEspecificaService.getClasesEspecificasParaAnotarse();
+        res.json({
+            clasesEspecificas: clases,
+            total: clases.length
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
 export async function createClaseEspecifica(req: Request<{}, ClaseEspecificaResponse, CreateClaseEspecifica>, res: Response<ClaseEspecificaResponse>, next: NextFunction) {
    try {
     const newClase = await claseEspecificaService.createClaseEspecifica(req.body);

@@ -5,15 +5,19 @@ import { addDays, isBefore } from "date-fns";
 export async function getAllClasesEspecificas(tipoClase?: number): Promise<ClaseEspecificaListadoFront[]> {
     const clases = await prisma.claseEspecifica.findMany({
         where: tipoClase ? { tipoClaseId: tipoClase } : {},
-        include: { reservas: true, asistenciasClase: true },
+        include: { reservas: true, asistenciasClase: true, tipoClase: true },
         orderBy: { diaHora: 'desc'}
     })
 
     const clasesConEstado: ClaseEspecificaListadoFront[]= clases.map(clase => ({
-      ...clase,
-      estado: new Date(clase.diaHora) > new Date() ? "Pendiente" : "Finalizada",
-      cantidadReservas: clase.reservas.length,
-      cantidadAsistencias: clase.asistenciasClase.length
+        id: clase.id,
+        diaHora: clase.diaHora,
+        cantmax: clase.cantmax,
+        tipoClaseId: clase.tipoClaseId,
+        nombre: clase.tipoClase.nombre,
+        estado: new Date(clase.diaHora) > new Date() ? "Pendiente" : "Finalizada",
+        cantidadReservas: clase.reservas.length,
+        cantidadAsistencias: clase.asistenciasClase.length
     }));
 
     return clasesConEstado;
@@ -27,6 +31,47 @@ export async function getClaseEspecificaById(id: number): Promise<ClaseEspecific
         throw(error);
     }
     return clase
+}
+
+export async function getClasesEspecificasParaAnotarse(): Promise<ClaseEspecificaListadoFront[]> {
+    const ahora = new Date();
+    const limite = addDays(ahora, 3);
+
+    const clases = await prisma.claseEspecifica.findMany({ 
+        where: { 
+            diaHora: {
+              gte: ahora,
+              lte: limite
+            }
+        },
+        include: {
+            reservas: true,
+            asistenciasClase: true,
+            tipoClase: true
+        },
+        orderBy: {
+            diaHora: "asc",
+        },
+
+    });
+
+    if (!clases) {
+        const error = new Error('Clase específicas no encontradas');
+        (error as any).statusCode = 404;
+        throw(error);
+    }
+
+    const clasesConInfo: ClaseEspecificaListadoFront[]= clases.map(clase => ({
+        id: clase.id,
+        diaHora: clase.diaHora,
+        cantmax: clase.cantmax,
+        tipoClaseId: clase.tipoClaseId,
+        nombre: clase.tipoClase.nombre,
+        estado: new Date(clase.diaHora) > new Date() ? "Pendiente" : "Finalizada",
+        cantidadReservas: clase.reservas.length,
+        cantidadAsistencias: clase.asistenciasClase.length
+    }));
+    return clasesConInfo
 }
 
 export async function createClaseEspecifica(data: CreateClaseEspecifica): Promise<ClaseEspecifica> {
