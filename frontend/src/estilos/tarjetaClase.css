@@ -1,0 +1,50 @@
+.tarjetaclase {
+  background-color: rgb(14, 14, 82);
+  padding: 1.5rem;
+  border-radius: 1em;
+  color: white;
+  display: inline-block;
+  min-width: 220px;
+  max-width: 300px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease;
+}
+
+.tarjetaclase:hover {
+  transform: scale(1.02); /* 👈 efecto visual al pasar el mouse */
+}
+
+.tarjetaclase-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tarjetaclase-primeracolumna h2 {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.tarjetaclase-segundacolumna {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.tarjetaclase-boton-reservar {
+  display: inline-flex; /* Cambiado a inline-flex para que no ocupe todo el ancho */
+  align-items: center;
+  justify-content: center; /* Centra el texto internamente */
+  background-color: #166f26;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  
+  /* --- LOS CAMBIOS CLAVE --- */
+  width: fit-content;      /* Hace que el ancho dependa del contenido */
+  padding: 0.2em 0.7em;    /* Da aire al texto (arriba/abajo y lados) */
+  height: auto;            /* Deja que el padding defina la altura */
+  margin: 0.5em auto 0;    /* Lo centra horizontalmente si el padre es flex */
+  cursor: pointer;         /* Para que se note que es clickable */
+  color: white;            /* Asumiendo que quieres el texto blanco como en la imagen */
+}
