@@ -7,6 +7,7 @@ import { useFetch } from '../hooks/useFetch';
 
 export function ClasesEspecificasPage () {
     const { id } = useParams();
+    const [estadoFiltro, setEstadoFiltro] = useState("")
 
     const url = `http://localhost:3000/clasesespecificas?tipoClase=${id}`;
     const { data, loading, error } = useFetch(url, {}, { requireAuth: true });
@@ -27,6 +28,11 @@ export function ClasesEspecificasPage () {
 
       return `${dia}-${mes}-${año} ${hora}:${minuto}`;
     }
+   
+   const clasesFiltradas = clases.filter(c => {
+     if (estadoFiltro === "") return true;
+     return c.estado === estadoFiltro;
+   });
 
 
     return (
@@ -38,18 +44,26 @@ export function ClasesEspecificasPage () {
                <i className="bi bi-search"></i>
                <input type="text" placeholder='Buscar por nombre o DNI' className='clasesespecificaspage-input-busqueda'></input>
             </div>
-            <Link to={`/admin/clases/${id}/crear`}>
-            <div className='clasesespecificaspage-boton-nuevo-claseespecifica'>
-               <i className='bi bi-plus'></i>
-               <button className='clasesespecificaspage-texto-boton-nuevo-claseespecifica'> Nueva Clase </button>            
-            </div>
-            </Link>
-            <Link to={`/admin/clases/${id}/crearconpatron`}>
-            <div className='clasesespecificaspage-boton-nuevo-claseespecifica'>
-               <i className='bi bi-plus'></i>
-               <button className='clasesespecificaspage-texto-boton-nuevo-claseespecifica'> Nuevas clases por patrón </button>            
-            </div>
-            </Link>
+
+            <select
+              className="clasesespecificaspage-select-estado"
+              value={estadoFiltro}
+              onChange={(e) => setEstadoFiltro(e.target.value)}
+            >
+              <option value="">Todos los estados</option>
+              <option value="Pendiente"> Pendiente </option>
+              <option value="Finalizada"> Finalizada</option>
+            </select>
+
+          <Link to={`/admin/clases/${id}/crear`} className="clasesespecificaspage-boton-nuevo-claseespecifica">
+            <i className="bi bi-plus"></i>
+            <span className="clasesespecificaspage-texto-boton-nuevo-claseespecifica">Nueva Clase</span>
+          </Link>
+
+          <Link to={`/admin/clases/${id}/crearconpatron`} className="clasesespecificaspage-boton-nuevo-claseespecifica">
+            <i className="bi bi-plus"></i>
+            <span className="clasesespecificaspage-texto-boton-nuevo-claseespecifica">Nuevas clases por patrón</span>
+          </Link>
           </div>
 
            <div className='clasesespecificaspage-contenedor-tabla'>
@@ -65,7 +79,7 @@ export function ClasesEspecificasPage () {
                     </tr>
                 </thead>
                 <tbody>
-                    {Array.isArray(clases) && clases.map((c) => (
+                    {Array.isArray(clases) && clasesFiltradas.map((c) => (
                         <tr key={c.id}>
                            <td> {formatearFecha(c.diaHora)} </td>
                            <td>

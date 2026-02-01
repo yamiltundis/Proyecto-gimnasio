@@ -8,7 +8,7 @@ import { ModalRespuesta } from '../components/ModalRespuesta';
 
 export function CrearPagoPage() {
 
-  const [mostrarModal, setMostrarModal] = useState(false) // estado para mostrar modal de creacion de pago
+  const [mostrarModal, setMostrarModal] = useState(false)
   const [formData, setFormData] = useState({
     fecha: '',
     clienteId: '',

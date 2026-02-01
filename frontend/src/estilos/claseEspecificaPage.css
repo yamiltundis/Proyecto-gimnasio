@@ -34,41 +34,67 @@
   color: #333;
 }
 
+.clasesespecificaspage-select-estado {
+  padding: 8px 12px;
+  border: 2px solid #4CAF50;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.clasesespecificaspage-select-estado:hover {
+  border-color: #45a049;
+  background-color: #fff;
+}
+
+.clasesespecificaspage-select-estado:focus {
+  outline: none;
+  border-color: #2e7d32;
+  box-shadow: 0 0 5px rgba(46, 125, 50, 0.5);
+}
+
 .clasesespecificaspage-boton-nuevo-claseespecifica {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  gap: 0.5em;
   background-color: #166f26;
-  border: 1px solid #ccc;
+  color: white;
+  padding: 0.4rem 0.8rem;
   border-radius: 8px;
-  gap: 0.05em;
-  padding: 0.2rem 0.3rem;
+  text-decoration: none;
+  font-size: 1rem;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  height: 2em;
-  margin-top: 0.2em;
+  transition: background-color 0.3s ease;
+  gap: 0.2em;  
+}
+
+.clasesespecificaspage-boton-nuevo-claseespecifica:hover {
+  background-color: #1a7f2e;
 }
 
 .clasesespecificaspage-boton-nuevo-claseespecifica i {
-    color: white;
-    font-size: 1em;
+  font-size: 1.2rem;
+  color: white;
 }
 
 .clasesespecificaspage-texto-boton-nuevo-claseespecifica {
-    border: none;
-    outline: none;
-    font-size: 1rem;
-    background-color: #166f26;
-    color: white;
-    flex: 1;
-    cursor: pointer;
+  color: white;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 .clasesespecificaspage-contenedor-tabla {
     margin-top: 1.5em;
     max-height: 400px;   /* límite de altura */
     overflow-y: auto;
+    width: 100%;
 }
 
 .clasesespecificaspage-tabla {
+  width: 100%;
   border: 1px solid #ccc;
   border-collapse: collapse;
 }

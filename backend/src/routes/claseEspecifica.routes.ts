@@ -2,12 +2,13 @@ import { Router } from "express";
 import * as claseEspecificaController from '../controllers/claseEspecifica.controller';
 import { validate } from "../middlewares/validation.middleware";
 import { createClaseEspecificaSchema, updateClaseEspecificaSchema, createClaseEspecificaConPatronSchema } from "../validations/claseEspecifica.validations";
+import { authenticate, authorize } from "../middlewares/auth.middleware";
 
 const router = Router();
 
 router.get('/', claseEspecificaController.getAllClasesEspecificas);
 
-router.get('/anotarse', claseEspecificaController.getClasesEspecificasParaAnotarse);
+router.get('/anotarse', authenticate, authorize('cliente'), claseEspecificaController.getClasesEspecificasParaAnotarse);
 
 router.get('/:id', claseEspecificaController.getClaseEspecificaById);
 

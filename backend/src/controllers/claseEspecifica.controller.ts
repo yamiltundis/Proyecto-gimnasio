@@ -33,7 +33,8 @@ export async function getClaseEspecificaById(req: Request, res: Response<ClaseEs
 
 export async function getClasesEspecificasParaAnotarse(req: Request, res: Response<ClaseEspecificaListResponse>, next: NextFunction) {
     try {
-        const clases = await claseEspecificaService.getClasesEspecificasParaAnotarse();
+        const id = req.usuario!.id
+        const clases = await claseEspecificaService.getClasesEspecificasParaAnotarse(id);
         res.json({
             clasesEspecificas: clases,
             total: clases.length

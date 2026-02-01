@@ -33,11 +33,13 @@ export function ClienteClases () {
           <div className="tarjetaclase-contenedor">
           {clasesParaAnotarse.map(c => (
              <TarjetaClase
-                key={c.id} // 👈 siempre poné key en listas
+                key={c.id}
+                id={c.id} 
                 nombre={c.nombre}
                 fechaHora={formatearFechaEspecial(c.diaHora)}
-                cantMax={c.cantmax} // ojo: en el objeto es "cantmax", no "cantMax"
+                cantMax={c.cantmax}
                 reservas={c.cantidadReservas}
+                yaReservado={c.yaReservado}
              />
             )
            )}

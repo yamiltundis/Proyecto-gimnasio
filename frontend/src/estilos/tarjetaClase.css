@@ -32,19 +32,22 @@
 }
 
 .tarjetaclase-boton-reservar {
-  display: inline-flex; /* Cambiado a inline-flex para que no ocupe todo el ancho */
+  display: inline-flex;
   align-items: center;
-  justify-content: center; /* Centra el texto internamente */
+  justify-content: center;
   background-color: #166f26;
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  
-  /* --- LOS CAMBIOS CLAVE --- */
-  width: fit-content;      /* Hace que el ancho dependa del contenido */
-  padding: 0.2em 0.7em;    /* Da aire al texto (arriba/abajo y lados) */
-  height: auto;            /* Deja que el padding defina la altura */
-  margin: 0.5em auto 0;    /* Lo centra horizontalmente si el padre es flex */
-  cursor: pointer;         /* Para que se note que es clickable */
-  color: white;            /* Asumiendo que quieres el texto blanco como en la imagen */
+  width: fit-content;
+  padding: 0.2em 0.7em;
+  height: auto;
+  margin: 0.5em auto 0;
+  cursor: pointer;
+  color: white;
+}
+
+.tarjetaclase-segundacolumna p {
+  font-size: 1.4rem;
+  margin: 0.5em auto 0; 
 }

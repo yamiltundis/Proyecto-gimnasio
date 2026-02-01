@@ -6,7 +6,7 @@ export async function getAllClasesEspecificas(tipoClase?: number): Promise<Clase
     const clases = await prisma.claseEspecifica.findMany({
         where: tipoClase ? { tipoClaseId: tipoClase } : {},
         include: { reservas: true, asistenciasClase: true, tipoClase: true },
-        orderBy: { diaHora: 'desc'}
+        orderBy: { diaHora: 'asc' }
     })
 
     const clasesConEstado: ClaseEspecificaListadoFront[]= clases.map(clase => ({
@@ -19,6 +19,20 @@ export async function getAllClasesEspecificas(tipoClase?: number): Promise<Clase
         cantidadReservas: clase.reservas.length,
         cantidadAsistencias: clase.asistenciasClase.length
     }));
+
+    clasesConEstado.sort((a, b) => {
+       if (a.estado === "Pendiente" && b.estado === "Finalizada") return -1;
+       if (a.estado === "Finalizada" && b.estado === "Pendiente") return 1;
+
+       // Si ambos son pendientes → orden ascendente por fecha
+       if (a.estado === "Pendiente" && b.estado === "Pendiente") {
+         return a.diaHora.getTime() - b.diaHora.getTime();
+       }
+
+       // Si ambos son finalizadas → orden descendente por fecha (más reciente primero)
+       return b.diaHora.getTime() - a.diaHora.getTime();
+    });
+
 
     return clasesConEstado;
 }
@@ -33,9 +47,9 @@ export async function getClaseEspecificaById(id: number): Promise<ClaseEspecific
     return clase
 }
 
-export async function getClasesEspecificasParaAnotarse(): Promise<ClaseEspecificaListadoFront[]> {
+export async function getClasesEspecificasParaAnotarse(userId: number): Promise<ClaseEspecificaListadoFront[]> {
     const ahora = new Date();
-    const limite = addDays(ahora, 3);
+    const limite = addDays(ahora, 5);
 
     const clases = await prisma.claseEspecifica.findMany({ 
         where: { 
@@ -69,7 +83,8 @@ export async function getClasesEspecificasParaAnotarse(): Promise<ClaseEspecific
         nombre: clase.tipoClase.nombre,
         estado: new Date(clase.diaHora) > new Date() ? "Pendiente" : "Finalizada",
         cantidadReservas: clase.reservas.length,
-        cantidadAsistencias: clase.asistenciasClase.length
+        cantidadAsistencias: clase.asistenciasClase.length,
+        yaReservado: clase.reservas.some(r => r.clienteId == userId)
     }));
     return clasesConInfo
 }
