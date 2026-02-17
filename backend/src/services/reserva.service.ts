@@ -30,6 +30,13 @@ export async function getReservaById(id: number): Promise<Reserva> {
 
 export async function createReserva(data: CreateReservaRequest): Promise<Reserva> {
 
+    // Verifico que el cliente no se haya ya reservado en una misma clase
+    const reservaYaRealizada = await prisma.reserva.findFirst({
+        where: { clienteId: data.clienteId, claseEspecificaId: data.claseEspecificaId}
+    })
+
+    if (reservaYaRealizada) { throw new Error("Ya te haz anotado")}
+
     // Verifica que el cliente esté con una membrecia en activo
     await validarMembreciaActiva(data.clienteId, data.fechaReserva);
 
@@ -38,17 +45,18 @@ export async function createReserva(data: CreateReservaRequest): Promise<Reserva
     const claseId = Number(data.claseEspecificaId);
 
     const clase = await prisma.claseEspecifica.findUnique({
-    where: { id: claseId },
-    include: {
-      reservas: {
-        where: { estado: 'Confirmada' },
-        select: { id: true }
+      where: { id: claseId },
+      include: {
+        _count: {
+          select: {
+            reservas: { where: { estado: 'Confirmada' } }
+          }
+        }
       }
-     }
     });
 
     if (!clase) throw new Error('No existe esa clase');
-    if (clase.reservas.length >= clase.cantmax) throw new Error('Cupo máximo alcanzado');
+    if (clase._count.reservas >= clase.cantmax) throw new Error('Cupo máximo alcanzado');
     if (data.fechaReserva >= clase.diaHora) throw new Error('La clase ya finalizó');
 
     // Creo la reserva

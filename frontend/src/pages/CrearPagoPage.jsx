@@ -73,6 +73,7 @@ export function CrearPagoPage() {
 
       const resultado = await response.json();
       setPagoCreado(resultado)
+      setCreacionExitosa(true)
       console.log('Pago creado:', resultado);
 
       setFormData({

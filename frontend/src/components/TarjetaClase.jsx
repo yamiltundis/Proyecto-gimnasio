@@ -10,6 +10,7 @@ export function TarjetaClase({ id, nombre, fechaHora, cantMax, reservas, yaReser
   const token = getToken();
   const [creacionExitosa, setCreacionExitosa] = useState(null);
   const [mostrarModal, setMostrarModal] = useState(false)
+  const [reservaRealizada, setReservaRealizada] = useState(yaReservado)
 
   async function reservar() {
     try {
@@ -32,6 +33,7 @@ export function TarjetaClase({ id, nombre, fechaHora, cantMax, reservas, yaReser
 
       const data = await response.json();
       setCreacionExitosa(true)
+      setReservaRealizada(true)
       console.log("Reserva creada:", data);
     } catch (error) {
       console.error(error);
@@ -52,7 +54,7 @@ export function TarjetaClase({ id, nombre, fechaHora, cantMax, reservas, yaReser
           <p>Capacidad máxima: {cantMax}</p>
         </div>
         <div className="tarjetaclase-segundacolumna">
-          {yaReservado ? <p> Ya te anotaste ✅ </p> :
+          {reservaRealizada ? <p> Ya te anotaste ✅ </p> :
           <div className="tarjetaclase-boton-reservar">
             <button
               className="clientespage-texto-boton-nuevo-cliente"
