@@ -1,6 +1,7 @@
 import { ClaseEspecifica, ClaseEspecificaListadoFront ,CreateClaseEspecifica, CreateClaseEspecificaConPatron, UpdateClaseEspecifica } from "../types/claseEspecifica.types";
 import prisma from "../config/prisma";
 import { addDays, isBefore } from "date-fns";
+import redisClient from "../config/redis";
 
 export async function getAllClasesEspecificas(tipoClase?: number): Promise<ClaseEspecificaListadoFront[]> {
     const clases = await prisma.claseEspecifica.findMany({
@@ -48,6 +49,22 @@ export async function getClaseEspecificaById(id: number): Promise<ClaseEspecific
 }
 
 export async function getClasesEspecificasParaAnotarse(userId: number): Promise<ClaseEspecificaListadoFront[]> {
+    const cacheKey = `clases:anotarse:user:${userId}`;
+
+    try {
+        // 1. Intentar obtener de Redis
+        const cachedData = await redisClient.get(cacheKey);
+        if (cachedData) {
+            console.log(`[Redis] Cache hit para usuario ${userId}`);
+            return JSON.parse(cachedData);
+        }
+    } catch (error) {
+        console.error("Error leyendo de Redis:", error);
+        // Si Redis falla, no cortamos la ejecución, seguimos a la DB (fallback)
+    }
+
+    // --- Lógica original de Prisma ---
+    console.log(`[DB] Consultando base de datos para usuario ${userId}`);
     const ahora = new Date();
     const limite = addDays(ahora, 5);
 
@@ -66,7 +83,6 @@ export async function getClasesEspecificasParaAnotarse(userId: number): Promise<
         orderBy: {
             diaHora: "asc",
         },
-
     });
 
     if (!clases) {
@@ -75,7 +91,7 @@ export async function getClasesEspecificasParaAnotarse(userId: number): Promise<
         throw(error);
     }
 
-    const clasesConInfo: ClaseEspecificaListadoFront[]= clases.map(clase => ({
+    const clasesConInfo: ClaseEspecificaListadoFront[] = clases.map(clase => ({
         id: clase.id,
         diaHora: clase.diaHora,
         cantmax: clase.cantmax,
@@ -86,7 +102,17 @@ export async function getClasesEspecificasParaAnotarse(userId: number): Promise<
         cantidadAsistencias: clase.asistenciasClase.length,
         yaReservado: clase.reservas.some(r => r.clienteId == userId)
     }));
-    return clasesConInfo
+
+    try {
+        // Guarda en Redis antes de retornar
+        await redisClient.set(cacheKey, JSON.stringify(clasesConInfo), {
+            EX: 300
+        });
+    } catch (error) {
+        console.error("Error guardando en Redis:", error);
+    }
+
+    return clasesConInfo;
 }
 
 export async function createClaseEspecifica(data: CreateClaseEspecifica): Promise<ClaseEspecifica> {

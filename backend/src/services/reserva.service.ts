@@ -1,6 +1,7 @@
 import { Reserva, CreateReservaRequest, UpdateReservaRequest } from "../types/reserva.types";
 import prisma from "../config/prisma";
 import { validarMembreciaActiva } from "./validarMembreciaActiva";
+import redisClient from "../config/redis";
 
 export async function getAllReservas(claseEspecificaId?: number): Promise<Reserva[]> {
     const reservas = await prisma.reserva.findMany({
@@ -68,6 +69,10 @@ export async function createReserva(data: CreateReservaRequest): Promise<Reserva
             claseEspecificaId: data.claseEspecificaId
         }
     });
+
+    await redisClient.del(`clases:anotarse:user:${data.clienteId}`);
+    
+    console.log(`Caché invalidada para el usuario ${data.clienteId}`);
     return newReserva;
 }
 
