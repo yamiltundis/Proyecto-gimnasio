@@ -1,6 +1,6 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import { authRoutes } from './routes/auth.routes';
 import { logRequest } from './middlewares/logger.middleware';
 import { handleError } from './middlewares/error.middleware';
@@ -14,8 +14,6 @@ import { reservaRoutes } from './routes/reserva.routes';
 import { asistenciaClaseRoutes } from './routes/asistenciaClase.routes';
 import { asistenciaRoutes } from './routes/asistencia.routes';
 import { membreciaActivaRoutes } from './routes/membreciaActiva.routes';
-
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
