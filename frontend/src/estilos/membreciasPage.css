@@ -21,10 +21,14 @@
   background-color: white;
 }
 
-.membreciaspage-columna-acciones {
-    gap: 5em;
+.membreciaspage-columna-acciones a {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
 }
 
-.membreciaspage-columna-acciones i {
-  color: blue;
+.membreciaspage-link-ver-mas {
+  color: rgb(14, 14, 94);
+  cursor: pointer;
+  text-decoration: underline;
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import '../estilos/membreciasPage.css'
 import { useFetch } from "../hooks/useFetch";
+import { Link } from "react-router-dom";
 
 export function MembreciasPage () {
 
@@ -53,8 +54,10 @@ export function MembreciasPage () {
                        <td> {m.nombre} </td>
                        <td> {m.dias} </td>
                        <td> ${m.precio}</td>
-                       <td className='membreciaspage-columna-acciones'> 
-                        <i className="bi bi-highlighter"></i>
+                       <td className='membreciaspage-columna-acciones'>
+                          <Link to={`/admin/membrecias/${m.id}`}>
+                            <span className='membreciaspage-link-ver-mas'> Ver más </span> 
+                          </Link>
                        </td>
                     </tr>
                 ))
