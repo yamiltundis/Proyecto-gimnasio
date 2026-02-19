@@ -30,49 +30,50 @@ export async function getReservaById(id: number): Promise<Reserva> {
 }
 
 export async function createReserva(data: CreateReservaRequest): Promise<Reserva> {
+    const claseId = Number(data.claseEspecificaId);
+    if (!claseId) throw new Error("Debe indicar una clase específica");
 
-    // Verifico que el cliente no se haya ya reservado en una misma clase
-    const reservaYaRealizada = await prisma.reserva.findFirst({
-        where: { clienteId: data.clienteId, claseEspecificaId: data.claseEspecificaId}
-    })
+    const reservaKey = `clases:${claseId}:reservas`;
+    const infoKey = `clases:${claseId}`;
 
-    if (reservaYaRealizada) { throw new Error("Ya te haz anotado")}
+    const [yaAnotado, cupoOcupado] = await Promise.all([
+        redisClient.sIsMember(reservaKey, data.clienteId.toString()),
+        redisClient.sCard(reservaKey)
+    ]);
 
-    // Verifica que el cliente esté con una membrecia en activo
+    if (yaAnotado) throw new Error("Ya te has anotado");
+
     await validarMembreciaActiva(data.clienteId, data.fechaReserva);
 
-    // Verifico que exista la clase específica y que el cupo máximo no haya sido alcanzado
-    if (!data.claseEspecificaId) { throw new Error("Debe indicar una clase específica"); }
-    const claseId = Number(data.claseEspecificaId);
-
     const clase = await prisma.claseEspecifica.findUnique({
-      where: { id: claseId },
-      include: {
-        _count: {
-          select: {
-            reservas: { where: { estado: 'Confirmada' } }
-          }
+        where: { id: claseId },
+        include: {
+            _count: {
+                select: {
+                    reservas: { where: { estado: 'Confirmada' } }
+                }
+            }
         }
-      }
     });
 
     if (!clase) throw new Error('No existe esa clase');
+    
     if (clase._count.reservas >= clase.cantmax) throw new Error('Cupo máximo alcanzado');
-    if (data.fechaReserva >= clase.diaHora) throw new Error('La clase ya finalizó');
+    if (new Date(data.fechaReserva) >= new Date(clase.diaHora)) throw new Error('La clase ya finalizó');
 
-    // Creo la reserva
     const newReserva = await prisma.reserva.create({
         data: {
             fechaReserva: data.fechaReserva,
             estado: 'Confirmada',
             clienteId: data.clienteId,
-            claseEspecificaId: data.claseEspecificaId
+            claseEspecificaId: claseId
         }
     });
 
-    await redisClient.del(`clases:anotarse:user:${data.clienteId}`);
+    await redisClient.sAdd(reservaKey, data.clienteId.toString());
     
-    console.log(`Caché invalidada para el usuario ${data.clienteId}`);
+    console.log(`[Redis] Usuario ${data.clienteId} añadido a la clase ${claseId}`);
+
     return newReserva;
 }
 

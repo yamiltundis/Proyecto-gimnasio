@@ -7,9 +7,11 @@ export interface ClaseEspecifica {
 }
 
 export interface ClaseEspecificaListadoFront extends ClaseEspecifica {
-  nombre: string
-  estado: "Pendiente" | "Finalizada",
-  cantidadReservas: number
+    nombre: string
+    estado: "Pendiente" | "Finalizada",
+    cantidadReservas: number,
+    yaReservado: boolean,
+    cantidadAsistencias: number
 }
 
 export interface CreateClaseEspecifica {

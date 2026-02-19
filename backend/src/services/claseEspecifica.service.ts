@@ -18,7 +18,8 @@ export async function getAllClasesEspecificas(tipoClase?: number): Promise<Clase
         nombre: clase.tipoClase.nombre,
         estado: new Date(clase.diaHora) > new Date() ? "Pendiente" : "Finalizada",
         cantidadReservas: clase.reservas.length,
-        cantidadAsistencias: clase.asistenciasClase.length
+        cantidadAsistencias: clase.asistenciasClase.length,
+        yaReservado: true
     }));
 
     clasesConEstado.sort((a, b) => {
@@ -49,70 +50,77 @@ export async function getClaseEspecificaById(id: number): Promise<ClaseEspecific
 }
 
 export async function getClasesEspecificasParaAnotarse(userId: number): Promise<ClaseEspecificaListadoFront[]> {
-    const cacheKey = `clases:anotarse:user:${userId}`;
-
-    try {
-        // 1. Intentar obtener de Redis
-        const cachedData = await redisClient.get(cacheKey);
-        if (cachedData) {
-            console.log(`[Redis] Cache hit para usuario ${userId}`);
-            return JSON.parse(cachedData);
-        }
-    } catch (error) {
-        console.error("Error leyendo de Redis:", error);
-        // Si Redis falla, no cortamos la ejecución, seguimos a la DB (fallback)
-    }
-
-    // --- Lógica original de Prisma ---
-    console.log(`[DB] Consultando base de datos para usuario ${userId}`);
     const ahora = new Date();
     const limite = addDays(ahora, 5);
 
-    const clases = await prisma.claseEspecifica.findMany({ 
-        where: { 
-            diaHora: {
-              gte: ahora,
-              lte: limite
+    let idsClases = await redisClient.sMembers("clases:activas:ids");
+
+    if (idsClases.length === 0) {
+        const clasesDB = await prisma.claseEspecifica.findMany({
+            where: { diaHora: { gte: ahora, lte: limite } },
+            select: { id: true }
+        });
+        idsClases = clasesDB.map(c => c.id.toString());
+        if (idsClases.length > 0) await redisClient.sAdd("clases:activas:ids", idsClases);
+    }
+
+    const promesas = idsClases.map(async (id) => {
+        const infoKey = `clases:${id}`;
+        const reservaKey = `clases:${id}:reservas`;
+
+        let info = await redisClient.hGetAll(infoKey);
+
+        if (Object.keys(info).length === 0) {
+            const claseDB = await prisma.claseEspecifica.findUnique({
+                where: { id: parseInt(id) },
+                include: { tipoClase: true, reservas: { select: { clienteId: true } } }
+            });
+
+            if (!claseDB) return null;
+
+            await redisClient.hSet(infoKey, {
+                id: claseDB.id.toString(),
+                nombre: claseDB.tipoClase.nombre,
+                diaHora: claseDB.diaHora.toISOString(),
+                cantmax: claseDB.cantmax.toString()
+            });
+
+            const idsReservas = claseDB.reservas.map(r => r.clienteId.toString());
+            if (idsReservas.length > 0) {
+                await redisClient.sAdd(reservaKey, idsReservas);
             }
-        },
-        include: {
-            reservas: true,
-            asistenciasClase: true,
-            tipoClase: true
-        },
-        orderBy: {
-            diaHora: "asc",
-        },
+
+            await redisClient.expire(infoKey, 86400);
+            await redisClient.expire(reservaKey, 86400);
+
+            info = {
+                id: claseDB.id.toString(),
+                nombre: claseDB.tipoClase.nombre,
+                diaHora: claseDB.diaHora.toISOString(),
+                cantmax: claseDB.cantmax.toString()
+            };
+        }
+
+        const [cantidad, yaReservado] = await Promise.all([
+            redisClient.sCard(reservaKey),
+            redisClient.sIsMember(reservaKey, userId.toString())
+        ]);
+
+        return {
+            id: parseInt(info.id),
+            nombre: info.nombre,
+            diaHora: new Date(info.diaHora),
+            cantmax: parseInt(info.cantmax),
+            cantidadReservas: cantidad,
+            yaReservado: !!yaReservado, 
+            estado: new Date(info.diaHora) > ahora ? "Pendiente" : "Finalizada",
+            cantidadAsistencias: 0
+        };
     });
 
-    if (!clases) {
-        const error = new Error('Clase específicas no encontradas');
-        (error as any).statusCode = 404;
-        throw(error);
-    }
+    const resultado = await Promise.all(promesas);
 
-    const clasesConInfo: ClaseEspecificaListadoFront[] = clases.map(clase => ({
-        id: clase.id,
-        diaHora: clase.diaHora,
-        cantmax: clase.cantmax,
-        tipoClaseId: clase.tipoClaseId,
-        nombre: clase.tipoClase.nombre,
-        estado: new Date(clase.diaHora) > new Date() ? "Pendiente" : "Finalizada",
-        cantidadReservas: clase.reservas.length,
-        cantidadAsistencias: clase.asistenciasClase.length,
-        yaReservado: clase.reservas.some(r => r.clienteId == userId)
-    }));
-
-    try {
-        // Guarda en Redis antes de retornar
-        await redisClient.set(cacheKey, JSON.stringify(clasesConInfo), {
-            EX: 300
-        });
-    } catch (error) {
-        console.error("Error guardando en Redis:", error);
-    }
-
-    return clasesConInfo;
+    return resultado.filter((clase): clase is ClaseEspecificaListadoFront => clase !== null);
 }
 
 export async function createClaseEspecifica(data: CreateClaseEspecifica): Promise<ClaseEspecifica> {
