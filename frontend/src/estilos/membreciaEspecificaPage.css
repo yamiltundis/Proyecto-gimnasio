@@ -1,33 +1,33 @@
-.membreciaspage-contenedor-tabla {
+.membreciaespecificapage-contenedor-tabla {
     margin-top: 1rem;
 }
 
-.membreciaspage-tabla {
+.membreciaespecificapage-tabla {
     border: 1px solid black;
     border-collapse: collapse;
 }
 
-.membreciaspage-tabla th, .membreciaspage-tabla td {
+.membreciaespecificapage-tabla th, .membreciaespecificapage-tabla td {
   border: 1px solid #ccc;
   padding: 8px;
   text-align: center;
 }
 
-.membreciaspage-tabla th {
+.membreciaespecificapage-tabla th {
   background-color: rgb(187, 184, 184);
 }
 
-.membreciaspage-tabla td {
+.membreciaespecificapage-tabla td {
   background-color: white;
 }
 
-.membreciaspage-columna-acciones a {
+.membreciaespecificapage-columna-acciones a {
   display: inline-flex;
   align-items: center;
   text-decoration: none;
 }
 
-.membreciaspage-link-ver-mas {
+.membreciaespecificapage-link-ver-mas {
   color: rgb(14, 14, 94);
   cursor: pointer;
   text-decoration: underline;

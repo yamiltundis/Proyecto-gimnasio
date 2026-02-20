@@ -5,7 +5,11 @@ import { nextTick } from "node:process";
 
 export async function getAllListasPrecios(req: Request, res: Response<ListaPrecioListResponse>, next: NextFunction) {
    try {
-    const listas = await listaPrecioService.getAllListasPrecios();
+    const tipoMembreciaId = req.query.tipoMembreciaId
+      ? Number(req.query.tipoMembreciaId)
+      : undefined;
+
+    const listas = await listaPrecioService.getAllListasPrecios(tipoMembreciaId);
     res.json({
         listasprecios: listas,
         total: listas.length

@@ -1,9 +1,17 @@
 import { ListaPrecio, CreateListaPrecio, UpdateListaPrecio } from "../types/listaPrecio.types";
 import prisma from "../config/prisma";
 
-export async function getAllListasPrecios(): Promise<ListaPrecio[]> {
+export async function getAllListasPrecios(tipoMembreciaId?: number): Promise<ListaPrecio[]> {
     const listas = await prisma.listaPrecio.findMany({
-        orderBy: { id: 'asc'}
+        orderBy: { id: 'asc'},
+        where: tipoMembreciaId ? { tipoMembreciaId: tipoMembreciaId } : {},
+        include: {
+            tipoMembrecia: {
+                select: {
+                    nombre: true
+                }
+            }
+        }
     })
     return listas;
 }
