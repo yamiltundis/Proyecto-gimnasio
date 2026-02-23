@@ -6,16 +6,16 @@ import { authenticate, authorize } from "../middlewares/auth.middleware";
 
 const router = Router();
 
-router.get('/admin', pagoController.getAllPagos);
+router.get('/admin', authenticate, authorize("admin"), pagoController.getAllPagos);
 
 router.get('/cliente', authenticate, authorize("cliente"), pagoController.getAllPagosByCliente);
 
-router.get('/:id', pagoController.getPagoById);
+router.get('/:id', authenticate, authorize("admin"), pagoController.getPagoById);
 
-router.post('/', validate(createPagoSchema), pagoController.createPago);
+router.post('/', authenticate, authorize("admin"), validate(createPagoSchema), pagoController.createPago);
 
-router.put('/:id', validate(updatePagoSchema), pagoController.updatePago);
+router.put('/:id', authenticate, authorize("admin"), validate(updatePagoSchema), pagoController.updatePago);
 
-router.delete('/:id', pagoController.deletePago);
+router.delete('/:id', authenticate, authorize("admin"), pagoController.deletePago);
 
 export const pagoRoutes = router;
