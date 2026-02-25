@@ -3,10 +3,12 @@ import '../estilos/loginPage.css';
 import { setToken } from "../helpers/auth";
 import { useNavigate } from "react-router-dom";
 import { useUsuario } from "../context/usuarioContext";
+import { ModalRespuesta } from "../components/ModalRespuesta"
 
 export function LoginPage () {
 
     const { setUsuario } = useUsuario();
+    const [modalRechazo, setModalRechazo] = useState(null)
 
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -40,14 +42,15 @@ export function LoginPage () {
           setUsuario(user);
             
           if (user.rol === "admin" || user.rol === "superadmin") {
-            navigate("/admin");
+            navigate("/admin/clientes");
           } else if (user.rol === "cliente") {
-            navigate("/cliente");
+            navigate("/cliente/miperfil");
           } else {
-            navigate("/login"); // fallback
+            navigate("/login");
           }
       } catch (err) {
-           alert("Login fallido");
+          setModalRechazo(true)
+
       }
       console.log('Datos del inicio de sesión:', formData);
     };
@@ -85,6 +88,14 @@ export function LoginPage () {
                 Iniciar sesión
               </button>
             </form>
+            {modalRechazo && (
+              <ModalRespuesta
+                frase="Login incorrecto"
+                exito={false}
+                textoLink="Volver"
+                onClose={() => setModalRechazo(false)}
+             />
+            )}
         </>
     )
 }

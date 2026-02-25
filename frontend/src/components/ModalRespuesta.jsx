@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import '../estilos/modalRespuesta.css';
 
-export function ModalRespuesta ({ frase, exito, link, textoLink, onClose }) {
+export function ModalRespuesta ({ frase, exito, link = null, textoLink, onClose }) {
     return (
         <>
             <div className="modal-overlay">
@@ -14,9 +14,15 @@ export function ModalRespuesta ({ frase, exito, link, textoLink, onClose }) {
                 ) : (
                   <i className="bi bi-x-circle-fill icono-error"></i>
                 )}
-                <Link to={link}>
-                  <span onClick={onClose} className="link-cerrar-modal"> {textoLink}</span>
-                </Link>
+                {
+                  link ? (
+                    <Link to={link}>
+                       <span onClick={onClose} className="link-cerrar-modal"> {textoLink}</span>
+                    </Link>
+                  ) : (
+                    <span onClick={onClose} className="link-cerrar-modal"> {textoLink}</span>
+                  )
+                }
            </div>
          </div>
         </>
