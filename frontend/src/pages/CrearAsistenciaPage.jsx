@@ -4,6 +4,7 @@ import { BotonRegresar } from '../components/BotonRegresar';
 import Select from 'react-select';
 import { useFetch } from '../hooks/useFetch';
 import { ModalRespuesta } from '../components/ModalRespuesta';
+import { getToken } from '../helpers/auth';
 
 export function CrearAsistenciaPage() {
   
@@ -45,10 +46,12 @@ export function CrearAsistenciaPage() {
     };
     
     try {
+      const token = getToken();
       const response = await fetch('http://localhost:3000/asistencias', {
         method: 'POST',
         headers: {
-         'Content-Type': 'application/json'
+         'Content-Type': 'application/json',
+         'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(payload)
       });

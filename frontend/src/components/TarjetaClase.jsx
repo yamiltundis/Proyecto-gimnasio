@@ -50,8 +50,7 @@ export function TarjetaClase({ id, nombre, fechaHora, cantMax, reservas, yaReser
         <div className="tarjetaclase-primeracolumna">
           <h3>{nombre}</h3>
           <p>{fechaHora}</p>
-          <p>Cupos restantes: {diasRestantes}</p>
-          <p>Capacidad máxima: {cantMax}</p>
+          <p>Cupos restantes: {diasRestantes} de {cantMax} </p>
         </div>
         <div className="tarjetaclase-segundacolumna">
           {reservaRealizada ? <p> Ya te anotaste ✅ </p> :

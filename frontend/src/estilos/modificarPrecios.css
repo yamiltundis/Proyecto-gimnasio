@@ -1,0 +1,92 @@
+/* --- Contenedor del Simulador --- */
+.modificarprecios-contenedor-modificaciones {
+    margin-top: 2rem;
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+}
+
+/* --- Estilos del Modal (Overlay y Contenido) --- */
+.modificarprecios-modal-respuesta-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo oscurecido */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(3px); /* Efecto de desenfoque moderno */
+}
+
+.modificarprecios-modal-respuesta-contenido {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* --- Tabla dentro del Modal --- */
+.modificarprecios-modal-respuesta-contenido .modificarprecios-tabla {
+    width: 100%;
+    margin-top: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.modificarprecios-modal-respuesta-contenido h3 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 0.5rem;
+}
+
+/* --- Botones del Modal --- */
+.modificarprecios-modal-acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.modificarprecios-modal-acciones button {
+    padding: 0.7rem 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    background: #f0f0f0;
+    transition: all 0.2s;
+}
+
+.modificarprecios-modal-acciones button:hover {
+    background: #e0e0e0;
+}
+
+/* Botón de confirmación con color de acción */
+.modificarprecios-modal-acciones .modificarprecios-boton-submit {
+    background-color: #28a745; /* Verde para confirmar */
+    color: white;
+    border: none;
+    margin-top: 0; /* Quitamos el margen superior del estilo original */
+}
+
+.modificarprecios-modal-acciones .modificarprecios-boton-submit:hover {
+    background-color: #218838;
+}
+
+.modificarprecios-modal-acciones .modificarprecios-boton-submit:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* --- Animación --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
