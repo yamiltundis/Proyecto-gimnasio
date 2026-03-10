@@ -3,7 +3,7 @@ import '../estilos/membreciasPage.css'
 import { useFetch } from "../hooks/useFetch";
 import { Link } from "react-router-dom";
 import Select from 'react-select';
-import { ModificarPrecios } from "../components/modificarPrecios";
+import { ModificarPrecios } from "../components/ModificarPrecios";
 
 export function MembreciasPage () {
 
