@@ -8,8 +8,9 @@ export function ClientesPage () {
   const [estadoFiltro, setEstadoFiltro] = useState("")
   const [mostrarModal, setMostrarModal] = useState(false)
 
-  const url = 'http://localhost:3000/usuarios'
-  const { data, loading, error } = useFetch(url, {}, true) // requireAuth = true
+  const API_URL = import.meta.env.VITE_API_URL;
+  const url = `${API_URL}/usuarios`
+  const { data, loading, error } = useFetch(url, {}, { requireAuth: true});
 
   const clientes = data?.usuarios || [];
 

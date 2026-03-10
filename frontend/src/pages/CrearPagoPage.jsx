@@ -1,4 +1,4 @@
-import '../estilos/crearpagopage.css';
+import '../estilos/crearPagoPage.css';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BotonRegresar } from '../components/BotonRegresar';
@@ -15,11 +15,12 @@ export function CrearPagoPage() {
     tipoMembreciaId: ''
   });
 
-  const url = 'http://localhost:3000/usuarios';
+  const API_URL = import.meta.env.VITE_API_URL;
+  const url = `${API_URL}/usuarios`;
   const { data: clienteData, loading: clienteLoading, error: clienteError } = useFetch(url, {}, { requireAuth: true });
   const clientes = clienteData?.usuarios || [];
 
-  const urlMembrecia = 'http://localhost:3000/tiposmembrecia';
+  const urlMembrecia = `${API_URL}/tiposmembrecia`;
   const { data, loading, error } = useFetch(urlMembrecia, {}, { requireAuth: true });
   const membrecias = data?.tiposmembrecias || [];
   
@@ -59,7 +60,7 @@ export function CrearPagoPage() {
     };
 
     try {
-      const response = await fetch('http://localhost:3000/pagos', {
+      const response = await fetch(`${API_URL}/pagos`, {
         method: 'POST',
         headers: {
          'Content-Type': 'application/json'

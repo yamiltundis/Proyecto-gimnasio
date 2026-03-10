@@ -4,7 +4,8 @@ import "../estilos/clienteClases.css"
 
 export function ClienteClases () {
 
-    const url = `http://localhost:3000/clasesespecificas/anotarse`;
+    const API_URL = import.meta.env.VITE_API_URL;
+    const url = `${API_URL}/clasesespecificas/anotarse`;
     const { data, loading, error } = useFetch(url, {}, { requireAuth: true });
     console.log(data)
 

@@ -6,7 +6,8 @@ import { Calendario } from "../components/Calendario"
 
 export function MisAsistenciasPage () {
 
-    const url = 'http://localhost:3000/asistencias/cliente';
+    const API_URL = import.meta.env.VITE_API_URL;
+    const url = `${API_URL}/asistencias/cliente`;
     const { data, loading, error } = useFetch(url, {}, { requireAuth: true });
 
     const asistencias = data?.asistencias || [];

@@ -8,7 +8,8 @@ import { BotonRegresar } from '../components/BotonRegresar';
 export function ReservasPage () {
     const { id } = useParams();
 
-    const url = `http://localhost:3000/reservas?claseEspecificaId=${id}`;
+    const API_URL = import.meta.env.VITE_API_URL;
+    const url = `${API_URL}/reservas?claseEspecificaId=${id}`;
     const { data, loading, error } = useFetch(url, {}, { requireAuth: true });
 
     const reservas = data?.reservas || [];

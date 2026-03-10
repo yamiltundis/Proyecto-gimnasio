@@ -9,7 +9,8 @@ export function ClasesEspecificasPage () {
     const { id } = useParams();
     const [estadoFiltro, setEstadoFiltro] = useState("")
 
-    const url = `http://localhost:3000/clasesespecificas?tipoClase=${id}`;
+    const API_URL = import.meta.env.VITE_API_URL;
+    const url = `${API_URL}/clasesespecificas?tipoClase=${id}`;
     const { data, loading, error } = useFetch(url, {}, { requireAuth: true });
 
     const clases = data?.clasesEspecificas || [];

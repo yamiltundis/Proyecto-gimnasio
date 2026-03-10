@@ -24,7 +24,7 @@ import { CrearClaseEspecificaPatronPage } from "./pages/CrearClaseEspecificaPatr
 import { CrearPrimerPagoPage } from "./pages/CrearPrimerPagoPage.jsx";
 import { LoginLayout } from "./components/LoginLayout.jsx";
 import { AsistenciasClasePage } from "./pages/AsistenciasClasePage.jsx";
-import { MembreciaEspecificaPage } from "./pages/membreciaEspecificaPage.jsx";
+import { MembreciaEspecificaPage } from "./pages/MembreciaEspecificaPage.jsx";
 
 // Páginas para el cliente
 import { LayoutCliente } from "./components/LayoutCliente.jsx";

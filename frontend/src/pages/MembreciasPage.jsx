@@ -10,7 +10,8 @@ export function MembreciasPage () {
   const [membrecias, setMembrecias] = useState([])
   const [precioBase, setPrecioBase] = useState("");
 
-  const url = 'http://localhost:3000/tiposMembrecia';
+  const API_URL = import.meta.env.VITE_API_URL;
+  const url = `${API_URL}/tiposMembrecia`;
   const { data, loading, error } = useFetch(url, {}, { requireAuth: true });
 
   const memb = data?.tiposmembrecias || [];
@@ -35,7 +36,7 @@ export function MembreciasPage () {
         const membreciasConPrecio = await Promise.all(
           data.tiposmembrecias.map(async (t) => {
             try {
-              const precioResponse = await fetch(`http://localhost:3000/listasprecios/ultimo/${t.id}`)
+              const precioResponse = await fetch(`${API_URL}/listasprecios/ultimo/${t.id}`)
               if (!precioResponse.ok) throw new Error('Error al traer el último precio')
               const precioData = await precioResponse.json()
               return { ...t, precio: precioData.monto }

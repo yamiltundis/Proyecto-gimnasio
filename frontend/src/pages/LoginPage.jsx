@@ -27,7 +27,8 @@ export function LoginPage () {
     const handleSubmit = async (e) => {
       e.preventDefault();
       try {
-          const res = await fetch("http://localhost:3000/auth/login" , {
+          const API_URL = import.meta.env.VITE_API_URL;
+          const res = await fetch(`${API_URL}/auth/login` , {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(formData)

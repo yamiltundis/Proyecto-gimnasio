@@ -7,7 +7,8 @@ import { useFetch } from "../hooks/useFetch";
 export function ClienteEspecificoPage () {
     const { id } = useParams()
 
-    const url = `http://localhost:3000/usuarios/${id}`;
+    const API_URL = import.meta.env.VITE_API_URL;
+    const url = `${API_URL}/usuarios/${id}`;
     const { data, error, loading } = useFetch(url, {}, { requireAuth: true });
     const cliente = data?.usuario || []
 

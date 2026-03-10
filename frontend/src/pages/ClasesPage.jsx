@@ -5,7 +5,8 @@ import { useFetch } from '../hooks/useFetch';
 
 export function ClasesPage () {
 
-    const url = 'http://localhost:3000/tiposclase';
+    const API_URL = import.meta.env.VITE_API_URL;
+    const url = `${API_URL}/tiposclase`;
     const { data, loading, error } = useFetch(url, {}, { requireAuth: true });
 
     const clases = data?.tiposClase || [];

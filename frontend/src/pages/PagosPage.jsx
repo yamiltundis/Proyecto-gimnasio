@@ -9,11 +9,12 @@ export function PagosPage () {
     const [busquedaFecha, setBusquedaFecha] = useState("") // estado para filtrar por fecha
     const [busquedaMembresia, setBusquedaMembresia] = useState("") // estado para filtrar por mrembresia
    
-    const urlPagos = 'http://localhost:3000/pagos/admin';
+    const API_URL = import.meta.env.VITE_API_URL;
+    const urlPagos = `${API_URL}/pagos/admin`;
     const { data: pagosData, loading: pagosLoading, error: pagosError } = useFetch(urlPagos, {}, { requireAuth: true });
     const pagos = pagosData?.pagos || [];
 
-    const urlMembrecias = 'http://localhost:3000/tiposmembrecia';
+    const urlMembrecias = `${API_URL}/tiposmembrecia`;
     const { data: membresiasData, loading: membresiasLoading, error: membresiasError } = useFetch(urlMembrecias, {}, { requireAuth: true });
     const nombresMembresias = membresiasData?.tiposmembrecias || [];
 

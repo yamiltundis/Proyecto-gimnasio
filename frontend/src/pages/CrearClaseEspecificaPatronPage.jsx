@@ -23,7 +23,8 @@ export function CrearClaseEspecificaPatronPage() {
   useEffect(() => {
       const fetchTipoClase = async () => {
         try {
-          const response = await fetch(`http://localhost:3000/tiposclase/${id}`)
+          const API_URL = import.meta.env.VITE_API_URL;
+          const response = await fetch(`${API_URL}/tiposclase/${id}`)
           if (!response.ok) {
             throw new Error('Error al traer tipo de clase')
           }
@@ -71,7 +72,7 @@ export function CrearClaseEspecificaPatronPage() {
 
     console.log('Datos de la clase creada:', payload);
     try {
-      const response = await fetch('http://localhost:3000/clasesespecificas/conpatron', {
+      const response = await fetch(`${API_URL}/clasesespecificas/conpatron`, {
         method: 'POST',
         headers: {
          'Content-Type': 'application/json'

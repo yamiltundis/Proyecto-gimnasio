@@ -11,7 +11,8 @@ export function CrearAsistenciaPage() {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [creacionExitosa, setCreacionExitosa] = useState(null);
 
-  const url = 'http://localhost:3000/usuarios';
+  const API_URL = import.meta.env.VITE_API_URL;
+  const url = `${API_URL}/usuarios`;
   const { data: clienteData, loading: clienteLoading, error: clienteError } = useFetch(url, {}, { requireAuth: true });
   const clientes = clienteData?.usuarios || [];
 
@@ -47,7 +48,7 @@ export function CrearAsistenciaPage() {
     
     try {
       const token = getToken();
-      const response = await fetch('http://localhost:3000/asistencias', {
+      const response = await fetch(`${API_URL}/asistencias`, {
         method: 'POST',
         headers: {
          'Content-Type': 'application/json',

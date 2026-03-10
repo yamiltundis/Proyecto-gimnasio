@@ -7,13 +7,14 @@ import { TarjetaPago } from '../components/TarjetaPago'
 export function MisPagosPage () {
 
     const [busquedaFecha, setBusquedaFecha] = useState("") // estado para filtrar por fecha
-    const [busquedaMembresia, setBusquedaMembresia] = useState("") // estado para filtrar por mrembresia
+    const [busquedaMembresia, setBusquedaMembresia] = useState("") // estado para filtrar por membresia
    
-    const urlPagos = 'http://localhost:3000/pagos/cliente';
+    const API_URL = import.meta.env.VITE_API_URL;
+    const urlPagos = `${API_URL}/pagos/cliente`;
     const { data: pagosData, loading: pagosLoading, error: pagosError } = useFetch(urlPagos, {}, { requireAuth: true });
     const pagos = pagosData?.pagos || [];
     
-    const urlMembrecias = 'http://localhost:3000/tiposmembrecia';
+    const urlMembrecias = `${API_URL}/tiposmembrecia`;
     const { data: membresiasData, loading: membresiasLoading, error: membresiasError } = useFetch(urlMembrecias, {}, { requireAuth: true });
     const nombresMembresias = membresiasData?.tiposmembrecias || [];
 

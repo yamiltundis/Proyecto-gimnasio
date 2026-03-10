@@ -8,15 +8,14 @@ export function AsistenciasPage () {
     const [busquedaFecha, setBusquedaFecha] = useState("")
     const [busqueda, setBusqueda] = useState("")
 
-    const url = 'http://localhost:3000/asistencias/admin';
+    const API_URL = import.meta.env.VITE_API_URL;
+    const url = `${API_URL}/asistencias/admin`;
     const { data, loading, error } = useFetch(url, {}, { requireAuth: true });
 
     const asistencias = data?.asistencias || [];
 
     function formatearFecha(fechaISO) {
         if (!fechaISO) return '';
-  
-       // Convertir el string ISO a objeto Date
         const fecha = new Date(fechaISO);
 
         const año = fecha.getFullYear();

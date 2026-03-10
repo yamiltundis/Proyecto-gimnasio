@@ -1,4 +1,4 @@
-import '../estilos/crearclientepage.css';
+import '../estilos/crearClientePage.css';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BotonRegresar } from '../components/BotonRegresar';

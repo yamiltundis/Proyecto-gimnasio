@@ -5,7 +5,8 @@ import { useFetch } from "../hooks/useFetch";
 
 export function MembreciaEspecificaPage () {
     const { id } = useParams();
-    const url = `http://localhost:3000/listasprecios?tipoMembreciaId=${id}`;
+    const API_URL = import.meta.env.VITE_API_URL;
+    const url = `${API_URL}/listasprecios?tipoMembreciaId=${id}`;
     const { data, loading, error } = useFetch(url, {}, { requireAuth: true });
     
     const listado = data?.listasprecios || [];

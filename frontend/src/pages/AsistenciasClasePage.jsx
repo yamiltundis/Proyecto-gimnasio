@@ -8,7 +8,8 @@ import { useFetch } from '../hooks/useFetch';
 export function AsistenciasClasePage () {
     const { id } = useParams(); 
 
-    const url = `http://localhost:3000/asistenciasclases?claseEspecificaId=${id}`;
+    const API_URL = import.meta.env.VITE_API_URL
+    const url = `${API_URL}/asistenciasclases?claseEspecificaId=${id}`;
     const { data, loading, error} = useFetch(url, {}, { requireAuth: true });
 
     const asistencias = data?.asistencias || [];

@@ -1,4 +1,4 @@
-import '../estilos/crearpagopage.css';
+import '../estilos/crearPagoPage.css';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { BotonRegresar } from '../components/BotonRegresar';
@@ -36,7 +36,8 @@ export function CrearPrimerPagoPage() {
           dataCliente.append("foto", clienteData.foto);
         }
 
-        const resCliente = await fetch("http://localhost:3000/usuarios", {
+        const API_URL = import.meta.env.VITE_API_URL;
+        const resCliente = await fetch(`${API_URL}/usuarios`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: dataCliente
@@ -56,7 +57,7 @@ export function CrearPrimerPagoPage() {
             clienteId: nuevoCliente.usuario.id
         }
 
-        const resPago = await fetch('http://localhost:3000/pagos', {
+        const resPago = await fetch(`${API_URL}/pagos`, {
           method: 'POST',
           headers: {
            'Content-Type': 'application/json'
