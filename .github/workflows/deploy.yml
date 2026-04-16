@@ -50,6 +50,10 @@ jobs:
               chmod 600 /tmp/id_rsa
 
               ssh -i /tmp/id_rsa -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.BACK_IP }} << 'EOF'
+
+              export NVM_DIR="$HOME/.nvm"
+              [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+               
               export http_proxy=http://${{ secrets.FRONT_IP_PRIVADA }}:${{ secrets.PROXY_PORT }}
               export https_proxy=http://${{ secrets.FRONT_IP_PRIVADA }}:${{ secrets.PROXY_PORT }}
               
