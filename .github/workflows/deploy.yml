@@ -46,7 +46,10 @@ jobs:
             sudo cp -r dist/* /var/www/html/
             
             # Actualizo el backend
-            ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.BACK_IP }} << 'EOF'
+              echo "${{ secrets.SSH_PRIVATE_KEY }}" > /tmp/id_rsa
+              chmod 600 /tmp/id_rsa
+
+              ssh -i /tmp/id_rsa -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.BACK_IP }} << 'EOF'
               export http_proxy=http://${{ secrets.FRONT_IP_PRIVADA }}:${{ secrets.PROXY_PORT }}
               export https_proxy=http://${{ secrets.FRONT_IP_PRIVADA }}:${{ secrets.PROXY_PORT }}
               
