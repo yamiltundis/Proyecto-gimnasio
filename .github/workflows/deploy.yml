@@ -35,18 +35,18 @@ jobs:
           host: ${{ secrets.FRONT_IP }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          agent: true
           script: |
-            # Actualiza el frontend
+            # Actualizo el frontend
             cd /var/www/Proyecto-gimnasio
             git pull origin main
+            cd frontend
             npm install
             npm run build
             sudo cp -r dist/* /var/www/html/
             
-            # Actualiza el backend
-              ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.BACK_IP }} << 'EOF'
-              # Configuro el proxy
-              # Esto le dice a esta sesión de terminal que salga por el Front
+            # Actualizo el backend
+            ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.BACK_IP }} << 'EOF'
               export http_proxy=http://${{ secrets.FRONT_IP_PRIVADA }}:${{ secrets.PROXY_PORT }}
               export https_proxy=http://${{ secrets.FRONT_IP_PRIVADA }}:${{ secrets.PROXY_PORT }}
               
@@ -58,7 +58,6 @@ jobs:
               pm2 restart api-gym
             EOF
 
-      # --- PASO DE SEGURIDAD: CIERRE DE PUERTA ---
       - name: Remove GitHub IP from Security Group
         if: always() # Esto garantiza que la puerta se cierre aunque el deploy falle
         run: |
