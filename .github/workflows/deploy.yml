@@ -1,0 +1,70 @@
+name: Deploy de GymLab
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Configuro las credenciales de AWS
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # Abre el puerto 22 solo para la IP de este servidor de GitHub
+      - name: Add GitHub IP to Security Group
+        run: |
+          PUBLIC_IP=$(curl -s https://ifconfig.me)
+          aws ec2 authorize-security-group-ingress \
+            --group-id sg-03f474a5bd0f6527a \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${PUBLIC_IP}/32
+
+      - name: Deploy via SSH Jump
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.FRONT_IP }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Actualiza el frontend
+            cd /var/www/Proyecto-gimnasio
+            git pull origin main
+            npm install
+            npm run build
+            sudo cp -r dist/* /var/www/html/
+            
+            # Actualiza el backend
+              ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.BACK_IP }} << 'EOF'
+              # Configuro el proxy
+              # Esto le dice a esta sesión de terminal que salga por el Front
+              export http_proxy=http://${{ secrets.FRONT_IP_PRIVADA }}:${{ secrets.PROXY_PORT }}
+              export https_proxy=http://${{ secrets.FRONT_IP_PRIVADA }}:${{ secrets.PROXY_PORT }}
+              
+              cd /home/ubuntu/backend
+              git pull origin main
+              npm install
+              npm run build
+              npx prisma migrate deploy
+              pm2 restart api-gym
+            EOF
+
+      # --- PASO DE SEGURIDAD: CIERRE DE PUERTA ---
+      - name: Remove GitHub IP from Security Group
+        if: always() # Esto garantiza que la puerta se cierre aunque el deploy falle
+        run: |
+          PUBLIC_IP=$(curl -s https://ifconfig.me)
+          aws ec2 revoke-security-group-ingress \
+            --group-id sg-03f474a5bd0f6527a \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${PUBLIC_IP}/32
