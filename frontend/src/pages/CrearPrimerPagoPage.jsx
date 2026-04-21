@@ -2,6 +2,7 @@ import '../estilos/crearPagoPage.css';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { BotonRegresar } from '../components/BotonRegresar';
+import { getToken } from '../helpers/auth';
 
 export function CrearPrimerPagoPage() {
   const [formData, setFormData] = useState({
@@ -37,9 +38,14 @@ export function CrearPrimerPagoPage() {
         }
 
         const API_URL = import.meta.env.VITE_API_URL;
+
+        const token = getToken();
         const resCliente = await fetch(`${API_URL}/usuarios`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+              "Content-Type": "application/json",
+              'Authorization': `Bearer ${token}`
+            },
             body: dataCliente
         })
         if (!resCliente.ok) {

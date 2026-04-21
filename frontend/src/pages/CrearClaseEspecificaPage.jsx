@@ -2,6 +2,7 @@ import '../estilos/crearClaseEspecificaPage.css';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { BotonRegresar } from '../components/BotonRegresar';
+import { getToken } from '../helpers/auth';
 
 export function CrearClaseEspecificaPage() {
   const { id } = useParams()
@@ -52,10 +53,12 @@ export function CrearClaseEspecificaPage() {
     };
     console.log('Datos de la clase creada:', payload);
     try {
+      const token = getToken();
       const response = await fetch(`${API_URL}/clasesespecificas`, {
         method: 'POST',
         headers: {
-         'Content-Type': 'application/json'
+         'Content-Type': 'application/json',
+         'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(payload)
       });

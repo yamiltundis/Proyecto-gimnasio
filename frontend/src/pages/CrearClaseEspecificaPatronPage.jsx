@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { BotonRegresar } from '../components/BotonRegresar';
 import { ModalRespuesta } from '../components/ModalRespuesta';
+import { getToken } from '../helpers/auth';
 
 export function CrearClaseEspecificaPatronPage() {
   const { id } = useParams();
@@ -72,10 +73,12 @@ export function CrearClaseEspecificaPatronPage() {
 
     console.log('Datos de la clase creada:', payload);
     try {
+      const token = getToken();
       const response = await fetch(`${API_URL}/clasesespecificas/conpatron`, {
         method: 'POST',
         headers: {
-         'Content-Type': 'application/json'
+         'Content-Type': 'application/json',
+         'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(payload)
       });

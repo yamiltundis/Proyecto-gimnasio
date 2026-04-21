@@ -1,6 +1,7 @@
 import '../estilos/crearClasePage.css';
 import { useState, useEffect } from 'react';
 import { BotonRegresar } from '../components/BotonRegresar';
+import { getToken } from '../helpers/auth';
 
 export function CrearClasePage() {
   const [formData, setFormData] = useState({
@@ -20,11 +21,13 @@ export function CrearClasePage() {
     console.log('Datos de la clase:', formData);
 
     try {
+      const token = getToken();
       const API_URL = import.meta.env.VITE_API_URL;
       const response = await fetch(`${API_URL}/tiposclase`, {
         method: 'POST',
         headers: {
-         'Content-Type': 'application/json'
+         'Content-Type': 'application/json',
+         'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(formData)
       });

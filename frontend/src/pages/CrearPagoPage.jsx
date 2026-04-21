@@ -5,6 +5,7 @@ import { BotonRegresar } from '../components/BotonRegresar';
 import { useFetch } from '../hooks/useFetch';
 import Select from 'react-select';
 import { ModalRespuesta } from '../components/ModalRespuesta';
+import { getToken } from '../helpers/auth';
 
 export function CrearPagoPage() {
 
@@ -60,10 +61,12 @@ export function CrearPagoPage() {
     };
 
     try {
+      const token = getToken();
       const response = await fetch(`${API_URL}/pagos`, {
         method: 'POST',
         headers: {
-         'Content-Type': 'application/json'
+         'Content-Type': 'application/json',
+         'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(payload)
       });
