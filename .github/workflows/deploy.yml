@@ -11,16 +11,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Configuro las credenciales de AWS
-      - name: Configure AWS credentials
+      # 1. Configurar credenciales de AWS (para build y push)
+      - name: Configurar credenciales de AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # Abre el puerto 22 solo para la IP de este servidor de GitHub
-      - name: Add GitHub IP to Security Group
+      # 2. Abrir puerto en el Security Group
+      - name: Agregar IP de GitHub al Security Group
         run: |
           PUBLIC_IP=$(curl -s https://ifconfig.me)
           aws ec2 authorize-security-group-ingress \
@@ -29,6 +29,28 @@ jobs:
             --port 22 \
             --cidr ${PUBLIC_IP}/32
 
+      # 3. Construir y subir imágenes a ECR
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and Push Images
+        run: |
+          docker build -t 328307993748.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/gym-backend:latest ./backend
+          docker push 328307993748.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/gym-backend:latest
+          docker build -t 328307993748.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/gym-frontend:latest ./frontend
+          docker push 328307993748.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/gym-frontend:latest
+
+      # 4. Copiar docker-compose.prod.yaml a los servidores
+      - name: Copiar docker-compose al servidor del frontend
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.FRONT_IP }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "docker-compose.prod.yaml"
+          target: "/var/www/Proyecto-gimnasio"
+
+      # 5. Desplegar mediante SSH
       - name: Deploy via SSH Jump
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -37,36 +59,30 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           agent: true
           script: |
-            # Actualizo el frontend
+            # --- ACTUALIZAR FRONTEND ---
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin 328307993748.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
             cd /var/www/Proyecto-gimnasio
-            git pull origin main
-            cd frontend
-            npm install
-            npm run build
-            sudo cp -r dist/* /var/www/html/
+            docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml up -d
             
-            # Actualizo el backend
-              echo "${{ secrets.SSH_PRIVATE_KEY }}" > /tmp/id_rsa
-              chmod 600 /tmp/id_rsa
-
-              ssh -i /tmp/id_rsa -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.BACK_IP }} << 'EOF'
-
-              export NVM_DIR="$HOME/.nvm"
-              [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-               
-              export http_proxy=http://${{ secrets.FRONT_IP_PRIVADA }}:${{ secrets.PROXY_PORT }}
-              export https_proxy=http://${{ secrets.FRONT_IP_PRIVADA }}:${{ secrets.PROXY_PORT }}
-              
+            # --- ACTUALIZAR BACKEND (Saltando al privado) ---
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" > /tmp/id_rsa
+            chmod 600 /tmp/id_rsa
+            
+            # Copiamos el archivo del Frontend al Backend usando el SSH interno
+            scp -i /tmp/id_rsa -o StrictHostKeyChecking=no docker-compose.prod.yml ${{ secrets.USER }}@${{ secrets.BACK_IP }}:/home/ubuntu/backend/docker-compose.prod.yml
+            
+            # Ejecutamos el despliegue en el backend
+            ssh -i /tmp/id_rsa -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.BACK_IP }} << 'EOF'
+              aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin 328307993748.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
               cd /home/ubuntu/backend
-              git pull origin main
-              npm install
-              npm run build
-              npx prisma migrate deploy
-              pm2 restart api-gym
+              docker compose -f docker-compose.prod.yml pull
+              docker compose -f docker-compose.prod.yml up -d
             EOF
 
-      - name: Remove GitHub IP from Security Group
-        if: always() # Esto garantiza que la puerta se cierre aunque el deploy falle
+      # 6. Cerrar el puerto
+      - name: Eliminar IP de GitHub del Security Group
+        if: always()
         run: |
           PUBLIC_IP=$(curl -s https://ifconfig.me)
           aws ec2 revoke-security-group-ingress \
