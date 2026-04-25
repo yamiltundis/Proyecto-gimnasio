@@ -58,7 +58,7 @@ export function LoginPage () {
 
     return (
         <>
-            <h1 className="loginpage-h1"> Inicio de sesión </h1>
+            <h1 className="loginpage-h1"> Ingresá a GymLab! </h1>
             <form className="loginpage-formulario" onSubmit={handleSubmit}>
               <div className="loginpage-contenedor-inputs">
                 <label>
