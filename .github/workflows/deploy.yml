@@ -71,19 +71,19 @@ jobs:
             chmod 600 /tmp/id_rsa
             
             # Copiamos usando ruta absoluta desde el origen
-            scp -i /tmp/id_rsa -o StrictHostKeyChecking=no /var/www/Proyecto-gimnasio/docker-compose.prod.yaml ${{ secrets.USER }}@${{ secrets.BACK_IP }}:/home/ubuntu/backend/docker-compose.prod.yaml
+            scp -i /tmp/id_rsa -o StrictHostKeyChecking=no /var/www/Proyecto-gimnasio/docker-compose-prod.yaml ${{ secrets.USER }}@${{ secrets.BACK_IP }}:/home/ubuntu/backend/docker-compose-prod.yaml
             
             # Ejecutamos con ruta absoluta en el destino
             ssh -i /tmp/id_rsa -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.BACK_IP }} << 'EOF'
               # ¡IMPORTANTE! Si el backend usa el proxy, asegúrate de que estas variables estén activas
-              export http_proxy=http://${{ secrets.FRONT_IP_PRIVADA }}:${{ secrets.PROXY_PORT }}
-              export https_proxy=http://${{ secrets.FRONT_IP_PRIVADA }}:${{ secrets.PROXY_PORT }}
+              export http_proxy=http://${{ secrets.FRONT_IP_PRIVADA }}:8080
+              export https_proxy=http://${{ secrets.FRONT_IP_PRIVADA }}:8080
               
               aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin 328307993748.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
               
               cd /home/ubuntu/backend
-              docker compose -f docker-compose.prod.yaml pull
-              docker compose -f docker-compose.prod.yaml up -d
+              docker compose -f docker-compose-prod.yaml pull
+              docker compose -f docker-compose-prod.yaml up -d
             EOF
       # 6. Cerrar el puerto
       - name: Eliminar IP de GitHub del Security Group
