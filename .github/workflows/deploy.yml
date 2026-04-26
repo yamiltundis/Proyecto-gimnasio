@@ -51,7 +51,7 @@ jobs:
           target: "/var/www/Proyecto-gimnasio"
 
       # 5. Desplegar mediante SSH
-      - name: Deploy via SSH
+      - name: Deploy via SSH Jump
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.FRONT_IP }}
@@ -61,25 +61,30 @@ jobs:
           script: |
             # --- ACTUALIZAR FRONTEND ---
             aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin 328307993748.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
-            cd /var/www/Proyecto-gimnasio
-            docker compose -f docker-compose.prod.yml pull
-            docker compose -f docker-compose.prod.yml up -d
+            
+            # Usamos ruta absoluta para el archivo
+            docker compose -f /var/www/Proyecto-gimnasio/docker-compose-prod.yaml pull
+            docker compose -f /var/www/Proyecto-gimnasio/docker-compose-prod.yaml up -d
             
             # --- ACTUALIZAR BACKEND (Saltando al privado) ---
             echo "${{ secrets.SSH_PRIVATE_KEY }}" > /tmp/id_rsa
             chmod 600 /tmp/id_rsa
             
-            # Copiamos el archivo del Frontend al Backend usando el SSH interno
-            scp -i /tmp/id_rsa -o StrictHostKeyChecking=no docker-compose.prod.yml ${{ secrets.USER }}@${{ secrets.BACK_IP }}:/home/ubuntu/backend/docker-compose.prod.yml
+            # Copiamos usando ruta absoluta desde el origen
+            scp -i /tmp/id_rsa -o StrictHostKeyChecking=no /var/www/Proyecto-gimnasio/docker-compose.prod.yaml ${{ secrets.USER }}@${{ secrets.BACK_IP }}:/home/ubuntu/backend/docker-compose.prod.yaml
             
-            # Ejecutamos el despliegue en el backend
+            # Ejecutamos con ruta absoluta en el destino
             ssh -i /tmp/id_rsa -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.BACK_IP }} << 'EOF'
+              # ¡IMPORTANTE! Si el backend usa el proxy, asegúrate de que estas variables estén activas
+              export http_proxy=http://${{ secrets.FRONT_IP_PRIVADA }}:${{ secrets.PROXY_PORT }}
+              export https_proxy=http://${{ secrets.FRONT_IP_PRIVADA }}:${{ secrets.PROXY_PORT }}
+              
               aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin 328307993748.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+              
               cd /home/ubuntu/backend
-              docker compose -f docker-compose.prod.yml pull
-              docker compose -f docker-compose.prod.yml up -d
+              docker compose -f docker-compose.prod.yaml pull
+              docker compose -f docker-compose.prod.yaml up -d
             EOF
-
       # 6. Cerrar el puerto
       - name: Eliminar IP de GitHub del Security Group
         if: always()
