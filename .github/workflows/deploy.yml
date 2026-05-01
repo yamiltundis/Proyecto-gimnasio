@@ -52,40 +52,43 @@ jobs:
           strip_components: 0
           overwrite: true
 
-      # 5. Desplegar mediante SSH Jump
+      # 5. Desplegar mediante SSH
       - name: Deploy via SSH Jump
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.FRONT_IP }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          agent: true
           script: |
-            # Autenticación ECR en el Frontend
+            # 1. Login en ECR (Frontend)
             aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin 328307993748.dkr.ecr.sa-east-1.amazonaws.com
             
-            # --- DESPLIEGUE FRONTEND ---
+            # 2. Despliegue Frontend
             cd /home/ubuntu/frontend-produccion
             docker compose -f docker-compose-prod.yaml --profile frontend pull
             docker compose -f docker-compose-prod.yaml --profile frontend up -d --remove-orphans
             
-            # --- SALTO AL BACKEND ---
-            # Copiamos el archivo de configuración al host privado
-            scp -o StrictHostKeyChecking=no /home/ubuntu/frontend-produccion/docker-compose-prod.yaml ${{ secrets.USER }}@${{ secrets.BACK_IP }}:/home/ubuntu/backend-produccion/docker-compose-prod.yaml
+            # 3. Configurar llave para el salto al Backend
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" > /tmp/deploy_key
+            chmod 600 /tmp/deploy_key
             
-            ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.BACK_IP }} << 'EOF'
-              # Variables de proxy para que Docker pueda salir a ECR desde la red privada
+            # 4. Copiar el compose al Backend usando la llave temporal
+            scp -i /tmp/deploy_key -o StrictHostKeyChecking=no /home/ubuntu/frontend-produccion/docker-compose-prod.yaml ${{ secrets.USER }}@${{ secrets.BACK_IP }}:/home/ubuntu/backend-produccion/docker-compose-prod.yaml
+            
+            # 5. Ejecutar comandos en el Backend
+            ssh -i /tmp/deploy_key -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.BACK_IP }} << 'EOF'
               export http_proxy=http://10.0.1.114:8080
               export https_proxy=http://10.0.1.114:8080
               
               aws ecr get-login-password --region sa-east-1 | docker login --username AWS --password-stdin 328307993748.dkr.ecr.sa-east-1.amazonaws.com
               
               cd /home/ubuntu/backend-produccion
-              
-              # Pull y Up del perfil backend (usa el .env que ya está en la carpeta)
               docker compose -f docker-compose-prod.yaml --profile backend pull
               docker compose -f docker-compose-prod.yaml --profile backend up -d --remove-orphans
             EOF
+            
+            # 6. Limpiar la llave temporal
+            rm /tmp/deploy_key
 
       # 6. Cerrar el puerto en el SG
       - name: Eliminar IP de GitHub del Security Group

@@ -15,8 +15,10 @@ services:
   frontend:
     image: 328307993748.dkr.ecr.sa-east-1.amazonaws.com/gym-frontend:latest
     profiles: ["frontend"]
+    environment:
+      - VITE_API_URL=/api
     ports:
-      - "81:81"
+      - "81:80"
     restart: always
     networks:
       - gym-network
