@@ -11,7 +11,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 1. Configurar credenciales de AWS (para build y push)
+      # 1. Configurar credenciales de AWS
       - name: Configurar credenciales de AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -19,7 +19,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # 2. Abrir puerto en el Security Group
+      # 2. Abrir puerto SSH en el Security Group (Solo para el Runner)
       - name: Agregar IP de GitHub al Security Group
         run: |
           PUBLIC_IP=$(curl -s https://ifconfig.me)
@@ -33,24 +33,26 @@ jobs:
       - name: Login a Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build y Push de las Imágenes
+      - name: Build y Push
         run: |
-          docker build -t 328307993748.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/gym-backend:latest ./backend
-          docker push 328307993748.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/gym-backend:latest
-          docker build -t 328307993748.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/gym-frontend:latest ./frontend
-          docker push 328307993748.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/gym-frontend:latest
+          docker build -t 328307993748.dkr.ecr.sa-east-1.amazonaws.com/gym-backend:latest ./backend
+          docker push 328307993748.dkr.ecr.sa-east-1.amazonaws.com/gym-backend:latest
+          docker build -t 328307993748.dkr.ecr.sa-east-1.amazonaws.com/gym-frontend:latest ./frontend
+          docker push 328307993748.dkr.ecr.sa-east-1.amazonaws.com/gym-frontend:latest
 
-      # 4. Copiar docker-compose.prod.yaml a los servidores
-      - name: Copiar docker-compose al servidor del frontend
+      # 4. Copiar docker-compose al servidor del frontend
+      - name: Copiar docker-compose al Frontend
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.FRONT_IP }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "docker-compose-prod.yaml"
-          target: "/var/www/Proyecto-gimnasio"
+          target: "/home/ubuntu/frontend-produccion"
+          strip_components: 0
+          overwrite: true
 
-      # 5. Desplegar mediante SSH
+      # 5. Desplegar mediante SSH Jump
       - name: Deploy via SSH Jump
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -59,33 +61,33 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           agent: true
           script: |
-            # --- ACTUALIZAR FRONTEND ---
-            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin 328307993748.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+            # Autenticación ECR en el Frontend
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin 328307993748.dkr.ecr.sa-east-1.amazonaws.com
             
-            # Usamos ruta absoluta para el archivo
-            docker compose -f /var/www/Proyecto-gimnasio/docker-compose-prod.yaml pull
-            docker compose -f /var/www/Proyecto-gimnasio/docker-compose-prod.yaml up -d
+            # --- DESPLIEGUE FRONTEND ---
+            cd /home/ubuntu/frontend-produccion
+            docker compose -f docker-compose-prod.yaml --profile frontend pull
+            docker compose -f docker-compose-prod.yaml --profile frontend up -d --remove-orphans
             
-            # --- ACTUALIZAR BACKEND (Saltando al privado) ---
-            echo "${{ secrets.SSH_PRIVATE_KEY }}" > /tmp/id_rsa
-            chmod 600 /tmp/id_rsa
+            # --- SALTO AL BACKEND ---
+            # Copiamos el archivo de configuración al host privado
+            scp -o StrictHostKeyChecking=no /home/ubuntu/frontend-produccion/docker-compose-prod.yaml ${{ secrets.USER }}@${{ secrets.BACK_IP }}:/home/ubuntu/backend-produccion/docker-compose-prod.yaml
             
-            # Copiamos usando ruta absoluta desde el origen
-            scp -i /tmp/id_rsa -o StrictHostKeyChecking=no /var/www/Proyecto-gimnasio/docker-compose-prod.yaml ${{ secrets.USER }}@${{ secrets.BACK_IP }}:/home/ubuntu/backend/docker-compose-prod.yaml
-            
-            # Ejecutamos con ruta absoluta en el destino
-            ssh -i /tmp/id_rsa -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.BACK_IP }} << 'EOF'
-              # ¡IMPORTANTE! Si el backend usa el proxy, asegúrate de que estas variables estén activas
-              export http_proxy=http://${{ secrets.FRONT_IP_PRIVADA }}:8080
-              export https_proxy=http://${{ secrets.FRONT_IP_PRIVADA }}:8080
+            ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.BACK_IP }} << 'EOF'
+              # Variables de proxy para que Docker pueda salir a ECR desde la red privada
+              export http_proxy=http://10.0.1.114:8080
+              export https_proxy=http://10.0.1.114:8080
               
-              aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin 328307993748.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+              aws ecr get-login-password --region sa-east-1 | docker login --username AWS --password-stdin 328307993748.dkr.ecr.sa-east-1.amazonaws.com
               
-              cd /home/ubuntu/backend
-              docker compose -f docker-compose-prod.yaml pull
-              docker compose -f docker-compose-prod.yaml up -d
+              cd /home/ubuntu/backend-produccion
+              
+              # Pull y Up del perfil backend (usa el .env que ya está en la carpeta)
+              docker compose -f docker-compose-prod.yaml --profile backend pull
+              docker compose -f docker-compose-prod.yaml --profile backend up -d --remove-orphans
             EOF
-      # 6. Cerrar el puerto
+
+      # 6. Cerrar el puerto en el SG
       - name: Eliminar IP de GitHub del Security Group
         if: always()
         run: |

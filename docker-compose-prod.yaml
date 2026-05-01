@@ -2,17 +2,21 @@
 services:
   backend:
     image: 328307993748.dkr.ecr.sa-east-1.amazonaws.com/gym-backend:latest
+    profiles: ["backend"]
     environment:
       - HTTP_PROXY=http://10.0.1.114:8080
       - HTTPS_PROXY=http://10.0.1.114:8080
     restart: always
+    env_file:
+      - .env
     networks:
       - gym-network
 
   frontend:
     image: 328307993748.dkr.ecr.sa-east-1.amazonaws.com/gym-frontend:latest
+    profiles: ["frontend"]
     ports:
-      - "80:80"
+      - "81:81"
     restart: always
     networks:
       - gym-network
